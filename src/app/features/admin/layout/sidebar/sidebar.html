@@ -1,0 +1,56 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed()">
+
+    <!-- ─── Logo ─────────────────────────────────────────── -->
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <img src="assets/images/logo.png" alt="CoachHub" onerror="this.style.display='none'" />
+        <span class="logo-fallback">CH</span>
+      </div>
+      <span class="logo-text" *ngIf="!isCollapsed()">Coaching Hub</span>
+    </div>
+  
+    <!-- ─── Main Navigation ──────────────────────────────── -->
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li *ngFor="let item of mainNavItems">
+          <a
+            class="nav-item"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: false }"
+          >
+            <i [class]="item.icon + ' nav-icon'"></i>
+            <span class="nav-label" *ngIf="!isCollapsed()">{{ item.label }}</span>
+            <span class="nav-badge" *ngIf="item.badge && !isCollapsed()">
+              {{ item.badge }}
+            </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  
+    <!-- ─── Settings Section ─────────────────────────────── -->
+    <div class="sidebar-settings" *ngIf="!isCollapsed()">
+      <span class="settings-label">SETTINGS</span>
+      <ul class="nav-list">
+        <li *ngFor="let item of settingsNavItems">
+          <a
+            class="nav-item"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+          >
+            <i [class]="item.icon + ' nav-icon'"></i>
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  
+  </aside>
+  
+  <!-- ─── Mobile Overlay ────────────────────────────────── -->
+  <div
+    class="sidebar-overlay"
+    *ngIf="!isCollapsed()"
+    (click)="toggleSidebar()"
+  ></div>

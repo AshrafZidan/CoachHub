@@ -1,0 +1,193 @@
+// ─── Variables ────────────────────────────────────────────
+$sidebar-width:       240px;
+$sidebar-collapsed:   72px;
+$primary-light:       #ede9fe;
+$text-dark:           #1a1a2e;
+$text-muted:          #6b7280;
+$border-color:        #D3D6DB;
+$sidebar-bg:          #F8F8FD;
+$active-bg:           #ede9fe;
+$active-color:        #7c3aed;
+$transition:          0.25s ease;
+
+:host {
+  display: block;
+  position: relative;
+  z-index: 100;
+}
+
+// ─── Sidebar Container ────────────────────────────────────
+.sidebar {
+  width: $sidebar-width;
+  min-height: 100vh;
+  background: $sidebar-bg;
+  border-right: 1px solid $border-color;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  transition: width $transition;
+  position: relative;
+  flex-shrink: 0;
+
+  &.collapsed {
+    width: $sidebar-collapsed;
+
+    .logo-text,
+    .nav-label,
+    .nav-badge,
+    .settings-label { display: none; }
+
+    .sidebar-logo { justify-content: center; padding: 20px 0; }
+    .nav-item      { justify-content: center; padding: 12px; }
+  }
+
+  // ─── Mobile: slide in from left ──────────────────────
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 300;
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+
+    &.collapsed {
+      transform: translateX(-100%);
+      width: $sidebar-width;
+    }
+  }
+}
+
+// ─── Logo ─────────────────────────────────────────────────
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid $border-color;
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: $primary-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .logo-fallback {
+      font-size: 13px;
+      font-weight: 700;
+      color: $primary;
+    }
+  }
+
+  .logo-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: $text-dark;
+    white-space: nowrap;
+  }
+}
+
+// ─── Navigation ───────────────────────────────────────────
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 10px;
+  overflow-y: auto;
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: $text-muted;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: background $transition, color $transition;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+
+  &:hover {
+    background: $active-bg;
+    color: $active-color;
+  }
+
+  // ─── Active state (routerLinkActive) ─────────────────
+  &.active {
+    background: $active-bg;
+    color: $active-color;
+
+    .nav-icon { color: $active-color; }
+  }
+}
+
+// ─── Icons ────────────────────────────────────────────────
+.nav-icon {
+  font-size: 16px;
+  width: 18px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+// ─── Badge ────────────────────────────────────────────────
+.nav-badge {
+  margin-left: auto;
+  background: $primary;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+// ─── Settings Section ─────────────────────────────────────
+.sidebar-settings {
+  padding: 8px 10px 16px;
+  border-top: 1px solid $border-color;
+
+  .settings-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #9ca3af;
+    letter-spacing: 0.08em;
+    padding: 8px 12px 4px;
+  }
+}
+
+// ─── Mobile Overlay ───────────────────────────────────────
+.sidebar-overlay {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 299;
+  }
+}

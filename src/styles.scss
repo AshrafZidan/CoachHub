@@ -1,1 +1,98 @@
 /* You can add global styles to this file, and also import other style files */
+// @import "./app/shared-lib/_variables.scss";
+@import 'primeicons/primeicons.css';
+:root{
+  --tilte-color:#25324B;
+  --tilte-secodary-color:#515B6F;
+  --app-primary-color:#833C88;
+  
+  --p-button-primary-background:#833C88 !important; 
+  --p-button-primary-border-color:#833C88 !important;
+  --p-button-primary-hover-background:#833C88 !important;
+  --p-button-primary-hover-border-color:#833C88 !important;
+  --p-button-primary-focus-ring-color:#833C88 !important;
+    --p-button-primary-active-background: #833C88 !important;
+    --p-button-primary-border-color:  #833C88 !important;
+    --p-button-primary-hover-border-color:  #833C88 !important;
+    --p-button-primary-active-border-color:  #833C88 !important;
+    --p-message-text-font-size:12px !important;
+
+  --app-border-color:#D6DDEB;
+  --app-text-color:#A8ADB7;
+  --p-button-border-radius:15px !important;
+  --app-error:#f87171;
+  --p-inputtext-border-radius:15px !important;
+
+}
+
+
+/* Regular */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assets/fonts/poppins/Poppins-Regular.ttf') format('ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Medium */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assets/fonts/poppins/Poppins-Medium.ttf') format('ttf');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Bold */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assets/fonts/poppins/Poppins-Bold.ttf') format('ttf');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+body,
+.p-component {
+  font-family: 'Poppins', sans-serif;
+}
+body{
+  margin:0;
+}
+.p-button {
+    border-radius: 15px;
+    font-weight: 500;
+  }
+  
+  .p-ripple.p-button {
+    background: var(--primary-color);
+    border: none;
+    padding:10px 30px;
+
+  }
+  
+  .p-ripple.p-button:hover {
+    background: var(--primary-600);
+  }
+
+
+  .p-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--surface-border);
+  }
+  .p-error{
+    color: var(--app-error);
+    font-size: 12px;
+  }
+  .p-inputtext {
+    border: 1px solid var(--app-border-color) !important;
+    color: var(--app-text-color) !important;
+    width:100% !important;
+    font-size: 14px !important;
+  }
+  
+  .p-inputtext:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+  }
