@@ -1,11 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 // @import "./app/shared-lib/_variables.scss";
 @import 'primeicons/primeicons.css';
+@import './styles/admin-table.scss';
 :root{
-  --tilte-color:#25324B;
-  --tilte-secodary-color:#515B6F;
+  --title-color:#25324B;
+  --title-secondary-color:#515B6F;
   --app-primary-color:#833C88;
-  
+    --app-primary-color-dark: #75347a;
+
   --p-button-primary-background:#833C88 !important; 
   --p-button-primary-border-color:#833C88 !important;
   --p-button-primary-hover-background:#833C88 !important;
@@ -15,14 +17,48 @@
     --p-button-primary-border-color:  #833C88 !important;
     --p-button-primary-hover-border-color:  #833C88 !important;
     --p-button-primary-active-border-color:  #833C88 !important;
+    --p-inputtext-focus-border-color:#833C88 !important;
+
+    --p-select-option-selected-background:#833C88 !important;
+    --p-select-option-selected-color:#fff !important;
+    --p-select-option-selected-focus-background:#833C88 !important;
+     --p-select-option-selected-focus-color:#fff !important;
+    --p-select-focus-border-color:#833C88 !important;
+
+   --p-datepicker-date-selected-background:#f1e9f2 !important;
+
+   --p-multiselect-option-selected-background:#f1e9f2 !important;
+   --p-multiselect-option-selected-color:#833C88 !important;
+   --p-checkbox-checked-border-color:#833C88 !important;
+   --p-checkbox-checked-background:#833C88 !important;
+   --p-multiselect-option-selected-focus-background:#833C88 !important;
+   --p-multiselect-option-selected-focus-color:#fff !important;
+    --p-chip-background: #F8F8FD !important;
+    --p-chip-color: #833C88 !important;
+    --p-checkbox-checked-hover-background: #833C88 !important;
+    --p-checkbox-checked-hover-border-color: #833C88 !important;
+
+    --p-chip-gap: .3rem !important;
+  --p-chip-remove-icon-color: #833C88 !important;
     --p-message-text-font-size:12px !important;
+    --p-dialog-title-font-size:1.1rem !important;
+  --p-button-success-background:#169E3F !important;
+   --p-button-success-border-color:#169E3F !important;
+   --p-button-danger-background:#F06565 !important;
+    --p-button-danger-border-color:#F06565 !important;
+
+
 
   --app-border-color:#D6DDEB;
   --app-text-color:#A8ADB7;
   --p-button-border-radius:15px !important;
   --app-error:#f87171;
   --p-inputtext-border-radius:15px !important;
-
+  --text-dark:       #111827;
+  --text-muted:      #7C8493;
+  --odd-row-bg:     #F8F8FD;
+  --app-success:#169E3F;
+  --app-delete:#F06565;
 }
 
 
@@ -60,20 +96,36 @@ body{
   margin:0;
 }
 .p-button {
-    border-radius: 15px;
+    border-radius: 12px !important;
     font-weight: 500;
+    cursor: pointer;
+    &:disabled {
+      opacity: 0.6;
+    }
   }
   
-  .p-ripple.p-button {
-    background: var(--primary-color);
+  .p-button-primary.p-button {
+    background: var(--app-primary-color);
+    color: #fff;
     border: none;
     padding:10px 30px;
+    &:hover {
+    background: var(--app-primary-color-dark) !important;
+    border: 0 !important;
+     
+    }
 
   }
-  
-  .p-ripple.p-button:hover {
-    background: var(--primary-600);
+   .p-button-sm {
+       padding: 7px 13px !important;
+    font-size: 12px !important;
+
   }
+  .no-radius {
+    border-radius: 0 !important;
+  }
+  
+
 
 
   .p-card {
@@ -85,14 +137,93 @@ body{
     color: var(--app-error);
     font-size: 12px;
   }
-  .p-inputtext {
-    border: 1px solid var(--app-border-color) !important;
-    color: var(--app-text-color) !important;
-    width:100% !important;
-    font-size: 14px !important;
+  .w-full{
+    width:100%;}
+   // ─── PrimeNG overrides ────────────────────────────────────
+ .p-motion {
+    display: block;
+    width: auto;
+    min-width: 200px !important;
+}
+.p-progressspinner{
+      position: absolute !important;
+    left: 50%;
+}
+.w-30{
+  width:30%;
+}
+  .p-dialog{
+    border: 0 !important;
+    border-radius: 0 !important;
+    .p-dialog-header {
+          border-top: 4px solid var(--app-primary-color);
+          .p-dialog-close-button {
+            border-radius: 0 !important;
+          }
+    }
+      .p-dialog-content {
+        padding: .5rem 1.25rem;
+        font-size: 14px;
+
+      }
+      .p-dialog-footer {
+        padding: 1.25rem;
+      }
   }
+  .app-input , .p-select , .p-dropdown, .p-inputtext , .p-datepicker{
+    width: 100%;
+    height: 42px;
+    padding: 0 16px 0 42px;
+    border-radius: 12px !important;
+    background: #fff;
+    border: 1px solid var(--app-border-color);
+    font-size: 14.5px;
+    color: var(--text-dark);
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    &::placeholder { color: var(--text-muted); }
+ &.invalid:not(:focus) {
+      border-color: var(--app-delete);
+    }
+    &:focus {
+      outline: none;
+      border-color: #c4b5fd;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+    }
+  }
+  .full-widtth{
+    width:100%;
+  }
+  .form-container{
+    label{
+      display: block;
+      margin-bottom: 0.5rem;
+      color:var(--title-secondary-color);
+      font-size: 13px;
+    font-weight: 600;
+    }
+    .field{
+      margin-bottom: 1rem;
+  }}
+
+ .p-select , .p-datepicker {
+  padding: 0;
+
+ }
+ .p-datepicker{border: 0;
   
-  .p-inputtext:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 1px var(--primary-color);
-  }
+}
+  // .p-toast .p-toast-message-success { border-left: 4px solid $green; }
+  // .p-toast .p-toast-message-error   { border-left: 4px solid $red;   }
+//   .page-ellipsis {
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   min-width: 34px;
+//   height: 34px;
+//   font-size: 13px;
+//   color: var(--text-muted);
+//   user-select: none;
+// }

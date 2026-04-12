@@ -1,0 +1,19 @@
+<div class="p-inputgroup" *ngIf="selectedCountry">
+  <!-- FLAG + CODE -->
+  <span class="p-inputgroup-addon">
+    <img [src]="selectedCountry.flag" width="20" />
+    {{ selectedCountry.dialCode }}
+  </span>
+
+  <!-- NUMBER INPUT -->
+  <input
+    pInputText
+    type="tel"
+    class="whatspp-input"
+    [value]="value"
+    (input)="setValue($event.target.value)"
+    (blur)="onTouched()"
+    placeholder="WhatsApp number"
+  />
+
+</div>

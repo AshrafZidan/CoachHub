@@ -1,11 +1,78 @@
 import { Routes } from '@angular/router';
+import { adminGuard, authGuard } from '../../core/guards/auth-guard';
 
 export const ADMIN_ROUTES: Routes = [
   {
-    path: 'dashboard',
+    path: '',
+    canActivate: [authGuard, adminGuard],
     loadComponent: () =>
-      import('./dashboard/dashboard').then(c => c.DashboardComponent),
-      title: 'Dashboard — Admin — CoachHub',
+      import('./layout/admin-layout/admin-layout').then(c => c.AdminLayout),
+    children: [
+      {
+        path: '',
+        redirectTo: 'coaches',
+        pathMatch: 'full'
+      },
+      {
+        path: 'coaches',
+        loadComponent: () =>
+          import('./coaches-management/coaches-management').then(c => c.CoachesManagement),
+        title: 'coaches — CoachHub Admin'
+      },
+      {
+        path: 'coaches/edit-coach/:id',
+        loadComponent: () =>
+          import('./coaches-management/edit-coach/edit-coach').then(c => c.EditCoachComponent),
+        title: 'Edit Coache — CoachHub Admin'
+      },
+      // {
+      //   path: 'coaches',
+      //   loadComponent: () =>
+      //     import('./coaches/coaches.component').then(c => c.CoachesComponent),
+      //   title: 'Coaches — CoachHub Admin'
+      // },
+      // {
+      //   path: 'bookings',
+      //   loadComponent: () =>
+      //     import('./bookings/bookings.component').then(c => c.BookingsComponent),
+      //   title: 'Bookings — CoachHub Admin'
+      // },
+      // {
+      //   path: 'coupons',
+      //   loadComponent: () =>
+      //     import('./coupons/coupons.component').then(c => c.CouponsComponent),
+      //   title: 'Coupons — CoachHub Admin'
+      // },
+      // {
+      //   path: 'admins',
+      //   loadComponent: () =>
+      //     import('./admins/admins.component').then(c => c.AdminsComponent),
+      //   title: 'Admins — CoachHub Admin'
+      // },
+      // {
+      //   path: 'reports',
+      //   loadComponent: () =>
+      //     import('./reports/reports.component').then(c => c.ReportsComponent),
+      //   title: 'Reports — CoachHub Admin'
+      // },
+      // {
+      //   path: 'gateways',
+      //   loadComponent: () =>
+      //     import('./gateways/gateways.component').then(c => c.GatewaysComponent),
+      //   title: 'Gateways — CoachHub Admin'
+      // },
+      // {
+      //   path: 'transactions',
+      //   loadComponent: () =>
+      //     import('./transactions/transactions.component').then(c => c.TransactionsComponent),
+      //   title: 'Transactions — CoachHub Admin'
+      // },
+      // {
+      //   path: 'help-center',
+      //   loadComponent: () =>
+      //     import('./help-center/help-center.component').then(c => c.HelpCenterComponent),
+      //   title: 'Help Center — CoachHub Admin'
+      // }
+    ]
   }
-
 ];

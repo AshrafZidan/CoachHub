@@ -13,10 +13,10 @@ import { MessageModule } from 'primeng/message';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink,InputTextModule,
+  imports: [CommonModule, ReactiveFormsModule,InputTextModule,
     PasswordModule,
     ButtonModule,
-    MessageModule,],
+    MessageModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })

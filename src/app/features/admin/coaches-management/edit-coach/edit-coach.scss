@@ -1,0 +1,11 @@
+.edit-page{
+    width: 100%;
+    margin: auto;
+    .form-actions{
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        .p-button{flex: 1;}
+    }
+
+}

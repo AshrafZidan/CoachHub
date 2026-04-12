@@ -1,1 +1,62 @@
-<p>topbar works!</p>
+<header class="topbar">
+
+  <!-- ─── Hamburger (mobile only) ──────────────────────── -->
+  <button
+    class="hamburger"
+    type="button"
+    aria-label="Toggle sidebar"
+    (click)="sidebar.toggle()"
+  >
+    <i class="pi pi-bars"></i>
+  </button>
+
+  <!-- ─── LEFT: Welcome + User dropdown ───────────────── -->
+  <div class="topbar-left">
+    <div class="user-info" (click)="menu.toggle($event)" role="button" tabindex="0">
+      <span class="welcome-label">Welcome</span>
+      <div class="user-name-row">
+        <span class="user-name">{{ userName() }}</span>
+        <svg class="chevron-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+            clip-rule="evenodd" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CENTER: Search bar ───────────────────────────── -->
+  <div class="topbar-center" *ngIf="searchService.searchVisible()">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input
+        type="text"
+        class="app-input"
+        [placeholder]="searchService.searchPlaceholder()"
+        [value]="searchTerm()"
+         (input)="onSearchInput($any($event.target).value);
+             onSearchClear($any($event.target).value)"
+      (keydown.enter)="onSearchEnter()"
+        autocomplete="off"
+      />
+    </div>
+  </div>
+
+  <!-- ─── RIGHT: Notifications ─────────────────────────── -->
+  <div class="topbar-right">
+    <button class="notif-btn" type="button" aria-label="Notifications">
+      <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+      <span class="notif-dot"></span>
+    </button>
+  </div>
+
+  <!-- ─── PrimeNG User Menu ─────────────────────────────── -->
+  <p-menu #menu [model]="userMenuItems" [popup]="true" appendTo="body" />
+
+</header>

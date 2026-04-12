@@ -1,32 +1,19 @@
 import { Routes } from '@angular/router';
+import { guestGuard } from '../../core/guards/auth-guard';
 
 export const AUTH_ROUTES: Routes = [
-
-  {
-    path: 'login-admin',
-    loadComponent: () =>
-      import('./login/login').then(c => c.LoginComponent),
-    title: 'Admin — Login — CoachHub',
-    // isAdmin:true
-  },
-
   {
     path: 'login',
+    canActivate: [guestGuard],
     loadComponent: () =>
       import('./login/login').then(c => c.LoginComponent),
-    title: 'Login — CoachHub',
-    // isAdmin:false
+    title: 'Login — CoachHub'
+  },
+  {
+    path: 'login-admin',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./login/login').then(c => c.LoginComponent),
+    title: 'Admin Login — CoachHub'
   }
-  // {
-  //   path: 'signup',
-  //   loadComponent: () =>
-  //     import('./signup/signup.component').then(c => c.SignupComponent),
-  //   title: 'Create Account — CoachHub'
-  // },
-  // {
-  //   path: 'forgot-password',
-  //   loadComponent: () =>
-  //     import('./forgot-password/forgot-password.component').then(c => c.ForgotPasswordComponent),
-  //   title: 'Forgot Password — CoachHub'
-  // }
 ];

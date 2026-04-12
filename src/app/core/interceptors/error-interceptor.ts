@@ -2,18 +2,22 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { ToastService } from '../services/toast.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
+  const toast = inject(ToastService); // Assuming you have a toast service for notifications
+
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
         case 401:
-          // Token expired or invalid → redirect to login
-          localStorage.clear();
-          router.navigate(['/auth/login']);
-          break;
+          toast.error('Session expired. Please log in again.', 'Unauthorized');
+      setTimeout(() => {
+        router.navigate(['/auth/login']);
+      }, 1000);
+      break;
 
         case 403:
           // No permission → redirect to dashboard

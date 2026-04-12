@@ -1,14 +1,10 @@
-// ─── Variables ────────────────────────────────────────────
-$sidebar-width:       240px;
-$sidebar-collapsed:   72px;
-$primary-light:       #ede9fe;
-$text-dark:           #1a1a2e;
-$text-muted:          #6b7280;
-$border-color:        #D3D6DB;
-$sidebar-bg:          #F8F8FD;
-$active-bg:           #ede9fe;
-$active-color:        #7c3aed;
-$transition:          0.25s ease;
+// ─── Variables (keeping your values) ─────────────────────
+$sidebar-width:     240px;
+$sidebar-collapsed: 72px;
+$primary-light:     #ede9fe;
+$sidebar-bg:        #F8F8FD;
+$active-bg:         #E9EBFD;
+$transition:        0.25s ease;
 
 :host {
   display: block;
@@ -19,41 +15,72 @@ $transition:          0.25s ease;
 // ─── Sidebar Container ────────────────────────────────────
 .sidebar {
   width: $sidebar-width;
-  min-height: 100vh;
+  height: 100vh;
   background: $sidebar-bg;
-  border-right: 1px solid $border-color;
+  border-right: 1px solid var(--app-border-color);
   display: flex;
   flex-direction: column;
-  padding: 0;
-  transition: width $transition;
-  position: relative;
   flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 300;
+  transition: width $transition, transform $transition;
+  overflow: hidden;
 
-  &.collapsed {
-    width: $sidebar-collapsed;
+  // ─── Mobile: hidden by default, slide in when open ───
+  @media (max-width: 768px) {
+    width: $sidebar-width !important; // always full width on mobile
+    transform: translateX(-100%);     // hidden by default
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
 
-    .logo-text,
-    .nav-label,
-    .nav-badge,
-    .settings-label { display: none; }
+    &:not(.collapsed) {
+      transform: translateX(0);       // visible when NOT collapsed
+    }
 
-    .sidebar-logo { justify-content: center; padding: 20px 0; }
-    .nav-item      { justify-content: center; padding: 12px; }
+    // On mobile, never show icons-only mode
+    &.collapsed {
+      .logo-icon,
+      .nav-label,
+      .nav-badge,
+      .settings-label { display: inherit; }
+      
+      .sidebar-logo { padding: 20px 16px 50px; justify-content: flex-start; }
+      .nav-item { justify-content: flex-start; padding: 10px 12px; margin-left: 20px; }
+      .sidebar-settings { padding: 8px 10px 16px; }
+    }
   }
 
-  // ─── Mobile: slide in from left ──────────────────────
-  @media (max-width: 768px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 300;
-    transform: translateX(0);
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
-
+  // ─── Tablet: auto-collapse to icons ──────────────────
+  @media (min-width: 769px) and (max-width: 1024px) {
     &.collapsed {
-      transform: translateX(-100%);
-      width: $sidebar-width;
+      width: $sidebar-collapsed;
+
+      .logo-icon    { width: 44px; height: 44px; margin: 0 auto; }
+      .nav-label,
+      .nav-badge,
+      .settings-label { display: none; }
+
+      .sidebar-logo { padding: 20px 0; justify-content: center; }
+      .nav-item     { justify-content: center; padding: 12px; margin-left: 0; }
+      .sidebar-settings { padding: 8px 0 16px; }
+    }
+  }
+
+  // ─── Desktop: collapse to icons only when .collapsed ──
+  @media (min-width: 1025px) {
+    &.collapsed {
+      width: $sidebar-collapsed;
+
+      .logo-icon    { width: 44px; height: 44px; margin: 0 auto; }
+      .nav-label,
+      .nav-badge,
+      .settings-label { display: none; }
+
+      .sidebar-logo { padding: 20px 0; justify-content: center; }
+      .nav-item     { justify-content: center; padding: 12px; margin-left: 0; }
+      .sidebar-settings { padding: 8px 0 16px; }
     }
   }
 }
@@ -63,46 +90,38 @@ $transition:          0.25s ease;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 20px 16px 16px;
-  border-bottom: 1px solid $border-color;
+  padding: 20px 16px 50px;
+  transition: padding $transition;
 
   .logo-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: $primary-light;
+    width: 100px;
+    height: 80px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
+    margin: auto;
+    transition: width $transition, height $transition;
 
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
-
-    .logo-fallback {
-      font-size: 13px;
-      font-weight: 700;
-      color: $primary;
-    }
-  }
-
-  .logo-text {
-    font-size: 14px;
-    font-weight: 700;
-    color: $text-dark;
-    white-space: nowrap;
   }
 }
 
 // ─── Navigation ───────────────────────────────────────────
 .sidebar-nav {
   flex: 1;
-  padding: 12px 10px;
+  padding: 12px 0;
   overflow-y: auto;
+  overflow-x: hidden;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--app-border-color);
+    border-radius: 4px;
+  }
 }
 
 .nav-list {
@@ -114,32 +133,43 @@ $transition:          0.25s ease;
   gap: 2px;
 }
 
+// ─── Active left border indicator ─────────────────────────
+li {
+  border-left: 4px solid transparent;
+  transition: border-color $transition;
+
+  &:has(> a.active) {
+    border-left: 4px solid var(--app-primary-color);
+  }
+}
+
+// ─── Nav Item ─────────────────────────────────────────────
 .nav-item {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  border-radius: 8px;
   text-decoration: none;
-  color: $text-muted;
+  color: var(--text-muted);
   font-size: 13.5px;
   font-weight: 500;
+  margin-left: 20px;
   transition: background $transition, color $transition;
   cursor: pointer;
-  position: relative;
   white-space: nowrap;
+  overflow: hidden;
 
   &:hover {
     background: $active-bg;
-    color: $active-color;
+    color: var(--app-primary-color);
   }
 
-  // ─── Active state (routerLinkActive) ─────────────────
   &.active {
     background: $active-bg;
-    color: $active-color;
+    color: var(--app-primary-color);
+    font-weight: 700;
 
-    .nav-icon { color: $active-color; }
+    .nav-icon { color: var(--app-primary-color); }
   }
 }
 
@@ -154,7 +184,6 @@ $transition:          0.25s ease;
 // ─── Badge ────────────────────────────────────────────────
 .nav-badge {
   margin-left: auto;
-  background: $primary;
   color: #fff;
   font-size: 10px;
   font-weight: 700;
@@ -162,12 +191,13 @@ $transition:          0.25s ease;
   border-radius: 10px;
   min-width: 18px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 // ─── Settings Section ─────────────────────────────────────
 .sidebar-settings {
   padding: 8px 10px 16px;
-  border-top: 1px solid $border-color;
+  border-top: 1px solid var(--app-border-color);
 
   .settings-label {
     display: block;
@@ -179,15 +209,19 @@ $transition:          0.25s ease;
   }
 }
 
-// ─── Mobile Overlay ───────────────────────────────────────
-.sidebar-overlay {
-  display: none;
+// ─── PrimeNG Tooltip Customization ──────────────────────
+:host ::ng-deep .p-tooltip {
+  .p-tooltip-text {
+    background: var(--app-primary-color);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
 
-  @media (max-width: 768px) {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 299;
+  .p-tooltip-arrow {
+    border-color: var(--app-primary-color);
   }
 }

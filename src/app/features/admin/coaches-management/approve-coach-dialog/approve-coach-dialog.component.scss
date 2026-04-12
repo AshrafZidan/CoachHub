@@ -1,0 +1,74 @@
+
+// ─── Dialog subtitle ──────────────────────────────────────
+.dialog-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 0 16px;
+  font-size: 13.5px;
+  color: var(--app-text-color);
+  border-bottom: 1px solid var(--app-border-color);
+  margin-bottom: 20px;
+
+  i {
+    font-size: 15px;
+    color: var(--app-primary-color);
+  }
+
+  strong { color: var(--title-color); }
+}
+
+// ─── Price Grid — 2 columns ───────────────────────────────
+.price-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Price Field ──────────────────────────────────────────
+.price-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+
+  .required {
+    color: var(--app-delete);
+    margin-left: 2px;
+  }
+}
+
+// ─── Input wrapper with currency badge ────────────────────
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .currency-badge {
+    position: absolute;
+    right: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

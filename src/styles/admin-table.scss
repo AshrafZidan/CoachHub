@@ -1,0 +1,362 @@
+// ─── Admin Table Styles ──────────────────────────────────
+
+.main-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// table design
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--title-color);
+  margin: 0;
+}
+
+// ─── Table Card ───────────────────────────────────────────
+.table-card {
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  font-size: 14px;
+  color: var(--title-color);
+
+  // ─── Header ─────────────────────────────────────────
+  thead tr {
+    background: #ffffff;
+  }
+
+  thead th {
+    border-bottom: 1px solid var(--app-border-color);
+    border-top: 1px solid var(--app-border-color);
+    &:first-child { border-left: 1px solid var(--app-border-color); }
+    &:last-child  { border-right: 1px solid var(--app-border-color); }
+  }
+
+  th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-muted);
+    white-space: nowrap;
+    user-select: none;
+
+    &.sortable {
+      cursor: pointer;
+      display: table-cell;
+
+      &:hover { color: var(--primary-color); }
+
+      .sort-icons {
+        display: inline-flex;
+        flex-direction: column;
+        margin-left: 4px;
+        gap: 1px;
+        vertical-align: middle;
+
+        i {
+          font-size: 8px;
+          color: #d1d5db;
+          line-height: 1;
+          display: block;
+
+          &.active { color: var(--primary-color); }
+        }
+      }
+    }
+  }
+
+  // ─── Body ───────────────────────────────────────────
+  tbody tr {
+    border-bottom: 1px solid var(--app-border-color);
+    transition: background 0.15s;
+
+    &:nth-child(odd) {
+      background: var(--odd-row-bg);
+      td {
+        border-top: 1px solid var(--app-border-color);
+        border-bottom: 1px solid var(--app-border-color);
+        &:first-child { border-left: 1px solid var(--app-border-color); }
+        &:last-child  { border-right: 1px solid var(--app-border-color); }
+      }
+    }
+
+    &:last-child { border-bottom: 0; }
+
+    // &:hover { background: $row-hover; }
+
+    // &.selected { background: $selected-bg; }
+    .action-btns {
+      display: flex;
+      gap: 8px;
+      height: 25px;
+
+      button {
+        width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+
+        i {
+          font-size: 15px;
+        }
+
+        &.view-btn {
+          background: var(--app-primary-color);
+          border: 1px solid var(--app-primary-color);
+          color: #fff;
+        }
+
+        &.edit-btn {
+          background: #fff;
+          border: 1px solid var(--app-primary-color);
+          color: var(--app-primary-color);
+        }
+
+        &.deactivate-btn {
+          background: #fff;
+          border: 1px solid var(--app-success);
+          color: var(--app-success);
+        }
+
+        &.delete-btn {
+          background: #fff;
+          border: 1px solid var(--app-delete);
+          color: var(--app-delete);
+        }
+        &.restore-btn {
+          background: #fff;
+          border: 1px solid var(--app-primary-color);
+          color: var(--app-primary-color);
+        }
+        &.reject-btn {
+          background: #fff;
+          border: 1px solid #95890c;
+          color: #95890c;
+        }
+
+        &.arrow-btn {
+          width: 16px;
+          height: 16px;
+          font-size: 12px;
+          border: 1px solid #ACACAC;
+          color: #ACACAC;
+          margin: auto;
+          margin-inline-start: 20px;
+
+          i {
+            font-size: 9px;
+          }
+        }
+      }
+    }
+  }
+
+  td {
+    padding: 14px 16px;
+    vertical-align: middle;
+  }
+}
+
+// ─── Checkbox ─────────────────────────────────────────────
+.ch-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--app-primary-color);
+  cursor: pointer;
+}
+
+// ─── Empty State ──────────────────────────────────────────
+.empty-state {
+  text-align: center;
+  padding: 60px 20px !important;
+  color: var(--title-color);
+
+  i {
+    font-size: 40px;
+    margin-bottom: 12px;
+    display: block;
+    opacity: 0.4;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+// ─── Table Footer ─────────────────────────────────────────
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid var(--app-border-color);
+  flex-wrap: wrap;
+  gap: 12px;
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+// ─── Per Page ─────────────────────────────────────────────
+.per-page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .per-page-label {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .per-page-select {
+    height: 32px;
+    padding: 0 28px 0 10px;
+    border: 1.5px solid var(--app-border-color);
+    font-size: 13px;
+    color: var(--title-color);
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: var(--app-primary-color);
+    }
+  }
+}
+
+// ─── Pagination ───────────────────────────────────────────
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-btn {
+  min-width: 34px;
+  height: 34px;
+  border: 0;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--app-primary-color);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  border-radius: 8px;
+
+  &.nav-btn {
+    border: 0;
+  }
+
+  &:hover:not(:disabled):not(.active) {
+    border-color: var(--app-primary-color);
+    color: var(--app-primary-color);
+  }
+
+  &.active {
+    background: var(--app-primary-color);
+    border-color: var(--app-primary-color);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &.nav-btn i {
+    font-size: 11px;
+  }
+}
+
+// ─── Skeleton Loading ─────────────────────────────────────
+.skeleton-wrapper {
+  padding: 8px 0;
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--app-border-color);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.skeleton-cell {
+  height: 14px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  flex: 1;
+
+  &.wide {
+    flex: 2;
+  }
+
+  &.actions {
+    flex: 1.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ─── Responsive ───────────────────────────────────────────
+@media (max-width: 768px) {
+  .coaches-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .col-actions {
+    width: auto;
+  }
+
+  .action-btns {
+    gap: 4px;
+  }
+
+  .action-btn {
+    width: 30px;
+    height: 30px;
+
+    i {
+      font-size: 12px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 18px;
+  }
+}

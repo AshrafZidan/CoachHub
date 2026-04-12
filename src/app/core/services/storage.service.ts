@@ -5,6 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
 export class StorageService {
   private readonly ACCESS_TOKEN_KEY  = 'coachhub_access_token';
   private readonly REFRESH_TOKEN_KEY = 'coachhub_refresh_token';
+  private readonly REFRESH_TOKEN_EXPIRY_KEY = 'coachhub_refresh_expiry';
   private readonly USER_KEY          = 'coachhub_user';
 
   private platformId = inject(PLATFORM_ID);
@@ -32,6 +33,7 @@ export class StorageService {
     return this.getStorage()?.getItem(this.REFRESH_TOKEN_KEY) ?? null;
   }
 
+
   // ─── User ─────────────────────────────────────────────
   setUser(user: object): void {
     this.getStorage()?.setItem(this.USER_KEY, JSON.stringify(user));
@@ -41,6 +43,18 @@ export class StorageService {
     const raw = this.getStorage()?.getItem(this.USER_KEY);
     return raw ? (JSON.parse(raw) as T) : null;
   }
+
+
+
+setRefreshTokenExpiry(date: string): void {
+  this.getStorage()?.setItem(this.REFRESH_TOKEN_EXPIRY_KEY, date);
+}
+
+isRefreshTokenExpired(): boolean {
+  const expiry = this.getStorage()?.getItem(this.REFRESH_TOKEN_EXPIRY_KEY);
+  if (!expiry) return true;
+  return new Date(expiry) < new Date(); // ✅ compare with now
+}
 
   // ─── Clear All ────────────────────────────────────────
   clear(): void {

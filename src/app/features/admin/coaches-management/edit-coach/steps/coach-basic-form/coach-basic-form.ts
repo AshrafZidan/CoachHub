@@ -1,0 +1,119 @@
+import {
+  Component,
+  Input,
+  inject,
+  OnInit
+} from '@angular/core';
+
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
+
+import { SelectModule } from 'primeng/select';
+import { DatePicker } from 'primeng/datepicker';
+import { InputTextModule } from 'primeng/inputtext';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
+import { LookupsService } from '../../../../services/lookups.service';
+import { WhatsappInputComponent } from '../../../../../../shared/whatsapp-input/whatsapp-input';
+
+@Component({
+  selector: 'app-coach-basic-form',
+  standalone: true,
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    SelectModule,
+    DatePicker,
+    InputTextModule,
+    WhatsappInputComponent
+  ],
+  templateUrl: './coach-basic-form.html',
+  styleUrl: './coach-basic-form.scss',
+})
+export class CoachBasicForm implements OnInit {
+
+  @Input() form!: FormGroup;
+
+  private service = inject(LookupsService);
+
+  // =========================
+  // STATE
+  // =========================
+  countries: any[] = [];
+  selectedCountry: any = null;
+  isLoading = false;
+
+  // =========================
+  // DROPDOWNS
+  // =========================
+  genders = [
+    { label: 'Male', value: 'male' },
+    { label: 'Female', value: 'female' }
+  ];
+
+  // =========================
+  // INIT
+  // =========================
+  ngOnInit(): void {
+    this.loadCountries();
+
+    // ✅ react to form changes instead of effect()
+    this.form.get('countryId')?.valueChanges.subscribe(countryId => {
+      this.selectedCountry = this.countries.find(c => c.value === countryId);
+    });
+  }
+
+  // =========================
+  // COUNTRIES
+  // =========================
+  loadCountries(): void {
+    this.isLoading = true;
+
+    this.service.getCountries().subscribe(res => {
+      this.countries = res?.map((c: any) => ({
+        label: c.name?.common,
+        value: c.cca2,
+        flag: c.flags?.png,
+        dialCode: c.idd?.root + (c.idd?.suffixes?.[0] || '')
+      }));
+
+      this.isLoading = false;
+
+      // ✅ sync selected country after load
+      const countryId = this.form.get('countryId')?.value;
+      this.selectedCountry = this.countries.find(c => c.value === countryId);
+    });
+  }
+
+  // =========================
+  // COUNTRY CHANGE
+  // =========================
+  onCountryChange(event: any) {
+    const country = this.countries.find(c => c.value === event.value);
+    if (!country) return;
+
+    this.selectedCountry = country;
+
+    // reset number when country changes
+    this.form.get('whatsAppNumber')?.setValue('');
+  }
+
+  // =========================
+  // VALIDATION
+  // =========================
+  isInvalid(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return !!control && control.invalid && (control.touched || control.dirty);
+  }
+
+  hasError(controlName: string, error?: string): boolean {
+    const control = this.form.get(controlName);
+    if (!control) return false;
+
+    const show = control.touched || control.dirty;
+
+    return error
+      ? control.hasError(error) && show
+      : control.invalid && show;
+  }
+}

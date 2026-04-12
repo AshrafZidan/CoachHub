@@ -1,3 +1,13 @@
+// ─── User Object (from JWT token) ────────────────────────
+export interface User {
+  id?: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  roles?: string[];
+  [key: string]: any; // Allow additional fields from token
+}
+
 // ─── Role Enum ───────────────────────────────────────────
 export enum RoleName {
   ADMIN = 'ADMIN',

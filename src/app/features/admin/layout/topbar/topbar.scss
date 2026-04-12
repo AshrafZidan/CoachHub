@@ -1,0 +1,261 @@
+// ─── Design tokens (keeping your values) ─────────────────
+$topbar-height: 65px;
+$search-bg:     #f9fafb;
+$search-border: #e5e7eb;
+$search-radius: 10px;
+
+:host { display: block; }
+
+// ─── Topbar Shell ─────────────────────────────────────────
+.topbar {
+  height: $topbar-height;
+  background: #ffffff;
+  border-bottom: 1px solid var(--app-border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+
+  // ─── Desktop: offset by sidebar width ────────────────
+  margin-left: 240px;
+  transition: margin-left 0.25s ease;
+
+  // ─── Tablet: offset by collapsed sidebar ─────────────
+  @media (min-width: 769px) and (max-width: 1024px) {
+    margin-left: 72px;
+  }
+
+  // ─── Mobile: no offset, full width ───────────────────
+  @media (max-width: 768px) {
+    margin-left: 0;
+    padding: 0 16px;
+    gap: 12px;
+  }
+}
+
+// ─── Hamburger (mobile only) ──────────────────────────────
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--text-dark);
+  font-size: 18px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+
+  &:hover { background: #f3f4f6; }
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+}
+
+// ─── LEFT: Welcome + User ─────────────────────────────────
+.topbar-left {
+  flex-shrink: 0;
+  min-width: 160px;
+
+  @media (max-width: 480px) { min-width: auto; }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  user-select: none;
+
+  &:focus { outline: none; }
+}
+
+.welcome-label {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--title-secondary-color);
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.user-name-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.user-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--app-primary-color);
+  line-height: 1.2;
+  transition: color 0.15s;
+
+  // ─── Truncate on small screens ───────────────────────
+  @media (max-width: 480px) {
+    font-size: 13px;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.chevron-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--text-dark);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+// ─── CENTER: Search ───────────────────────────────────────
+.topbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: space-around;
+
+  // ─── Hide on mobile (show search icon instead) ───────
+  @media (max-width: 768px) { display: none; }
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+ 
+}
+
+// ─── Mobile search icon button ────────────────────────────
+.mobile-search-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--text-muted);
+  font-size: 17px;
+
+  &:hover { background: #f3f4f6; color: var(--app-primary-color); }
+
+  @media (max-width: 768px) { display: flex; align-items: center; }
+}
+
+// ─── RIGHT: Notifications ─────────────────────────────────
+.topbar-right {
+  flex-shrink: 0;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notif-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #f5f3ff;
+    .bell-icon { color: var(--app-primary-color); }
+  }
+
+  .bell-icon {
+    width: 18px;
+    height: 18px;
+    color: #6b7280;
+    transition: color 0.2s;
+  }
+
+  .notif-dot {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    background: #FF6550;
+    border-radius: 50%;
+    border: 1px solid #fff;
+  }
+}
+
+// ─── PrimeNG Menu Overrides ───────────────────────────────
+:host ::ng-deep {
+  .p-menu {
+    min-width: 180px;
+    border: 1px solid var(--app-border-color);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 6px;
+    overflow: hidden;
+  }
+
+  .p-menu-list { padding: 0; }
+
+  .p-menuitem {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .p-menuitem-link {
+    padding: 10px 14px !important;
+    gap: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-dark) !important;
+    border-radius: 8px;
+    transition: background 0.15s !important;
+
+    &:hover {
+      background: #f5f3ff !important;
+      color: var(--app-primary-color) !important;
+      .p-menuitem-icon { color: var(--app-primary-color) !important; }
+    }
+
+    .p-menuitem-icon {
+      font-size: 14px;
+      color: #6b7280;
+      transition: color 0.15s;
+    }
+  }
+
+  .menu-logout .p-menuitem-link {
+    color: #ef4444 !important;
+    .p-menuitem-icon { color: #ef4444 !important; }
+
+    &:hover {
+      background: #fef2f2 !important;
+      color: #dc2626 !important;
+      .p-menuitem-icon { color: #dc2626 !important; }
+    }
+  }
+
+  .p-separator {
+    margin: 4px 6px;
+    border-color: var(--app-border-color);
+  }
+}

@@ -1,16 +1,20 @@
-.error-banner {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-//   border-radius: $radius-sm;
-  padding: 10px 12px;
-  font-size: 13px;
-//   color: $error-color;
-  margin-bottom: 1rem;
-  text-align: center;
+/* PrimeNG Components */
+.p-message-error {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.p-password {
+  width: 100%;
+
+  .p-password-input {
+    width: 100% !important;
+    height: 36px;
+  }
 }
 .auth-wrapper {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   overflow: hidden;
 }
@@ -19,7 +23,6 @@
 .auth-image-side {
   flex: 1;
   position: relative;
-  .p-message-error{margin-top:15px}
 
   img {
     width: 100%;
@@ -38,27 +41,31 @@
 .auth-form-side {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   width: 100%;
+  padding: 40px;
+  min-height: 100vh;
+
   .p-button{
     width: 100%;
   }
   .p-inputtext,.p-inputwrapper{
-
     width: 100% !important;
     height: 36px;
     &::placeholder {
-      color:var(--tilte-secodary-color) !important;
+      color:var(--title-secondary-color) !important;
     }
   }
 }
 
 /* CARD */
 .auth-card {
-    width: 38%;
-    height: 100%;
-    margin-top: 15%;
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
 }
 
 /* LOGO */
@@ -84,7 +91,7 @@
 /* TEXT */
 .auth-title {
   text-align: center;
-  color: var(--tilte-color);
+  color: var(--title-color);
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 5px;
@@ -100,7 +107,7 @@
     font-size: 12px;
     margin-bottom: 6px;
     display: block;
-    color: var(--tilte-secodary-color);
+    color: var(--title-secondary-color);
     font-weight: bold;
   }
 }
@@ -151,34 +158,111 @@
 
 /* ================= 🔥 RESPONSIVE ================= */
 
+/* Large Desktop */
+@media (max-width: 1200px) {
+  .auth-card {
+    max-width: 380px;
+    padding: 35px;
+  }
+}
+
+/* Desktop */
+@media (max-width: 1024px) {
+  .auth-card {
+    max-width: 360px;
+    padding: 30px;
+  }
+
+  .auth-form-side {
+    padding: 30px;
+  }
+}
+
 /* Tablet */
-@media (max-width: 992px) {
+@media (max-width: 768px) {
   .auth-wrapper {
     flex-direction: column;
   }
 
   .auth-image-side {
-    height: 250px;
+    height: 200px;
     flex: unset;
+    order: 2; /* Move image to bottom on mobile */
   }
 
   .auth-form-side {
     padding: 20px;
+    order: 1; /* Form comes first on mobile */
+    min-height: auto;
+  }
+
+  .auth-card {
+    max-width: 100%;
+    padding: 25px;
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .auth-title {
+    font-size: 24px;
+  }
+
+  .auth-logo {
+    margin-bottom: 30px;
+
+    .logo-placeholder {
+      width: 45px;
+      height: 45px;
+    }
   }
 }
 
-/* Mobile */
+/* Small Tablet/Mobile */
 @media (max-width: 576px) {
+  .auth-form-side {
+    padding: 15px;
+  }
+
   .auth-card {
     padding: 20px;
-    border-radius: 10px;
   }
 
   .auth-title {
     font-size: 22px;
+    margin-bottom: 20px;
   }
 
-  .auth-subtitle {
-    font-size: 13px;
+  .auth-logo {
+    margin-bottom: 25px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+  .auth-form-side {
+    padding: 10px;
+  }
+
+  .auth-card {
+    padding: 15px;
+  }
+
+  .auth-title {
+    font-size: 20px;
+  }
+
+  .auth-logo {
+    margin-bottom: 20px;
+
+    .logo-placeholder {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
   }
 }
