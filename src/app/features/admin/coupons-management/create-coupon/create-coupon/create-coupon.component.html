@@ -1,5 +1,5 @@
 <div [formGroup]="form" class="form-container">
-
+  <h4 style="margin-bottom: 20px;" class="page-title">Create Coupons</h4>
   <!-- ─── Coupon Code ───────────────────────────────── -->
   <div class="field w-50">
     <label>Coupon Code <span class="required">*</span></label>
@@ -178,7 +178,7 @@
       optionLabel="fullNameEn"
       [maxSelectedLabels]="5"
       display="chip"
-      class="w-full"
+      class="w-full no-radius"
       appendTo="body"
       [class.input-invalid]="isFieldInvalid('assignedCoaches')"
     />
@@ -191,7 +191,7 @@
   <div class="form-actions w-50">
     <button
       type="button"
-      class="p-button p-button-secondary p-button-sm no-radius"
+      class="p-button p-button-secondary  no-radius"
       (click)="resetForm()"
       [disabled]="isLoading()"
     >
@@ -200,7 +200,7 @@
 
     <button
       type="button"
-      class="p-button p-button-success p-button-sm no-radius"
+      class="p-button p-button-success  no-radius"
       (click)="createCoupon()"
       [disabled]="isLoading() || form.invalid"
     >

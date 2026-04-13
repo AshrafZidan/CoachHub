@@ -31,7 +31,7 @@ export class Sidebar implements OnInit {
     { label: 'Coaches',      icon: 'pi pi-users',                  route: '/admin/coaches'      },
     { label: 'Bookings',     icon: 'pi pi-calendar',               route: '/admin/bookings'     },
     { label: 'Coupons',      icon: 'pi pi-tag',                    route: '/admin/coupons'      },
-    { label: 'Admins',       icon: 'pi pi-shield',                 route: '/admin/admins'       },
+    { label: 'Admins',       icon: 'pi pi-shield',                 route: '/admin/admins-List'       },
     { label: 'Reports',      icon: 'pi pi-chart-bar',              route: '/admin/reports', badge: 1 },
     { label: 'Gateways',     icon: 'pi pi-credit-card',            route: '/admin/gateways'     },
     { label: 'Transactions', icon: 'pi pi-arrow-right-arrow-left', route: '/admin/transactions' }

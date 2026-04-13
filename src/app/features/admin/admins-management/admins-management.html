@@ -1,0 +1,172 @@
+<div class="admin-page main-page">
+  <div class="main-title">
+
+    <h1 class="page-title">Admins</h1>
+    <button class="p-button p-button-primary no-radius" (click)="openCreateAdmin()">
+      Create Admin Account
+    </button>
+  </div>
+  <div class="table-card">
+
+    <!-- ─── Skeleton ─────────────────────────────────── -->
+    <div class="skeleton-wrapper" *ngIf="isLoading()">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
+        <div class="skeleton-cell wide"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell"></div>
+      </div>
+    </div>
+
+    <!-- ─── Table ─────────────────────────────────────── -->
+    <table class="admin-table" *ngIf="!isLoading()" aria-label="admins list">
+      <thead>
+        <tr>
+          <th class="col-check">
+            <input type="checkbox" class="ch-checkbox"
+              [checked]="isAllSelected()"
+              (change)="toggleSelectAll($any($event.target).checked)"
+              aria-label="Select all admins" />
+          </th>
+
+          <th class="col-name sortable" (click)="onSort('fullName')">
+            <span>Name</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'fullName' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'fullName' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-type sortable" (click)="onSort('email')">
+            <span>Role</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'email' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'email' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-price sortable" (click)="onSort('permission')">
+            <span>Permission</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'permission' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'permission' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let admin of admins(); trackBy: trackByAdminId"
+          class="admin-row" [class.selected]="isRowSelected(admin)">
+
+          <td class="col-check">
+            <input type="checkbox" class="ch-checkbox"
+              [checked]="isRowSelected(admin)"
+              (change)="toggleRow(admin, $any($event.target).checked)"
+              [attr.aria-label]="'Select ' + admin.fullName" />
+          </td>
+
+          <td class="col-name">
+            <span class="admin-name">{{ admin.fullName }}</span>
+          </td>
+
+          <td class="col-type">
+            <span class="coach-type">{{ admin.email }}</span>
+          </td>
+
+         <td class="col-bookings">
+          <ng-container *ngFor="let perm of admin.permissions; let i = index">
+            <span>
+              {{ perm.nameEn }}<span *ngIf="i < admin.permissions.length - 1">, </span>
+            </span>
+          </ng-container>
+        </td>
+
+  
+        </tr>
+
+        <tr *ngIf="admins().length === 0 && !isLoading()">
+          <td colspan="6" class="empty-state">
+            <i class="pi pi-ban"></i>
+            <p>No Admins found</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ─── Footer ───────────────────────────────────── -->
+    <div class="table-footer"
+      *ngIf="!isLoading() && tableConfig.totalRecords() > 0">
+
+      <!-- Per page -->
+      <div class="per-page">
+        <span class="per-page-label">View</span>
+        <select
+          class="per-page-select"
+          [ngModel]="tableConfig.pageSize()"
+          (ngModelChange)="onPageSizeChange($event)"
+          aria-label="Rows per page"
+        >
+          <option
+            *ngFor="let opt of pageSizeOptions()"
+            [value]="opt.value"
+          >
+            {{ opt.label }}
+          </option>
+        </select>
+        <span class="per-page-label">Applicants per page</span>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="pageItems().length > 0">
+
+        <!-- Prev -->
+        <button
+          class="page-btn nav-btn"
+          type="button"
+          [disabled]="tableConfig.pageIndex() === 1"
+          (click)="goToPage(tableConfig.pageIndex() - 1)"
+          aria-label="Previous page"
+        >
+          <i class="pi pi-chevron-left"></i>
+        </button>
+
+        <ng-container *ngFor="let item of pageItems(); trackBy: trackByPageItem">
+
+          <button
+            *ngIf="item.type === 'page'"
+            class="page-btn"
+            type="button"
+            [class.active]="item.value === tableConfig.pageIndex()"
+            (click)="goToPage(item.value)"
+            [attr.aria-label]="'Page ' + item.value"
+            [attr.aria-current]="item.value === tableConfig.pageIndex() ? 'page' : null"
+          >
+            {{ item.value }}
+          </button>
+
+          <span
+            *ngIf="item.type === 'ellipsis'"
+            class="page-ellipsis"
+            aria-hidden="true"
+          >
+            ...
+          </span>
+
+        </ng-container>
+
+        <!-- Next -->
+        <button
+          class="page-btn nav-btn"
+          type="button"
+          [disabled]="tableConfig.pageIndex() === totalPages()"
+          (click)="goToPage(tableConfig.pageIndex() + 1)"
+          aria-label="Next page"
+        >
+          <i class="pi pi-chevron-right"></i>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</div>

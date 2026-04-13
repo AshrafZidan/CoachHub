@@ -44,25 +44,3 @@
   }
 }
 
-
-
-// ─── Form actions ─────────────────────────────────────────
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-  // padding-top: 16px;
-  button{width: 50%;}
-  .btn-spinner {
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(#fff, 0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    display: inline-block;
-  }
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }

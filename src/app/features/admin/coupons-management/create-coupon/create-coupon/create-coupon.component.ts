@@ -102,9 +102,6 @@ export class CreateCouponComponent implements OnInit {
       usageLimit:         [null],          // required only when usageMode = 'limit'
       assignedCoaches:    [[]]             // required only when assignMode = 'list'
     });
-
-    // ✅ React to usageMode changes → toggle usageLimit validation
-    // Using effect pattern with signal
   }
 
   // ─── Load coaches for multiselect ─────────────────────
