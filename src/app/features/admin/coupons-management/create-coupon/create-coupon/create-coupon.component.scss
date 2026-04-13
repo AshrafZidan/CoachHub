@@ -1,0 +1,68 @@
+
+
+// ─── Section label ────────────────────────────────────────
+.section-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.required { color: var(--app-error); margin-left: 2px; }
+
+// ─── Checkbox group (radio-style) ─────────────────────────
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.checkbox-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1.5px solid var(--app-border-color);
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  user-select: none;
+
+  &:hover {
+    border-color: var(--app-primary-color);
+    color: var(--app-primary-color);
+  }
+
+  // ✅ Active state — selected option
+  &.active {
+    border-color: var(--app-primary-color);;
+    background: var(--p-datepicker-date-selected-background);
+    color: var(--app-primary-color);;
+  }
+}
+
+
+
+// ─── Form actions ─────────────────────────────────────────
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  // padding-top: 16px;
+  button{width: 50%;}
+  .btn-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(#fff, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+  }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

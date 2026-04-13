@@ -34,6 +34,7 @@ export class LookupsService {
 private countries$?: Observable<any[]>;
 private coachingIndustries$?: Observable<any[]>;
 private languages$?: Observable<any[]>;
+private coaches$?:Observable<any[]>;
 
 
 getCountries(): Observable<ICountry[]> {
@@ -62,6 +63,20 @@ getCoachingIndustries(): Observable<ICoachingIndustry[]> {
   }
 
   return this.coachingIndustries$;
+}
+getCoaches():Observable<any[]> {
+     if (!this.coaches$) {
+    this.coaches$ = this.http
+      .get<any[]>(
+       environment.apiUrl + 'portal/api/coaches/coaches-lookup'
+      )
+      .pipe(
+        shareReplay(1)
+      );
+  }
+
+  return this.coaches$;
+
 }
 getLanguages(): Observable<any[]> {
   if (!this.languages$) {

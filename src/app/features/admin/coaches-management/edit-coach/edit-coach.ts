@@ -36,6 +36,7 @@ import { CoachDetail } from '../Coaches.model';
 import { CoachBasicForm } from './steps/coach-basic-form/coach-basic-form';
 import { CoachProfessionalForm } from './steps/coach-professional-form/coach-professional-form';
 import { CoachMediaForm } from './steps/coach-profrssional-form/coach-media-form';
+import { ToastService } from '../../../../core/services/toast.service';
 @Component({
   selector: 'app-edit-coach',
   standalone: true,
@@ -67,6 +68,8 @@ export class EditCoachComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
+  private toast = inject(ToastService);
+
 
   // =========================
   // STATE
@@ -329,8 +332,19 @@ ngOnInit() {
     profileImage,
     certificates
   };
-
-  console.log('FINAL API PAYLOAD', payload);
+  const coachId = this.coach()?.id;
+  if (this.coach() !== undefined && coachId !== undefined) {
+    this.coachesService.updateCoach(coachId, payload).subscribe({
+    next: () => {
+      this.toast.show('success', 'Coach updated successfully', '');
+      this.router.navigate(['/admin/coaches']);
+    },
+    error: (err) => {
+      console.error('Error updating coach', err);
+        this.toast.show('error', 'Failed to update coach', '');
+    }
+  });
+}
 }
 
 extractBase64(dataUrl: string): string {

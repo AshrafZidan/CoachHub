@@ -14,7 +14,7 @@ export interface PageItem {
 
 export class TableConfig {
   // ─── Sorting ──────────────────────────────────────────
-  sortField = signal<string>('fullNameEn');
+  sortField = signal<string>('code');
   sortOrder = signal<'ASC' | 'DESC'>('ASC');
 
   // ─── Pagination (UI = 1-based) ────────────────────────

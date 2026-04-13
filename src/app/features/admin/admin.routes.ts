@@ -37,12 +37,19 @@ export const ADMIN_ROUTES: Routes = [
       //     import('./bookings/bookings.component').then(c => c.BookingsComponent),
       //   title: 'Bookings — CoachHub Admin'
       // },
-      // {
-      //   path: 'coupons',
-      //   loadComponent: () =>
-      //     import('./coupons/coupons.component').then(c => c.CouponsComponent),
-      //   title: 'Coupons — CoachHub Admin'
-      // },
+      {
+        path: 'coupons',
+        loadComponent: () =>
+          import('./coupons-management/coupones-management').then(c => c.CouponsManagement),
+        title: 'Coupons — CoachHub Admin'
+
+      },
+                {
+            path: 'coupons/create',
+            loadComponent: () =>
+              import('./coupons-management/create-coupon/create-coupon/create-coupon.component').then(c => c.CreateCouponComponent),
+            title: 'Create Coupon — CoachHub Admin'
+          }
       // {
       //   path: 'admins',
       //   loadComponent: () =>

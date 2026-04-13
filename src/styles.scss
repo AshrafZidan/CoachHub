@@ -95,6 +95,10 @@ body,
 body{
   margin:0;
 }
+.main-title{
+    display: flex;
+    justify-content: space-between;
+}
 .p-button {
     border-radius: 12px !important;
     font-weight: 500;
@@ -121,8 +125,9 @@ body{
     font-size: 12px !important;
 
   }
-  .no-radius {
-    border-radius: 0 !important;
+  .no-radius, .p-button.no-radius, .app-input.no-radius,.p-datepicker.no-radius input {
+     border-radius: 0 !important;
+  
   }
   
 
@@ -139,6 +144,7 @@ body{
   }
   .w-full{
     width:100%;}
+  .w-50{width: 50%;}
    // ─── PrimeNG overrides ────────────────────────────────────
  .p-motion {
     display: block;

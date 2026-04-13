@@ -1,0 +1,168 @@
+<div class="admin-page main-page">
+  <div class="main-title">
+
+    <h1 class="page-title">Coupons</h1>
+    <button class="p-button p-button-primary no-radius" (click)="openCreateCoupon()">
+      Create Coupon
+    </button>
+  </div>
+  <div class="table-card">
+
+    <!-- ─── Skeleton ─────────────────────────────────── -->
+    <div class="skeleton-wrapper" *ngIf="isLoading()">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
+        <div class="skeleton-cell wide"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell"></div>
+      </div>
+    </div>
+
+    <!-- ─── Table ─────────────────────────────────────── -->
+    <table class="admin-table" *ngIf="!isLoading()" aria-label="Coaches list">
+      <thead>
+        <tr>
+          <th class="col-check">
+            <input type="checkbox" class="ch-checkbox"
+              [checked]="isAllSelected()"
+              (change)="toggleSelectAll($any($event.target).checked)"
+              aria-label="Select all coaches" />
+          </th>
+
+          <th class="col-name sortable" (click)="onSort('code')">
+            <span>Coupon Code</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'code' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'code' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-type sortable" (click)="onSort('discountPercentage')">
+            <span>Value</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'discountPercentage' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'discountPercentage' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-price sortable" (click)="onSort('expiryDate')">
+            <span>Expiry Date</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'expiryDate' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'expiryDate' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let coupon of coupons(); trackBy: trackByCouponId"
+          class="coupon-row" [class.selected]="isRowSelected(coupon)">
+
+          <td class="col-check">
+            <input type="checkbox" class="ch-checkbox"
+              [checked]="isRowSelected(coupon)"
+              (change)="toggleRow(coupon, $any($event.target).checked)"
+              [attr.aria-label]="'Select ' + coupon.code" />
+          </td>
+
+          <td class="col-name">
+            <span class="coach-name">{{ coupon.code }}</span>
+          </td>
+
+          <td class="col-type">
+            <span class="coach-type">{{ coupon.discountPercentage }}</span>
+          </td>
+
+          <td class="col-bookings">
+            <span>{{ coupon.expiryDate }}</span>
+          </td>
+
+  
+        </tr>
+
+        <tr *ngIf="coupons().length === 0 && !isLoading()">
+          <td colspan="6" class="empty-state">
+            <i class="pi pi-ban"></i>
+            <p>No coupons found</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ─── Footer ───────────────────────────────────── -->
+    <div class="table-footer"
+      *ngIf="!isLoading() && tableConfig.totalRecords() > 0">
+
+      <!-- Per page -->
+      <div class="per-page">
+        <span class="per-page-label">View</span>
+        <select
+          class="per-page-select"
+          [ngModel]="tableConfig.pageSize()"
+          (ngModelChange)="onPageSizeChange($event)"
+          aria-label="Rows per page"
+        >
+          <option
+            *ngFor="let opt of pageSizeOptions()"
+            [value]="opt.value"
+          >
+            {{ opt.label }}
+          </option>
+        </select>
+        <span class="per-page-label">Applicants per page</span>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="pageItems().length > 0">
+
+        <!-- Prev -->
+        <button
+          class="page-btn nav-btn"
+          type="button"
+          [disabled]="tableConfig.pageIndex() === 1"
+          (click)="goToPage(tableConfig.pageIndex() - 1)"
+          aria-label="Previous page"
+        >
+          <i class="pi pi-chevron-left"></i>
+        </button>
+
+        <ng-container *ngFor="let item of pageItems(); trackBy: trackByPageItem">
+
+          <button
+            *ngIf="item.type === 'page'"
+            class="page-btn"
+            type="button"
+            [class.active]="item.value === tableConfig.pageIndex()"
+            (click)="goToPage(item.value)"
+            [attr.aria-label]="'Page ' + item.value"
+            [attr.aria-current]="item.value === tableConfig.pageIndex() ? 'page' : null"
+          >
+            {{ item.value }}
+          </button>
+
+          <span
+            *ngIf="item.type === 'ellipsis'"
+            class="page-ellipsis"
+            aria-hidden="true"
+          >
+            ...
+          </span>
+
+        </ng-container>
+
+        <!-- Next -->
+        <button
+          class="page-btn nav-btn"
+          type="button"
+          [disabled]="tableConfig.pageIndex() === totalPages()"
+          (click)="goToPage(tableConfig.pageIndex() + 1)"
+          aria-label="Next page"
+        >
+          <i class="pi pi-chevron-right"></i>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</div>

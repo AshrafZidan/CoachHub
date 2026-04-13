@@ -41,6 +41,12 @@ private handleError = (err: unknown) => {
       );
   }
 
+  // ─── update coach details ──────────────────────
+    updateCoach(id: number | string,coachDetails: any): Observable<ApiResponse<void>> {
+    return this.http
+      .put<ApiResponse<void>>(`${this.BASE_URL}/${id}`, coachDetails)
+      .pipe(catchError(err => throwError(() => err)));
+  }
 
   // ─── GET all coaches (paginated) ──────────────────────
   getCoaches(query: CoachesQuery): Observable<CoachesResponse> {

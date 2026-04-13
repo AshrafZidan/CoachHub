@@ -44,6 +44,9 @@ export class AuthService {
     }
   });
 
+  constructor() {
+      this.restoreSession();
+  }
   // ─── Get User from token ──────────────────────────────
   readonly user = computed<User | null>(() => {
     const token = this._accessToken();
@@ -121,12 +124,14 @@ export class AuthService {
   }
 
   // ─── REDIRECT AFTER LOGIN (role-based) ────────────────
-  redirectAfterLogin(): void {
-    // ✅ navigateByUrl is fine here — called after successful login, not in a guard
-    this.router.navigateByUrl(
-      this.isAdmin() ? '/admin/coaches' : '/user/dashboard'
-    );
-  }
+ redirectAfterLogin(): void {
+  const returnUrl =
+    this.router.routerState.snapshot.root.queryParams['returnUrl'];
+
+  this.router.navigateByUrl(
+    returnUrl || (this.isAdmin() ? '/admin/coaches' : '/user/dashboard')
+  );
+}
 
   // ─── PRIVATE ──────────────────────────────────────────
   private handleAuthSuccess(response: ApiResponse<LoginData>): void {
@@ -138,4 +143,10 @@ export class AuthService {
 
     this._accessToken.set(accessToken);
   }
+  private restoreSession(): void {
+  const token = this.storage.getAccessToken();
+  if (token) {
+    this._accessToken.set(token);
+  }
+}
 }
