@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { adminGuard, authGuard } from '../../core/guards/auth-guard';
+import { permissionGuard } from '../../core/guards/permission.guard';
+import { ForbiddenComponent } from '../../core/components/forbidden/forbidden.component';
 
 export const ADMIN_ROUTES: Routes = [
   {
@@ -39,6 +41,7 @@ export const ADMIN_ROUTES: Routes = [
       // },
       {
         path: 'coupons',
+        canActivate: [permissionGuard(['coupons'], false)], // false = OR logic
         loadComponent: () =>
           import('./coupons-management/coupones-management').then(c => c.CouponsManagement),
         title: 'Coupons — CoachHub Admin'
@@ -61,6 +64,10 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () =>
           import('./admins-management/create-admin/create-admin.component').then(c => c.CreateAdminComponent),
         title: 'Create Admin — CoachHub Admin'
+      },
+        {
+        path: 'forbidden',
+        component: ForbiddenComponent,
       },
 
       // {

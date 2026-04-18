@@ -14,7 +14,7 @@
   <!-- ─── Main Navigation ──────────────────────────────── -->
   <nav class="sidebar-nav">
     <ul class="nav-list">
-      <li *ngFor="let item of mainNavItems">
+      <li *ngFor="let item of mainNavItems()">
         <a
           class="nav-item"
           [routerLink]="item.route"
@@ -43,7 +43,7 @@
   <div class="sidebar-settings">
     <span class="settings-label" *ngIf="!isCollapsed()">SETTINGS</span>
     <ul class="nav-list">
-      <li *ngFor="let item of settingsNavItems">
+      <li *ngFor="let item of settingsNavItems()">
         <a
           class="nav-item"
           [routerLink]="item.route"

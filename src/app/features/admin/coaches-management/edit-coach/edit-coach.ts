@@ -436,11 +436,18 @@ async submit() {
       }
     });
 }
+
 formatDate(date: Date): string {
   const d = new Date(date);
-  return d.toISOString().split('T')[0];
 
-}private getCountryIdByCode(code: string): number | null {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+private getCountryIdByCode(code: string): number | null {
   const country = this.countriesArray?.data?.find((c:any ) => c.code === code);
   return country ? country.id : null;
 }

@@ -7,29 +7,48 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth-interceptor';
-import { refreshTokenInterceptor } from './core/interceptors/Refresh token.interceptor';
 import { errorInterceptor } from './core/interceptors/error-interceptor';
 import { MessageService } from 'primeng/api';
+import { PermissionService } from './core/services/permission.service';
+import { StorageService } from './core/services/storage.service';
+import { AuthService } from './core/services/auth.service';
+import { refreshTokenInterceptor } from './core/interceptors/refresh-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    // ─── Core Services ────────────────────────────────────────
     MessageService,
+    PermissionService,  // ✅ Add PermissionService
+    StorageService,     // ✅ Add StorageService
+    AuthService,        // ✅ Add AuthService
+
+    // ─── Browser Error Handling ───────────────────────────────
     provideBrowserGlobalErrorListeners(),
-       provideHttpClient(
+
+    // ─── HTTP Client with Interceptors ────────────────────────
+    provideHttpClient(
       withFetch(),
       withInterceptors([
-        authInterceptor,         // 1. Attach Bearer token
-        refreshTokenInterceptor, // 2. Handle 401 → refresh token
-        errorInterceptor         // 3. Handle other errors
+        authInterceptor,         // 1️⃣ Attach Bearer token to requests
+        refreshTokenInterceptor, // 2️⃣ Handle 401 → refresh token
+        errorInterceptor         // 3️⃣ Handle other errors & show toasts
       ])
     ),
+
+    // ─── Animations ────────────────────────────────────────────
     provideAnimations(),
+
+    // ─── PrimeNG Theme ────────────────────────────────────────
     providePrimeNG({
       theme: {
-          preset: Aura
+        preset: Aura
       }
-  }),
+    }),
 
-    provideRouter(routes), provideClientHydration(withEventReplay())
+    // ─── Routing ───────────────────────────────────────────────
+    provideRouter(routes),
+
+    // ─── Client Hydration (SSR) ────────────────────────────────
+    provideClientHydration(withEventReplay())
   ]
 };
