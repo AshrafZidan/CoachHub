@@ -51,6 +51,7 @@
   <div class="form-actions w-50">
     <button
       type="button"
+      pButton
       class="p-button p-button-secondary no-radius"
       (click)="resetForm()"
       [disabled]="isLoading()"
@@ -60,6 +61,7 @@
 
     <button
       type="button"
+      pButton
       class="p-button p-button-success no-radius"
       (click)="createAdminAccount()"
       [disabled]="isLoading() || form.invalid"
