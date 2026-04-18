@@ -120,6 +120,9 @@
               <button *ngIf="coach.enabled === false && coach.status !== 'PENDING_APPROVAL'" class="action-btn restore-btn" type="button" pTooltip="Activate" tooltipPosition="top" (click)="toggleActivation(coach)">
                 <i class="pi pi-undo"></i>
               </button>
+               <button class="action-btn deactivate-btn approve-btn" *ngIf= "coach.status == 'APPROVED'" type="button" pTooltip="Reset Password" tooltipPosition="top" (click)="sendForgetPasswordMail(coach)">
+                <i class="pi pi-key"></i>
+              </button>
               <button class="action-btn arrow-btn" type="button" (click)="viewCoach(coach)">
                 <i class="pi pi-chevron-right"></i>
               </button>

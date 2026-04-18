@@ -54,6 +54,26 @@
     </small>
   </div>
 
+   <div class="field">
+    <label>What's  Your Nationality?</label>
+    <p-select
+      [options]="countries"
+      formControlName="nationalityId"
+      optionLabel="label"
+      optionValue="value"
+      [filter]="true"
+      filterBy="label"
+      [showClear]="true"
+      placeholder="Select Your Nationality"
+      class="w-full">
+    </p-select>
+
+    <small class="p-error" *ngIf="isInvalid('nationalityId')">
+      Nationality is required
+    </small>
+  </div>
+
+  
   <!-- Country -->
   <div class="field">
     <label>Where are you located?</label>

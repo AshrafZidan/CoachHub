@@ -1,10 +1,16 @@
 <div class="edit-page main-page">
-<p-progress-spinner *ngIf="isLoading()" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '200px' }" />
+  <div class="loading-overlay" *ngIf="isLoading()">
+    <p-progressSpinner
+      strokeWidth="4"
+      animationDuration=".8s"
+    ></p-progressSpinner>
+  </div>
+
 
   <h1 class="page-title">Edit Coach Details</h1>
 
   <!-- STEP 1 -->
-  <ng-container *ngIf="isStep1()">
+  <ng-container  *ngIf="isStep1()">
     <app-coach-basic-form [form]="basicForm"></app-coach-basic-form>
 
   </ng-container>

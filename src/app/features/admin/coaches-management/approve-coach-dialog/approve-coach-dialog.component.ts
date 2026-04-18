@@ -95,7 +95,7 @@ constructor() {
     const incoming: CoachPrices = {
       halfHourPrice:       c.halfHourPrice       ?? 0,
       hourlyPrice:         c.hourlyPrice         ?? 0,
-      oneAndHalfHourPrice: c.oneAndHalfHourPrice ?? 0,
+      oneAndHalfHourPrice: c.OneAndHalfHourPrice ?? 0,
       twoHoursPrice:       c.twoHoursPrice       ?? 0
     };
 

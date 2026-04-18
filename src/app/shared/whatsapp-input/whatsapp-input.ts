@@ -22,13 +22,41 @@ export class WhatsappInputComponent implements ControlValueAccessor {
   @Input() selectedCountry: any;
 
   value: string = '';
+  code: string = '';
+  private fullValue: string = '';
 
-  onChange = (value: any) => {};
+  onChange = (_: any) => {};
   onTouched = () => {};
+  ngOnChanges(): void {
+  this.applyPhoneFormat();
+}
 
   writeValue(value: any): void {
-    this.value = value;
+  if (!value) {
+    this.value = '';
+    this.fullValue = '';
+    return;
   }
+
+  this.fullValue = value;
+
+  // try parsing immediately if country is ready
+  this.applyPhoneFormat();
+}
+private applyPhoneFormat(): void {
+  const dialCode = this.selectedCountry?.dialCode;
+
+  if (!dialCode || !this.fullValue) {
+    return; // wait until country is ready
+  }
+
+  if (this.fullValue.startsWith(dialCode)) {
+    this.value = this.fullValue.slice(dialCode.length);
+    this.code = dialCode;
+  } else {
+    this.value = this.fullValue;
+  }
+}
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -38,8 +66,25 @@ export class WhatsappInputComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  setValue(val: string) {
+  onInputChange(val: string) {
     this.value = val;
-    this.onChange(val);
+    this.emitValue();
   }
+
+  onCountryChange(country: any) {
+    this.code = country?.phoneCode || '';
+    this.emitValue();
+  }
+
+  private emitValue() {
+    const fullNumber = `${this.code}${this.value}`;
+    this.onChange(fullNumber); 
+  }
+  setValue(val: string) {
+  this.value = val;
+
+  const fullNumber = `${this.selectedCountry?.dialCode || ''}${val}`;
+  this.onChange(fullNumber);
+}
+
 }

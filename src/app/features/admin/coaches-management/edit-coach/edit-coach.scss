@@ -7,5 +7,22 @@
         gap: 1rem;
         .p-button{flex: 1;}
     }
+  position: relative;
+
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.content.blur {
+  pointer-events: none;
+  filter: blur(1px);
+}
 
 }

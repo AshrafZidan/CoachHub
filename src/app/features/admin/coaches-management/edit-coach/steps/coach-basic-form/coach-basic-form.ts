@@ -15,6 +15,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { LookupsService } from '../../../../services/lookups.service';
 import { WhatsappInputComponent } from '../../../../../../shared/whatsapp-input/whatsapp-input';
+import { log } from 'console';
 
 @Component({
   selector: 'app-coach-basic-form',
@@ -47,8 +48,8 @@ export class CoachBasicForm implements OnInit {
   // DROPDOWNS
   // =========================
   genders = [
-    { label: 'Male', value: 'male' },
-    { label: 'Female', value: 'female' }
+    { label: 'Male', value: 'MALE' },
+    { label: 'Female', value: 'FEMALE' }
   ];
 
   // =========================
@@ -57,7 +58,6 @@ export class CoachBasicForm implements OnInit {
   ngOnInit(): void {
     this.loadCountries();
 
-    // ✅ react to form changes instead of effect()
     this.form.get('countryId')?.valueChanges.subscribe(countryId => {
       this.selectedCountry = this.countries.find(c => c.value === countryId);
     });
@@ -67,21 +67,39 @@ export class CoachBasicForm implements OnInit {
   // COUNTRIES
   // =========================
   loadCountries(): void {
-    this.isLoading = true;
+  this.isLoading = true;
 
-    this.service.getCountries().subscribe(res => {
-      this.countries = res?.map((c: any) => ({
-        label: c.name?.common,
-        value: c.cca2,
-        flag: c.flags?.png,
-        dialCode: c.idd?.root + (c.idd?.suffixes?.[0] || '')
-      }));
+  this.service.getCountries().subscribe(res => {
+    this.countries = res?.map((c: any) => ({
+      label: c.name?.common,
+      value: c.cca2,
+      flag: c.flags?.png,
+      dialCode: c.idd?.root + (c.idd?.suffixes?.[0] || ''),
+      countryId:c.cca2
+    }));
 
-      this.isLoading = false;
+    this.isLoading = false;
 
-      // ✅ sync selected country after load
+    setTimeout(() => {
+      
       const countryId = this.form.get('countryId')?.value;
-      this.selectedCountry = this.countries.find(c => c.value === countryId);
+      const nationalityId = this.form.get('nationalityId')?.value;
+      
+      if (countryId ) {
+        const match = this.countries.find(c => c.value === countryId);
+        const matchNa = this.countries.find(c => c.value === nationalityId)
+        if (match) {
+          this.selectedCountry = match;
+          
+          this.form.get('countryId')?.setValue(countryId, { emitEvent: false });
+        }
+        
+        if (matchNa) {
+            this.form.get('nationalityId')?.setValue(nationalityId, { emitEvent: false });
+
+        }
+      }
+    }, 10);
     });
   }
 

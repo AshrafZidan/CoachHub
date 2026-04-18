@@ -6,7 +6,8 @@ import {
   inject,
   OnInit,
   OnDestroy,
-  DestroyRef
+  DestroyRef,
+  ViewEncapsulation
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -26,7 +27,7 @@ import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, filter, switchMap } from 'rxjs';
+import { map, filter, switchMap, finalize } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { SearchService } from '../../services/global-table-search.service';
@@ -35,8 +36,9 @@ import { CoachDetail } from '../Coaches.model';
 
 import { CoachBasicForm } from './steps/coach-basic-form/coach-basic-form';
 import { CoachProfessionalForm } from './steps/coach-professional-form/coach-professional-form';
-import { CoachMediaForm } from './steps/coach-profrssional-form/coach-media-form';
 import { ToastService } from '../../../../core/services/toast.service';
+import { CoachMediaForm } from './steps/coach-media-form/coach-media-form';
+import { LookupsService } from '../../services/lookups.service';
 @Component({
   selector: 'app-edit-coach',
   standalone: true,
@@ -55,15 +57,17 @@ import { ToastService } from '../../../../core/services/toast.service';
     CoachMediaForm
   ],
   templateUrl: './edit-coach.html',
-  styleUrls: ['./edit-coach.scss']
+  styleUrls: ['./edit-coach.scss'],
+  encapsulation:ViewEncapsulation.None
 })
 export class EditCoachComponent implements OnInit, OnDestroy {
-
+  countriesArray: any = [];
   // =========================
   // INJECTIONS
   // =========================
   private searchService = inject(SearchService);
   private coachesService = inject(CoachesService);
+  private lookupService = inject(LookupsService);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
@@ -96,8 +100,13 @@ export class EditCoachComponent implements OnInit, OnDestroy {
     gender: ['', Validators.required],
     birthDate: [null as Date | null, Validators.required],
     countryId: ['', Validators.required],
+    nationalityId:['',Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    whatsAppNumber: ['', [Validators.required, Validators.pattern(/^\d+$/)]]
+    halfHourPrice:[0,],
+    hourlyPrice:[0],
+    twoHoursPrice:[0],
+    whatsAppNumber: ['', [Validators.required, Validators.pattern(/^\+?\d+$/) ]],
+    oneAndHalfHourPrice:[0],
   });
 
   // =========================
@@ -105,8 +114,8 @@ export class EditCoachComponent implements OnInit, OnDestroy {
   // =========================
   professionalForm = this.fb.group({
     yearsOfExperience: [null as number | null, [Validators.required, Validators.min(0)]],
-    coachingIndustries: [[] as string[], Validators.required],
-    languages: [[] as string[], Validators.required],
+    coachingIndustriesIds: [[] as string[], Validators.required],
+    languageIds: [[] as string[], Validators.required],
     availableEveryWeek: [false as boolean, Validators.required],
     jobTitle: ['', Validators.required],
   });
@@ -117,7 +126,8 @@ export class EditCoachComponent implements OnInit, OnDestroy {
   mediaForm = this.fb.group({
     username: ['', Validators.required],
     profileImageUrl: [''],
-    certificates: this.fb.array([])
+    profileImageId: [''],
+  certificates: this.fb.array([])
   });
 
   // =========================
@@ -128,13 +138,14 @@ export class EditCoachComponent implements OnInit, OnDestroy {
   }
 
   createCertificate(cert?: any): FormGroup {
-    return this.fb.group({
-      id: [cert?.id || null],
-      name: [cert?.name || ''],
-      fileUrl: [cert?.fileUrl || ''],
-      contentType: [cert?.contentType || '']
-    });
-  }
+  return this.fb.group({
+    id: [cert?.id || null],
+    name: [cert?.name || ''],
+    fileUrl: [cert?.fileUrl || ''],
+    file: [null],
+    contentType: [cert?.contentType || 'image/jpeg']
+  });
+}
 
   addCertificate() {
     this.certificates.push(this.createCertificate());
@@ -166,6 +177,7 @@ export class EditCoachComponent implements OnInit, OnDestroy {
   }
 
 ngOnInit() {
+  this.loadCountriesfromBcApi();
   this.route.paramMap.pipe(
     map(params => params.get('id')),
     filter((id): id is string => !!id),
@@ -198,11 +210,16 @@ ngOnInit() {
       this.basicForm.patchValue({
         fullNameEn: data.fullNameEn,
         fullNameAr: data.fullNameAr,
-        gender: data.gender?.toLowerCase(),
+        gender: data.gender,
         birthDate: data.birthDate ? new Date(data.birthDate) : null,
         countryId: data.country?.code ?? null,
+        nationalityId:data.nationality.code??null,
         email: data.email,
-        whatsAppNumber: this.parseWhatsapp(data.whatsAppNumber).number
+        halfHourPrice:data.halfHourPrice??0,
+        hourlyPrice:data.hourlyPrice??0,
+        twoHoursPrice:data.twoHoursPrice??0,
+        oneAndHalfHourPrice: data.oneAndHalfHourPrice ?? 0,
+        whatsAppNumber: data.whatsAppNumber,
       });
 
       // =========================
@@ -212,8 +229,8 @@ ngOnInit() {
         yearsOfExperience: data.yearsOfExperience ?? null,
         jobTitle: data.jobTitle,
         availableEveryWeek: data.availableEveryWeek,
-        coachingIndustries: data.coachingIndustries?.map((i: any) => i.id) || [],
-        languages: data.languages?.map((l: any) => l.id) || []
+        coachingIndustriesIds: data.coachingIndustries?.map((i: any) => i.id) || [],
+        languageIds: data.languages?.map((l: any) => l.id) || []
       });
 
       // =========================
@@ -221,7 +238,8 @@ ngOnInit() {
       // =========================
       this.mediaForm.patchValue({
         username: data.username || '',
-        profileImageUrl: data.profileImageUrl || ''
+        profileImageUrl: data.profileImageUrl || '',
+        profileImageId: data.profileImageId || ''  
       });
 
       // =========================
@@ -264,10 +282,7 @@ ngOnInit() {
     };
   }
 
-  formatDate(date: Date | null): string | null {
-    if (!date) return null;
-    return date.toISOString().split('T')[0];
-  }
+ 
 
   // =========================
   // NAVIGATION
@@ -294,63 +309,164 @@ ngOnInit() {
   // =========================
   // SUBMIT
   // =========================
- submit() {
+async submit() {
+  if (this.isLoading()) return;
+  this.isLoading.set(true);
+
   const media = this.mediaForm.value;
 
-  const profileImage = media.profileImageUrl
-    ? {
-        contentType: 'image/jpeg',
-        content: this.extractBase64(media.profileImageUrl),
-        attachmentName: 'profile.jpg'
-      }
-    : null;
+  // =========================
+  // PROFILE IMAGE (ONLY ID OR BASE64)
+  // =========================
+  let profileImage = null;
 
-  const certificates = media.certificates?.map((c: any) => {
+  if (media.profileImageUrl && media.profileImageUrl.startsWith('data:')) {
+    profileImage = {
+      contentType: 'image/jpeg',
+      content: this.extractBase64(media.profileImageUrl),
+      attachmentName: 'profile.jpg'
+    };
+  } else if (media.profileImageId) {
+    profileImage = {
+      id: media.profileImageId
+    };
+  }
 
-    // ✅ CASE 1: user uploaded / replaced
-    if (c.file) {
+  // =========================
+  // CERTIFICATES (FULL OBJECT)
+  // =========================
+ const certificates = await Promise.all(
+  this.certificates.controls.map(async (c: any) => {
+    const v = c.value;
+
+    // ✅ NEW FILE (File object)
+    if (v.file instanceof File) {
+      const base64 = await this.fileToBase64(v.file);
+
       return {
-        contentType: c.contentType || 'image/jpeg',
-        content: this.extractBase64(c.file),
-        attachmentName: c.name
+        contentType: v.contentType || 'image/jpeg',
+        content: this.extractBase64(base64),
+        attachmentName: v.name
       };
     }
 
-    // ✅ CASE 2: existing from API
-    return {
-      contentType: c.contentType || 'image/jpeg',
-      content: this.extractBase64(c.fileUrl), // ⚠️ only works if already base64
-      attachmentName: c.name
-    };
-  });
+    // ✅ ALREADY BASE64 STRING (rare case)
+    if (typeof v.file === 'string' && v.file.startsWith('data:')) {
+      return {
+        contentType: v.contentType || 'image/jpeg',
+        content: this.extractBase64(v.file),
+        attachmentName: v.name
+      };
+    }
 
+    // ✅ KEEP FULL OBJECT
+    return {
+      id: v.id,
+      contentType: v.contentType,
+      attachmentName: v.name,
+      fileUrl: v.fileUrl
+    };
+  })
+);
+  // =========================
+  // DATE
+  // =========================
+  const birthDateValue = this.basicForm.value.birthDate;
+
+  // =========================
+  // PAYLOAD
+  // =========================
   const payload = {
-    ...this.basicForm.value,
-    ...this.professionalForm.value,
+    fullNameEn: this.basicForm.value.fullNameEn,
+    fullNameAr: this.basicForm.value.fullNameAr,
+    gender: this.basicForm.value.gender,
+
+    birthDate: birthDateValue
+      ? this.formatDate(new Date(birthDateValue))
+      : null,
+
+    countryId: this.basicForm.value.countryId
+      ? this.getCountryIdByCode(this.basicForm.value.countryId)
+      : null,
+
+    nationalityId: this.basicForm.value.nationalityId
+      ? this.getCountryIdByCode(this.basicForm.value.nationalityId)
+      : null,
+
+    email: this.basicForm.value.email,
+    whatsAppNumber: this.basicForm.value.whatsAppNumber,
+
+    halfHourPrice: this.basicForm.value.halfHourPrice,
+    oneAndHalfHourPrice: this.basicForm.value.oneAndHalfHourPrice,
+    hourlyPrice: this.basicForm.value.hourlyPrice,
+    twoHoursPrice: this.basicForm.value.twoHoursPrice,
+
+    yearsOfExperience: this.professionalForm.value.yearsOfExperience,
+    coachingIndustriesIds: this.professionalForm.value.coachingIndustriesIds,
+    languageIds: this.professionalForm.value.languageIds,
+    availableEveryWeek: this.professionalForm.value.availableEveryWeek,
+    jobTitle: this.professionalForm.value.jobTitle,
 
     username: media.username,
+
     profileImage,
     certificates
   };
+
+  // =========================
+  // API CALL
+  // =========================
   const coachId = this.coach()?.id;
-  if (this.coach() !== undefined && coachId !== undefined) {
-    this.coachesService.updateCoach(coachId, payload).subscribe({
-    next: () => {
-      this.toast.show('success', 'Coach updated successfully', '');
-      this.router.navigate(['/admin/coaches']);
-    },
-    error: (err) => {
-      console.error('Error updating coach', err);
+
+  if (!coachId) {
+    this.isLoading.set(false);
+    return;
+  }
+
+  this.coachesService.updateCoach(coachId, payload)
+    .pipe(finalize(() => this.isLoading.set(false)))
+    .subscribe({
+      next: () => {
+        this.toast.show('success', 'Coach updated successfully', '');
+        this.router.navigate(['/admin/coaches']);
+      },
+      error: (err) => {
+        console.error(err);
         this.toast.show('error', 'Failed to update coach', '');
-    }
+      }
+    });
+}
+formatDate(date: Date): string {
+  const d = new Date(date);
+  return d.toISOString().split('T')[0];
+
+}private getCountryIdByCode(code: string): number | null {
+  const country = this.countriesArray?.data?.find((c:any ) => c.code === code);
+  return country ? country.id : null;
+}
+loadCountriesfromBcApi() {
+  this.lookupService.getCountriesfrombackend().subscribe({
+    next: (res) => {
+      this.countriesArray = res;
+    },
+    error: (err) => console.error(err)
   });
 }
+fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+  });
 }
+ extractBase64(dataUrl: any): string {
+  if (!dataUrl || typeof dataUrl !== 'string') return '';
 
-extractBase64(dataUrl: string): string {
-  if (!dataUrl) return '';
+  if (!dataUrl.includes(',')) return dataUrl;
 
-  // remove prefix: data:image/png;base64,
   return dataUrl.split(',')[1];
 }
 }

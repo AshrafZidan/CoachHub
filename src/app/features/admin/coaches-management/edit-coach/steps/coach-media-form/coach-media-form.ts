@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { environment } from '../../../../../../../environments/environment';
 
 @Component({
   selector: 'app-coach-media-form',
@@ -41,7 +42,7 @@ export class CoachMediaForm implements OnInit {
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
 
-  readonly baseUrl = 'https://backend.coachinghub.ae';
+  readonly baseUrl = environment.apiUrl;
   certErrorMap = signal<Record<number, boolean>>({});
 
   // =========================

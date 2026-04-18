@@ -126,10 +126,10 @@ body{
     font-size: 12px !important;
 
   }
-  .no-radius, .p-button.no-radius, .app-input.no-radius,.p-datepicker.no-radius input , .no-radius .p-datepicker-input{
+  .no-radius, .p-button.no-radius, .app-input.no-radius,.p-datepicker.no-radius input , .no-radius .p-datepicker-input.p-inputtext , .no-raduis .p-inputtext{
      border-radius: 0 !important;
-  
   }
+.required { color: var(--app-error); margin-left: 2px; }
   
 
 

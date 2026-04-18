@@ -12,7 +12,6 @@ export interface Coach {
   hourlyPrice:          number | null;
   twoHoursPrice:        number | null;
   OneAndHalfHourPrice:  number | null;
-  oneAndHalfHourPrice: number | null;
   coachingIndustries:   CoachingIndustry[];
   bookingCount:         number;
 }
@@ -59,12 +58,22 @@ export interface CoachesQuery {
 }
 
 export interface Country {
+  id:number;
   code:        string;   // ISO 3166-1 alpha-2 e.g. 'EG'
   name:        string;   // 'Egypt'
   dialCode:    string;   // '+20'
   flag:        string;   // '🇪🇬'
   phoneLength: number[]; // [10] — valid local digit counts
+  
 }
+export interface Nationality {
+  id:number | string;
+  code:        string;   // ISO 3166-1 alpha-2 e.g. 'EG'
+  nameEn:        string;   // 'Egypt'
+  nameAr:    string;  
+}
+
+
 
 export interface WhatsAppContact {
   countryCode: string;   // '+20'
@@ -88,7 +97,7 @@ export interface CoachDetail {
   username: string;
 
   gender: 'MALE' | 'FEMALE'; // matches API
-  birthDate: string | null | Date; // ISO date string e.g. "1990-01-01"
+  birthDate: string; // ISO date string e.g. "1990-01-01"
 
   jobTitle: string;
   yearsOfExperience: number | null;
@@ -98,10 +107,12 @@ export interface CoachDetail {
   status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'DEACTIVATED';
   enabled: boolean;
 
+
   // ─── Contact ────────────────────────────
   whatsAppNumber: string | null;
 
-country: Country | null; // cca2 (e.g. "EG")
+country: Country ; // cca2 (e.g. "EG")
+nationality:Nationality;
 
   // ─── Pricing ────────────────────────────
   halfHourPrice: number;
@@ -111,6 +122,7 @@ country: Country | null; // cca2 (e.g. "EG")
 
   // ─── Media ──────────────────────────────
   profileImageUrl: string | null;
+  profileImageId:string | null;
 
   // ─── Stats ──────────────────────────────
   bookingCount: number;

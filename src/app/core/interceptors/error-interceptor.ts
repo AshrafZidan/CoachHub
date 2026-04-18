@@ -13,12 +13,14 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
         case 401:
-          toast.error('Session expired. Please log in again.', 'Unauthorized');
-      setTimeout(() => {
-        router.navigate(['/auth/login']);
-      }, 1000);
-      break;
+           if (!router.url.includes('/auth/login')) {
 
+    toast.error('Session expired. Please log in again.', 'Unauthorized');
+    router.navigate(['/auth/login'], {
+      queryParams: { returnUrl: router.url }
+    });
+  }
+      break;
         case 403:
           // No permission → redirect to dashboard
           router.navigate(['/app/dashboard']);

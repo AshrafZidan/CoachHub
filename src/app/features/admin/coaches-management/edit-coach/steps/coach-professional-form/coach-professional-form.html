@@ -1,86 +1,107 @@
-<div class="professional-form form-container " [formGroup]="form">
-  <!-- SECTION: EXPERIENCE -->
-  <div class="section">
-    <div class="field">
-      <label>What is the industry you can give coaching in? *</label>
-         <p-multiselect
-          [options]="coachingIndustriesOptions$ | async" 
-         formControlName="coachingIndustries" 
-         placeholder="Select industry" optionLabel="label"
-         optionValue="value"
-          [maxSelectedLabels]="5"
-          display="chip" class="w-full" />
+<div class="professional-form form-container" [formGroup]="form">
 
-      <small class="p-error" *ngIf="isInvalid('coachingIndustries')">
-        {{ getError('coachingIndustries') }}
-      </small>
-    </div>
-
-    <!-- Years of Experience -->
-    <div class="field">
-      <label>Years of Experience *</label>
-
-      <input
-        pInputText
-        type="number"
-        formControlName="yearsOfExperience"
-        placeholder="Enter years of experience"
-      />
-
-      <small class="p-error" *ngIf="isInvalid('yearsOfExperience')">
-        {{ getError('yearsOfExperience') }}
-      </small>
-    </div>
-
-        <div class="field">
-      <label>what's your languages? *</label>
-
-     <p-multiselect
-          [options]="languagesOptions$ | async" 
-         formControlName="languages" 
-         placeholder="Select languages" optionLabel="label"
-         optionValue="value"
-         [maxSelectedLabels]="5"
-          display="chip" class="w-full" />
-
-      <small class="p-error" *ngIf="isInvalid('languages')">
-        {{ getError('languages') }}
-      </small>
-    </div>
-    
-      <div class="field">
-      <label> Are you available/free for at least 2:3 hours every week? *</label>
-
-     <p-select
-          [options]="[{ label: 'Yes', value: true }, { label: 'No', value: false }]"
-         formControlName="availableEveryWeek" 
-         placeholder="Select availability" optionLabel="label"
-         optionValue="value"
-         class="w-full" />
-
-      <small class="p-error" *ngIf="isInvalid('availableEveryWeek')">
-        {{ getError('availableEveryWeek') }}
-      </small>
-    </div>
-   
-
-    <!-- Job Title -->
-    <div class="field">
-      <label>Job Title *</label>
-      <input
-        pInputText
-        formControlName="jobTitle"
-        placeholder="Enter job title"
-      />
-
-      <small class="p-error" *ngIf="isInvalid('jobTitle')">
-        {{ getError('jobTitle') }}
-      </small>
-    </div>
-
-
+  <!-- ✅ Loading Overlay -->
+  <div class="loading-overlay" *ngIf="isLoading()">
+    <p-progressSpinner
+      strokeWidth="4"
+      animationDuration=".8s"
+    ></p-progressSpinner>
   </div>
 
 
+  <!-- ✅ Content -->
+  <ng-container >
+
+    <div class="section">
+
+      <!-- Industries -->
+      <div class="field">
+        <label>What is the industry you can give coaching in? *</label>
+
+       <p-multiSelect
+  [options]="(options$ | async)?.industries || []"
+  formControlName="coachingIndustriesIds"
+  optionLabel="label"
+  optionValue="value"
+  class="w-full"
+  display="chip"
+></p-multiSelect>
+
+
+        <small class="p-error" *ngIf="isInvalid('coachingIndustriesIds')">
+          {{ getError('coachingIndustriesIds') }}
+        </small>
+      </div>
+
+      <!-- Experience -->
+      <div class="field">
+        <label>Years of Experience *</label>
+
+        <input
+          pInputText
+          type="number"
+          formControlName="yearsOfExperience"
+          placeholder="Enter years of experience"
+        />
+
+        <small class="p-error" *ngIf="isInvalid('yearsOfExperience')">
+          {{ getError('yearsOfExperience') }}
+        </small>
+      </div>
+
+      <!-- Languages -->
+      <div class="field">
+        <label>What are your languages? *</label>
+
+        <p-multiSelect
+  [options]="(options$ | async)?.languages || []"
+  formControlName="languageIds"
+  optionLabel="label"
+  optionValue="value"
+  class="w-full"
+   display="chip"
+></p-multiSelect>
+
+        <small class="p-error" *ngIf="isInvalid('languageIds')">
+          {{ getError('languageIds') }}
+        </small>
+      </div>
+
+      <!-- Availability -->
+      <div class="field">
+        <label>Are you available at least 2–3 hours per week? *</label>
+
+        <p-select
+          [options]="availabilityOptions"
+          formControlName="availableEveryWeek"
+          placeholder="Select availability"
+          optionLabel="label"
+          optionValue="value"
+          class="w-full"
+        ></p-select>
+
+        <small class="p-error" *ngIf="isInvalid('availableEveryWeek')">
+          {{ getError('availableEveryWeek') }}
+        </small>
+      </div>
+
+      <!-- Job Title -->
+      <div class="field">
+        <label>Job Title *</label>
+
+        <input
+          pInputText
+          formControlName="jobTitle"
+          placeholder="Enter job title"
+        />
+
+        <small class="p-error" *ngIf="isInvalid('jobTitle')">
+          {{ getError('jobTitle') }}
+        </small>
+      </div>
+
+    </div>
+
+  </ng-container>
 
 </div>

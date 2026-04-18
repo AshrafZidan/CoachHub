@@ -85,6 +85,11 @@ private handleError = (err: unknown) => {
     this.pendingRequest = { key, observable: request$ };
     return request$;
   }
+  sendForgetPasswordMail(id:number|string){
+    return this.http
+      .post<ApiResponse<void>>(`${this.BASE_URL}/${id}/reset-password`, {})
+      .pipe(catchError(err => throwError(() => err)));
+  }
 
   // ─── Activate coach ───────────────────────────────────
   activateCoach(id: number | string): Observable<ApiResponse<void>> {

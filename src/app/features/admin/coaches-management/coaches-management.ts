@@ -241,6 +241,39 @@ constructor() {
     });
   }
 
+    // ─── forget password  ─────────────────────────────────────
+
+  sendForgetPasswordMail(coach: Coach) {
+  this.confirmationService.confirm({
+    message: `Are you sure you want to send reset password email to <strong>${coach.fullNameEn}</strong>?`,
+    header: 'Reset Password',
+    acceptLabel: 'Send Mail',
+    rejectLabel: 'Cancel',
+    acceptButtonStyleClass: 'no-radius p-button-primary p-button-sm',
+    rejectButtonStyleClass: 'no-radius p-button-secondary p-button-sm',
+
+    accept: () => {
+      this.coachesService.sendForgetPasswordMail(coach.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Email Sent',
+              detail: `Reset password email sent to ${coach.fullNameEn}`
+            });
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to send reset password email'
+            });
+          }
+        });
+    }
+  });
+}
   // ─── Reject coach ─────────────────────────────────────
   rejectCoach(coach: Coach): void {
     this.confirmationService.confirm({
