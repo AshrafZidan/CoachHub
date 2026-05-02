@@ -1,0 +1,221 @@
+<p-toast position="top-right" />
+<p-confirmDialog />
+
+<app-approve-coach-dialog
+  *ngIf="selectedCoachForApproval()"
+  [coach]="selectedCoachForApproval()!"
+  [visible]="approvalDialogVisible()"
+  (visibleChange)="onDialogVisibleChange($event)"
+  (approved)="onCoachApproved()"
+/>
+
+<div class="admin-page main-page">
+
+  <h1 class="page-title">Coaches</h1>
+
+  <div class="table-card">
+
+    <!-- ─── Skeleton ─────────────────────────────────── -->
+    <div class="skeleton-wrapper" *ngIf="isLoading()">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
+        <div class="skeleton-cell wide"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell actions"></div>
+      </div>
+    </div>
+
+    <!-- ─── Table ─────────────────────────────────────── -->
+    <table class="admin-table" *ngIf="!isLoading()" aria-label="Coaches list">
+      <thead>
+        <tr>
+          <th class="col-check">
+            <input type="checkbox" class="ch-checkbox"
+              [checked]="isAllSelected()"
+              (change)="toggleSelectAll($any($event.target).checked)"
+              aria-label="Select all coaches" />
+          </th>
+
+          <th class="col-name sortable" (click)="onSort('fullNameEn')">
+            <span>Name</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'fullNameEn' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'fullNameEn' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-type sortable" (click)="onSort('coachingIndustries')">
+            <span>Type</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'coachingIndustries' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'coachingIndustries' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-price sortable" (click)="onSort('hourlyPrice')">
+            <span>Price</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'hourlyPrice' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'hourlyPrice' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-bookings sortable" (click)="onSort('bookingCount')">
+            <span>No of Booking</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'bookingCount' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'bookingCount' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-actions"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let coach of coaches(); trackBy: trackByCoachId"
+          class="coach-row" [class.selected]="isRowSelected(coach)">
+
+          <td class="col-check">
+            <input type="checkbox" class="ch-checkbox"
+              [checked]="isRowSelected(coach)"
+              (change)="toggleRow(coach, $any($event.target).checked)"
+              [attr.aria-label]="'Select ' + coach.fullNameEn" />
+          </td>
+
+          <td class="col-name">
+            <span class="coach-name">{{ coach.fullNameEn }}</span>
+          </td>
+
+          <td class="col-type">
+            <span class="coach-type">{{ coach.coachingIndustries[0]?.nameEn || 'N/A' }}</span>
+          </td>
+
+          <td class="col-price">
+            <span class="coach-price">{{ coach.hourlyPrice || 'N/A' }} L.E</span>
+          </td>
+
+          <td class="col-bookings">
+            <span>{{ coach.bookingCount }}</span>
+          </td>
+
+          <td class="col-actions">
+            <div *ngIf="coach.status != 'REJECTED'" class="action-btns">
+              <button class="action-btn view-btn" type="button" pTooltip="View Profile" tooltipPosition="top" (click)="viewCoach(coach)">
+                <i class="pi pi-eye"></i>
+              </button>
+              <button *ngIf="coach.status !== 'PENDING_APPROVAL'" class="action-btn edit-btn" type="button" pTooltip="Edit" tooltipPosition="top" (click)="editCoach(coach)">
+                <i class="pi pi-file-edit"></i>
+              </button>
+              <button *ngIf="coach.status === 'PENDING_APPROVAL'" class="action-btn deactivate-btn approve-btn" type="button" pTooltip="Approve" tooltipPosition="top" (click)="openApprovalDialog(coach)">
+                <i class="pi pi-check-circle"></i>
+              </button>
+              <button *ngIf="coach.status === 'PENDING_APPROVAL'" class="action-btn delete-btn reject-btn" type="button" pTooltip="Reject" tooltipPosition="top" (click)="rejectCoach(coach)">
+                <i class="pi pi-ban"></i>
+              </button>
+              <button *ngIf="coach.enabled === true && coach.status !== 'PENDING_APPROVAL'" class="action-btn delete-btn" type="button" pTooltip="Deactivate" tooltipPosition="top" (click)="toggleActivation(coach)">
+                <i class="pi pi-times-circle"></i>
+              </button>
+              <button *ngIf="coach.enabled === false && coach.status !== 'PENDING_APPROVAL'" class="action-btn restore-btn" type="button" pTooltip="Activate" tooltipPosition="top" (click)="toggleActivation(coach)">
+                <i class="pi pi-undo"></i>
+              </button>
+               <button class="action-btn deactivate-btn reset" *ngIf= "coach.status == 'APPROVED'" type="button" pTooltip="Reset Password" tooltipPosition="top" (click)="sendForgetPasswordMail(coach)">
+                <i class="pi pi-key"></i>
+              </button>
+              <!-- <button class="action-btn arrow-btn" type="button" (click)="viewCoach(coach)">
+                <i class="pi pi-chevron-right"></i>
+              </button> -->
+            </div>
+             <div class="chip cancelled text-center" style="text-align: center;" *ngIf="coach.status == 'REJECTED'">
+                  {{coach.status }}
+             </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="coaches().length === 0 && !isLoading()">
+          <td colspan="6" class="empty-state">
+            <i class="pi pi-users"></i>
+            <p>No coaches found</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ─── Footer ───────────────────────────────────── -->
+    <div class="table-footer"
+      *ngIf="!isLoading() && tableConfig.totalRecords() > 0">
+
+      <!-- Per page -->
+      <div class="per-page">
+        <span class="per-page-label">View</span>
+        <select
+          class="per-page-select"
+          [ngModel]="tableConfig.pageSize()"
+          (ngModelChange)="onPageSizeChange($event)"
+          aria-label="Rows per page"
+        >
+          <option
+            *ngFor="let opt of pageSizeOptions()"
+            [value]="opt.value"
+          >
+            {{ opt.label }}
+          </option>
+        </select>
+        <span class="per-page-label">Applicants per page</span>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="pageItems().length > 0">
+
+        <!-- Prev -->
+        <button
+          class="page-btn nav-btn"
+          type="button"
+          [disabled]="tableConfig.pageIndex() === 1"
+          (click)="goToPage(tableConfig.pageIndex() - 1)"
+          aria-label="Previous page"
+        >
+          <i class="pi pi-chevron-left"></i>
+        </button>
+
+        <ng-container *ngFor="let item of pageItems(); trackBy: trackByPageItem">
+
+          <button
+            *ngIf="item.type === 'page'"
+            class="page-btn"
+            type="button"
+            [class.active]="item.value === tableConfig.pageIndex()"
+            (click)="goToPage(item.value)"
+            [attr.aria-label]="'Page ' + item.value"
+            [attr.aria-current]="item.value === tableConfig.pageIndex() ? 'page' : null"
+          >
+            {{ item.value }}
+          </button>
+
+          <span
+            *ngIf="item.type === 'ellipsis'"
+            class="page-ellipsis"
+            aria-hidden="true"
+          >
+            ...
+          </span>
+
+        </ng-container>
+
+        <!-- Next -->
+        <button
+          class="page-btn nav-btn"
+          type="button"
+          [disabled]="tableConfig.pageIndex() === totalPages()"
+          (click)="goToPage(tableConfig.pageIndex() + 1)"
+          aria-label="Next page"
+        >
+          <i class="pi pi-chevron-right"></i>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</div>

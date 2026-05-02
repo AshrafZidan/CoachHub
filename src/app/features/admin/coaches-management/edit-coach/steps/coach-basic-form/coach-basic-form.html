@@ -1,0 +1,120 @@
+<div [formGroup]="form" class="form-container">
+
+  <!-- Full Name EN -->
+  <div class="field">
+    <label>Full name in English *</label>
+    <input pInputText formControlName="fullNameEn" placeholder="Enter your full name" />
+    <small class="p-error" *ngIf="isInvalid('fullNameEn')">
+      Full name is required
+    </small>
+  </div>
+
+  <!-- Full Name AR -->
+  <div class="field">
+    <label>Full name in Arabic *</label>
+    <input pInputText formControlName="fullNameAr" placeholder="Enter your full name" />
+    <small class="p-error" *ngIf="isInvalid('fullNameAr')">
+      Full name is required
+    </small>
+  </div>
+
+  <!-- Gender -->
+  <div class="field">
+    <label>Gender *</label>
+    <p-select
+      [options]="genders"
+      formControlName="gender"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Select Gender"
+      class="w-full">
+    </p-select>
+
+    <small class="p-error" *ngIf="isInvalid('gender')">
+      Gender is required
+    </small>
+  </div>
+
+  <!-- Birth Date -->
+  <div class="field">
+    <label>Birth Date *</label>
+    <p-datePicker
+      formControlName="birthDate"
+      placeholder="Select Birth Date"
+      class="w-full"
+      [showIcon]="true"
+      iconDisplay="input"
+      [showOnFocus]="false"
+      [readonlyInput]="true"
+      appendTo="body">
+    </p-datePicker>
+
+    <small class="p-error" *ngIf="isInvalid('birthDate')">
+      Birth date is required
+    </small>
+  </div>
+
+   <div class="field">
+    <label>What's  Your Nationality?</label>
+    <p-select
+      [options]="countries"
+      formControlName="nationalityId"
+      optionLabel="label"
+      optionValue="value"
+      [filter]="true"
+      filterBy="label"
+      [showClear]="true"
+      placeholder="Select Your Nationality"
+      class="w-full">
+    </p-select>
+
+    <small class="p-error" *ngIf="isInvalid('nationalityId')">
+      Nationality is required
+    </small>
+  </div>
+
+  
+  <!-- Country -->
+  <div class="field">
+    <label>Where are you located?</label>
+
+    <p-select
+      [options]="countries"
+      formControlName="countryId"
+      optionLabel="label"
+      optionValue="value"
+      [filter]="true"
+      filterBy="label"
+      [showClear]="true"
+      placeholder="Select Location"
+      class="w-full"
+      (onChange)="onCountryChange($event)">
+    </p-select>
+
+    <small class="p-error" *ngIf="isInvalid('countryId')">
+      Location is required
+    </small>
+  </div>
+
+  <!-- Email -->
+  <div class="field">
+    <label>Email Address</label>
+    <input pInputText type="email" formControlName="email" placeholder="Enter your email" />
+
+    <small class="p-error" *ngIf="hasError('email', 'required')">
+      Email is required
+    </small>
+
+    <small class="p-error" *ngIf="hasError('email', 'email')">
+      Invalid email format
+    </small>
+  </div>
+
+  <!-- WhatsApp -->
+  <app-whatsapp-input
+    formControlName="whatsAppNumber"
+    [selectedCountry]="selectedCountry"
+    [countries]="countries">
+  </app-whatsapp-input>
+
+</div>

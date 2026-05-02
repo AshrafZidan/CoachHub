@@ -1,0 +1,45 @@
+<div class="edit-page main-page">
+  <div class="loading-overlay" *ngIf="isLoading()">
+    <p-progressSpinner
+      strokeWidth="4"
+      animationDuration=".8s"
+    ></p-progressSpinner>
+  </div>
+
+
+  <h1 class="page-title">Edit Coach Details</h1>
+
+  <!-- STEP 1 -->
+  <ng-container  *ngIf="isStep1()">
+    <app-coach-basic-form [form]="basicForm"></app-coach-basic-form>
+
+  </ng-container>
+
+  <!-- STEP 2 -->
+  <ng-container *ngIf="isStep2()">
+    <app-coach-professional-form [form]="professionalForm"></app-coach-professional-form>
+
+
+  </ng-container>
+
+  <!-- STEP 3 -->
+  <ng-container *ngIf="isStep3()">
+    <app-coach-media-form [form]="mediaForm"></app-coach-media-form>
+  </ng-container>
+
+  <!-- BACK -->
+<div class="form-actions">
+<button class="p-button p-button-secondary p-button-outlined" *ngIf="showBackButton()"  
+(click)="back()">
+  Back
+</button>
+
+<!-- NEXT / SAVE -->
+<button class="p-button p-button-primary"
+  (click)="next()" 
+  [disabled]="this.currentForm().invalid"
+>
+  {{ isLastStep() ? 'Save' : 'Next' }}
+</button>
+</div>
+</div>

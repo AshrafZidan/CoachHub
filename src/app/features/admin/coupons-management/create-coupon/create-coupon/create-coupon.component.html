@@ -1,0 +1,212 @@
+<div [formGroup]="form" class="form-container">
+  <h4 style="margin-bottom: 20px;" class="page-title">Create Coupons</h4>
+  <!-- ─── Coupon Code ───────────────────────────────── -->
+  <div class="field w-50">
+    <label>Coupon Code <span class="required">*</span></label>
+    <input
+      pInputText
+      formControlName="code"
+      placeholder="Enter coupon code (e.g. SAVE20)"
+      class="w-full app-input no-radius"
+      [class.input-invalid]="isFieldInvalid('code')"
+    />
+    <small class="p-error" *ngIf="isFieldInvalid('code')">
+      {{ getFieldError('code') }}
+    </small>
+  </div>
+
+
+    <div class="field w-50">
+    <label>Coupon Title <span class="required">*</span></label>
+    <input
+      pInputText
+      formControlName="title"
+      placeholder="Enter coupon title"
+      class="w-full app-input no-radius"
+      [class.input-invalid]="isFieldInvalid('title')"
+    />
+    <small class="p-error" *ngIf="isFieldInvalid('title')">
+      {{ getFieldError('title') }}
+    </small>
+  </div>
+
+  <!-- ─── Discount Percentage ──────────────────────── -->
+  <div class="field w-50">
+    <label>Discount Percentage <span class="required">*</span></label>
+    <p-inputNumber
+      formControlName="discountPercentage"
+      placeholder="e.g. 20"
+      [min]="1"
+      [max]="100"
+      suffix=" %"
+      class="w-full"
+      [class.input-invalid]="isFieldInvalid('discountPercentage')"
+      inputStyleClass="w-full app-input no-radius"
+    />
+    <small class="p-error" *ngIf="isFieldInvalid('discountPercentage')">
+      {{ getFieldError('discountPercentage') }}
+    </small>
+  </div>
+
+  <!-- ─── Expiry Date ───────────────────────────────── -->
+  <div class="field w-50">
+    <label>Expiry Date <span class="required">*</span></label>
+    <p-datePicker
+      formControlName="expiryDate"
+      placeholder="Select expiry date"
+      class="w-full no-raduis"
+      [showIcon]="true"
+      iconDisplay="input"
+      [showOnFocus]="false"
+      [readonlyInput]="true"
+      [minDate]="today"
+      appendTo="body"
+      [class.input-invalid]="isFieldInvalid('expiryDate')"
+    />
+    <small class="p-error" *ngIf="isFieldInvalid('expiryDate')">
+      {{ getFieldError('expiryDate') }}
+    </small>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- USAGE LIMIT SECTION                                -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="field">
+    <label class="section-label">
+      How Would You Like To Assign Usage Limit?
+    </label>
+
+    <!-- Radio-style checkboxes — mutually exclusive -->
+    <div class="checkbox-group">
+
+      <label
+        class="checkbox-option"
+        [class.active]="usageMode() === 'limit'"
+        (click)="setUsageMode('limit')"
+      >
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="usageMode() === 'limit'"
+          [ngModelOptions]="{ standalone: true }"
+          (onChange)="setUsageMode('limit')"
+        />
+        <span>Add Usage Limit</span>
+      </label>
+
+      <label
+        class="checkbox-option"
+        [class.active]="usageMode() === 'unlimited'"
+        (click)="setUsageMode('unlimited')"
+      >
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="usageMode() === 'unlimited'"
+          [ngModelOptions]="{ standalone: true }"
+          (onChange)="setUsageMode('unlimited')"
+        />
+        <span>Unlimited Usage</span>
+      </label>
+
+    </div>
+  </div>
+
+  <!-- Usage Limit input — visible only when mode = 'limit' -->
+  <div class="field w-50" *ngIf="showUsageLimit()">
+    <label>Usage Limit <span class="required">*</span></label>
+    <p-inputNumber
+      formControlName="usageLimit"
+      placeholder="e.g. 100"
+      [min]="1"
+      class="w-full"
+      inputStyleClass="w-full app-input no-radius"
+      [class.input-invalid]="isFieldInvalid('usageLimit')"
+    />
+    <small class="p-error" *ngIf="isFieldInvalid('usageLimit')">
+      {{ getFieldError('usageLimit') }}
+    </small>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- ASSIGN COACHES SECTION                             -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="field">
+    <label class="section-label">
+      How Would You Like To Assign This Coupon?
+    </label>
+
+    <!-- Radio-style checkboxes — mutually exclusive -->
+    <div class="checkbox-group">
+
+      <label
+        class="checkbox-option"
+        [class.active]="assignMode() === 'list'"
+        (click)="setAssignMode('list')"
+      >
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="assignMode() === 'list'"
+          [ngModelOptions]="{ standalone: true }"
+          (onChange)="setAssignMode('list')"
+        />
+        <span>Select From List</span>
+      </label>
+
+      <label
+        class="checkbox-option"
+        [class.active]="assignMode() === 'all'"
+        (click)="setAssignMode('all')"
+      >
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="assignMode() === 'all'"
+          [ngModelOptions]="{ standalone: true }"
+          (onChange)="setAssignMode('all')"
+        />
+        <span>Assign To All Coaches</span>
+      </label>
+
+    </div>
+  </div>
+
+  <!-- Coaches multiselect — visible only when mode = 'list' -->
+  <div class="field w-50" *ngIf="showCoachList()">
+    <label>Select Coaches <span class="required">*</span></label>
+    <p-multiselect
+      formControlName="assignedCoaches"
+      [options]="coachesOptions"
+      placeholder="Select coaches"
+      optionLabel="fullNameEn"
+      [maxSelectedLabels]="5"
+      display="chip"
+      class="w-full no-radius"
+      appendTo="body"
+      [class.input-invalid]="isFieldInvalid('assignedCoaches')"
+    />
+    <small class="p-error" *ngIf="isFieldInvalid('assignedCoaches')">
+      {{ getFieldError('assignedCoaches') }}
+    </small>
+  </div>
+
+  <!-- ─── Actions ──────────────────────────────────── -->
+  <div class="form-actions w-50">
+    <button
+      type="button"
+      class="p-button p-button-secondary  no-radius"
+      (click)="resetForm()"
+      [disabled]="isLoading()"
+    >
+      Reset
+    </button>
+
+    <button
+      type="button"
+      class="p-button p-button-success  no-radius"
+      (click)="createCoupon()"
+      [disabled]="isLoading() || form.invalid"
+    >
+      <span class="btn-spinner" *ngIf="isLoading()"></span>
+      <span>{{ isLoading() ? 'Creating...' : 'Create Coupon' }}</span>
+    </button>
+  </div>
+
+</div>

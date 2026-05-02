@@ -1,0 +1,45 @@
+
+
+// ─── Section label ────────────────────────────────────────
+.section-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 12px;
+}
+
+
+// ─── Checkbox group (radio-style) ─────────────────────────
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.checkbox-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1.5px solid var(--app-border-color);
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  user-select: none;
+
+  &:hover {
+    border-color: var(--app-primary-color);
+    color: var(--app-primary-color);
+  }
+
+  // ✅ Active state — selected option
+  &.active {
+    border-color: var(--app-primary-color);;
+    background: var(--p-datepicker-date-selected-background);
+    color: var(--app-primary-color);;
+  }
+}
+

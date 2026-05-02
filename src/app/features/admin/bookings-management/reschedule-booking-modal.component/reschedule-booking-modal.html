@@ -1,0 +1,65 @@
+<p-dialog
+  [visible]="visible"
+  (onHide)="close()"
+  header="Reschedule Booking for {{booking?.coacheeFullName}}" 
+  [modal]="true"
+  [style]="{ width: '600px' }"
+  [contentStyle]="{ 'overflow-y': 'auto', 'max-height': '80vh' }" 
+>
+  <!-- Loading -->
+  <div *ngIf="isLoading()">Loading slots...</div>
+
+  <!-- Content -->
+  <div class="rescdule-modal" *ngIf="!isLoading() && booking">
+    
+    <!-- Date Picker -->
+    <p-date-picker 
+      [ngModel]="selectedDate()"
+      (ngModelChange)="selectDate($event)"
+      [showIcon]="true"
+      dateFormat="dd M yy"
+      placeholder="Select Date"
+      appendTo="body"
+    ></p-date-picker>
+
+    <!-- Slots Section -->
+    <div *ngIf="selectedDate()">
+      <h4>Available Slots</h4>
+
+      <!-- FIXED: Removed the *ngFor from this div -->
+      <div *ngIf="slotsForSelectedDate().length > 0" class="slots-container">
+          <button
+            class="slot-btn"
+            *ngFor="let slot of slotsForSelectedDate()"
+            (click)="selectSlot(slot)"
+            [class.selected]="selectedSlot()?.id === slot.id"
+          >
+            {{ formatTime(slot.startTimeUtc) }} - {{ formatTime(slot.endTimeUtc) }}
+          </button>
+      </div>
+
+      <p *ngIf="slotsForSelectedDate().length === 0">
+        No slots available
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer (Move outside the conditional div for consistent placement) -->
+  <ng-template pTemplate="footer">
+    <div class="p-dialog-footer-custom">
+      <button
+        pButton
+        label="Cancel"
+        class="p-button-secondary p-button-sm no-radius"
+        (click)="close()"
+      ></button>
+      <button
+        pButton
+        label="Reschedule"
+        class="p-button-primary p-button-sm no-radius"
+        (click)="submit()"
+        [disabled]="!canSubmit()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,2 @@
+import './polyfills.server.mjs';
+import{b as o}from"./chunk-SMTXB5ZP.mjs";import{Ac as n,U as u,ec as a,y as r}from"./chunk-PYBKU4FO.mjs";var l=(t,e)=>{let i=r(o),c=r(n);return!a(r(u))||i.isLoggedIn()?!0:c.createUrlTree(["/auth/login"],{queryParams:{returnUrl:e.url}})},A=()=>{let t=r(o),e=r(n);return!a(r(u))||t.isAdmin()?!0:e.createUrlTree(["/auth/login-admin"])},g=()=>{let t=r(o),e=r(n);return t.isLoggedIn()?e.createUrlTree([t.isAdmin()?"/admin/coaches":"/user/dashboard"]):!0};export{l as a,A as b,g as c};

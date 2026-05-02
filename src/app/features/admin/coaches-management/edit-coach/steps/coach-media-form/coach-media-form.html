@@ -1,0 +1,148 @@
+<div class="professional-form form-container" [formGroup]="form">
+  <div class="section">
+
+    <!-- ─── Username ──────────────────────────────────── -->
+    <div class="field w-30">
+      <label>Username (to be in your profile link) *</label>
+      <input
+        pInputText
+        type="text"
+        formControlName="username"
+        class="w-full"
+        placeholder="Enter username"
+      />
+      <small class="p-error" *ngIf="isInvalid('username')">
+        {{ getError('username') }}
+      </small>
+    </div>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- PROFILE PHOTO                                    -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="image-field w-30">
+      <label>Profile Photo</label>
+      <p class="desc">
+        This image will be shown publicly as your profile picture,
+        it will help recruiters recognize you!
+      </p>
+
+      <div class="upload-row">
+
+        <!-- ── Left: circular avatar preview ── -->
+        <div class="avatar">
+
+          <div class="avatar-loading" *ngIf="profileImageLoading()">
+            <p-progressSpinner
+              styleClass="mini-spinner"
+              strokeWidth="4"
+              animationDuration=".8s"
+            />
+          </div>
+
+          <ng-container *ngIf="!profileImageLoading()">
+            <img
+              *ngIf="profileImageUrl; else emptyProfileAvatar"
+              [src]="profileImageUrl"
+              class="avatar-img"
+              alt="Profile photo"
+              (error)="onImageError()"
+            />
+            <ng-template #emptyProfileAvatar>
+              <div class="avatar-placeholder">
+                <i class="pi pi-user"></i>
+              </div>
+            </ng-template>
+          </ng-container>
+
+        </div>
+
+        <!-- ── Right: dashed zone → click = replace ── -->
+        <div class="upload-zone" (click)="profileInput.click()">
+          <input
+            #profileInput
+            type="file"
+            hidden
+            accept="image/*"
+            (change)="onImageSelect($event)"
+          />
+          <div class="inner">
+            <svg class="upload-img-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span class="upload-text">Click to replace</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- CERTIFICATES                                     -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="image-field">
+
+  <label>Upload Certificate</label>
+  <p class="desc">
+    Upload your certificates, they will help you stand out!
+  </p>
+<div class="cert-container">
+    <!-- ✅ CERT LIST -->
+  <div class="cert-list">
+
+    <div class="upload-row cert-row"
+         *ngFor="let cert of certificates.controls; let i = index">
+
+      <input
+        #fileInput
+        type="file"
+        hidden
+        accept="image/*"
+        (change)="onCertSelect($event, i)"
+      />
+
+      <!-- preview -->
+      <div class="avatar avatar-square">
+
+        <button class="remove-btn" type="button"
+                (click)="removeCertificate(i)">
+        <i class="pi pi-times-circle"></i>
+        </button>
+
+        <!-- click to replace -->
+        <div class="cert-preview" (click)="fileInput.click()">
+
+          <img
+        *ngIf="getCertPreview(i, cert.value); else emptyCert"
+        [src]="getCertPreview(i, cert.value)"
+        (error)="onCertImageError(i)"
+      />
+
+          <ng-template #emptyCert>
+            <div class="avatar-placeholder">
+              <i class="pi pi-image"></i>
+            </div>
+          </ng-template>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!-- ✅ ADD BUTTON (ONLY ONCE) -->
+  <div class="upload-zone upload-zone--add" (click)="addCertificate()">
+    <div class="inner">
+      <i class="pi pi-plus-circle"></i>
+      <span class="upload-text">Add New Certificate</span>
+    </div>
+  </div>
+
+
+</div>
+</div>
+
+  </div>
+</div>

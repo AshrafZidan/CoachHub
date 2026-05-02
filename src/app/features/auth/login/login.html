@@ -1,0 +1,102 @@
+<div class="auth-wrapper">
+
+    <!-- Left: Background Image -->
+    <div class="auth-image-side">
+      <img src="assets/images/auth-bg.jpg" alt="CoachHub background" />
+      <div class="image-overlay"></div>
+    </div>
+  
+    <!-- Right: Login Form -->
+    <div class="auth-form-side">
+      <div class="auth-card fade-in">
+  
+        <!-- Logo -->
+        <div class="auth-logo">
+          <div class="logo-placeholder">
+              <img src="assets/images/alt-logo.png" alt="CoachHub logo" />
+          </div>
+        </div>
+  
+        <h1 class="auth-title">Hello, <br>Welcome Back!</h1>
+  
+        <!-- Error Banner -->
+        <p-message
+          *ngIf="errorMessage"
+          severity="error"
+          [text]="errorMessage"
+          styleClass="mb-3 w-full">
+        </p-message>
+  
+        <!-- Login Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+  
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Email Address</label>
+  
+            <span class="p-input-icon-left w-full">
+              <i class="pi pi-envelope"></i>
+              <input
+                pInputText
+                id="email"
+                type="email"
+                formControlName="email"
+                placeholder="Enter your email"
+                class="w-full"
+                [ngClass]="{'ng-invalid ng-dirty': email.invalid && email.touched}"
+                autocomplete="email"
+              />
+            </span>
+  
+            <small class="p-error" *ngIf="email.invalid && email.touched">
+              <ng-container *ngIf="email.errors?.['required']">Email is required.</ng-container>
+              <ng-container *ngIf="email.errors?.['email']">Please enter a valid email.</ng-container>
+            </small>
+          </div>
+  
+          <!-- Password -->
+          <div class="form-group">
+            <label for="password">Password</label>
+  
+            <p-password
+              formControlName="password"
+              [feedback]="false"
+              [toggleMask]="true"
+              placeholder="Enter your password"
+              inputStyleClass="w-full pass"
+              styleClass="w-full"
+              [ngClass]="{'ng-invalid ng-dirty': password.invalid && password.touched}">
+            </p-password>
+            <div *ngIf="password.invalid && password.touched">
+
+              <small class="p-error" >
+                <ng-container *ngIf="password.errors?.['required']">Password is required.</ng-container>
+              </small>
+            </div>
+          </div>
+  
+          <!-- Forgot Password -->
+          <!-- <a routerLink="/auth/forgot-password" class="forgot-link">Forgot Password?</a> -->
+  
+          <!-- Submit -->
+          <button
+            pButton
+            type="submit"
+            label="{{ isLoading ? 'Signing in...' : 'Login' }}"
+            class="w-full mt-3"
+            [loading]="isLoading"
+            [disabled]="isLoading">
+          </button>
+  
+        </form>
+  
+        <!-- Footer -->
+        <!-- <p class="auth-footer">
+          Don't have an account?
+          <a routerLink="/auth/signup">Sign Up</a>
+        </p> -->
+  
+      </div>
+    </div>
+  
+  </div>

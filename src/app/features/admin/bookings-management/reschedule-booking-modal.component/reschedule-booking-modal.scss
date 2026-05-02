@@ -1,0 +1,92 @@
+/* Ensure the dialog content itself doesn't leak */
+::ng-deep .p-dialog-content {
+  overflow-y: auto !important;
+  padding-bottom: 0;
+}
+
+.rescdule-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+.p-dialog-footer-custom {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.rescdule-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 10px;
+  padding: var(--p-dialog-content-padding);
+
+}
+
+
+
+/* ─────────────────────────────
+   Slots container
+───────────────────────────── */
+.slots-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 90vh;
+  overflow: auto;
+   display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+  /* FIXED: Use a fixed height or max-height that fits in the dialog */
+  overflow-y: auto;
+  
+  /* Added padding so the scrollbar doesn't cut off the buttons */
+  padding: 4px;
+  border: 1px solid #f3f4f6;
+}
+
+/* ─────────────────────────────
+   Slot button (radio-style pill)
+───────────────────────────── */
+.slot-btn {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding: 10px 14px;
+  border: 1px solid var(--app-border-color);
+  border-radius: 8px;
+
+  background: #fff;
+  cursor: pointer;
+
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #6b7280;
+
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--app-primary-color);
+    color: var(--app-primary-color);
+    background: rgba(124, 58, 237, 0.04);
+  }
+
+  &.selected {
+    border-color: var(--app-primary-color);
+    background: rgba(124, 58, 237, 0.1);
+    color: var(--app-primary-color);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

@@ -1,0 +1,227 @@
+// ─── Variables (keeping your values) ─────────────────────
+$sidebar-width:     240px;
+$sidebar-collapsed: 72px;
+$primary-light:     #ede9fe;
+$sidebar-bg:        #F8F8FD;
+$active-bg:         #E9EBFD;
+$transition:        0.25s ease;
+
+:host {
+  display: block;
+  position: relative;
+  z-index: 100;
+}
+
+// ─── Sidebar Container ────────────────────────────────────
+.sidebar {
+  width: $sidebar-width;
+  height: 100vh;
+  background: $sidebar-bg;
+  border-right: 1px solid var(--app-border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 300;
+  transition: width $transition, transform $transition;
+  overflow: hidden;
+
+  // ─── Mobile: hidden by default, slide in when open ───
+  @media (max-width: 768px) {
+    width: $sidebar-width !important; // always full width on mobile
+    transform: translateX(-100%);     // hidden by default
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+
+    &:not(.collapsed) {
+      transform: translateX(0);       // visible when NOT collapsed
+    }
+
+    // On mobile, never show icons-only mode
+    &.collapsed {
+      .logo-icon,
+      .nav-label,
+      .nav-badge,
+      .settings-label { display: inherit; }
+      
+      .sidebar-logo { padding: 20px 16px 50px; justify-content: flex-start; }
+      .nav-item { justify-content: flex-start; padding: 10px 12px; margin-left: 20px; }
+      .sidebar-settings { padding: 8px 10px 16px; }
+    }
+  }
+
+  // ─── Tablet: auto-collapse to icons ──────────────────
+  @media (min-width: 769px) and (max-width: 1024px) {
+    &.collapsed {
+      width: $sidebar-collapsed;
+
+      .logo-icon    { width: 44px; height: 44px; margin: 0 auto; }
+      .nav-label,
+      .nav-badge,
+      .settings-label { display: none; }
+
+      .sidebar-logo { padding: 20px 0; justify-content: center; }
+      .nav-item     { justify-content: center; padding: 12px; margin-left: 0; }
+      .sidebar-settings { padding: 8px 0 16px; }
+    }
+  }
+
+  // ─── Desktop: collapse to icons only when .collapsed ──
+  @media (min-width: 1025px) {
+    &.collapsed {
+      width: $sidebar-collapsed;
+
+      .logo-icon    { width: 44px; height: 44px; margin: 0 auto; }
+      .nav-label,
+      .nav-badge,
+      .settings-label { display: none; }
+
+      .sidebar-logo { padding: 20px 0; justify-content: center; }
+      .nav-item     { justify-content: center; padding: 12px; margin-left: 0; }
+      .sidebar-settings { padding: 8px 0 16px; }
+    }
+  }
+}
+
+// ─── Logo ─────────────────────────────────────────────────
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px 50px;
+  transition: padding $transition;
+
+  .logo-icon {
+    width: 100px;
+    height: 80px;
+    display: flex;
+    margin: auto;
+    transition: width $transition, height $transition;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+// ─── Navigation ───────────────────────────────────────────
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--app-border-color);
+    border-radius: 4px;
+  }
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+// ─── Active left border indicator ─────────────────────────
+li {
+  border-left: 4px solid transparent;
+  transition: border-color $transition;
+
+  &:has(> a.active) {
+    border-left: 4px solid var(--app-primary-color);
+  }
+}
+
+// ─── Nav Item ─────────────────────────────────────────────
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-left: 20px;
+  transition: background $transition, color $transition;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:hover {
+    background: $active-bg;
+    color: var(--app-primary-color);
+  }
+
+  &.active {
+    background: $active-bg;
+    color: var(--app-primary-color);
+    font-weight: 700;
+
+    .nav-icon { color: var(--app-primary-color); }
+  }
+}
+
+// ─── Icons ────────────────────────────────────────────────
+.nav-icon {
+  font-size: 16px;
+  width: 18px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+// ─── Badge ────────────────────────────────────────────────
+.nav-badge {
+  margin-left: auto;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+// ─── Settings Section ─────────────────────────────────────
+.sidebar-settings {
+  padding: 8px 10px 16px;
+  border-top: 1px solid var(--app-border-color);
+
+  .settings-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #9ca3af;
+    letter-spacing: 0.08em;
+    padding: 8px 12px 4px;
+  }
+}
+
+// ─── PrimeNG Tooltip Customization ──────────────────────
+:host ::ng-deep .p-tooltip {
+  .p-tooltip-text {
+    background: var(--app-primary-color);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .p-tooltip-arrow {
+    border-color: var(--app-primary-color);
+  }
+}
