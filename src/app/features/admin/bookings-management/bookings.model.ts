@@ -48,13 +48,25 @@ export interface Booking {
 }
 
 export interface BookingsQuery {
-  pageIndex:     number;
+  pageIndex: number;
   pageSize: number;
-  name?:  string;
-  sortBy?:  string;
-  sortDir?: 'ASC' | 'DESC';
-  searchField?:string;
+  sortBy?: string;
+  sortDir?: string;
+
+  // 🔍 search
+  search?: string;
+  transaction?: string;
+
+  // filters
+  coachId?: number | null;
+  coacheeId?: number | null;
+  bookingStatus?: string | null;
+  paymentStatus?: string | null;
+
+  startDate?: Date | null;
+  endDate?: Date | null;
 }
+
 // ─── Booking List Request ─────────────────────────────────
 export interface BookingListRequest {
   pageIndex?: number;

@@ -39,6 +39,7 @@
         private coachingIndustries$?: Observable<any[]>;
         private languages$?: Observable<any[]>;
         private coaches$?: Observable<any[]>;
+        private coachees$?: Observable<any[]>;
         private permissions$?: Observable<any[]>;
 
 
@@ -115,5 +116,29 @@
                     );
             }
             return this.permissions$;
+        }
+
+        loadCoaches(): Observable<any[]> {
+            if (!this.coaches$) {
+                this.coaches$ =
+                this.http
+                    .get<any[]>(this.BASE_URL + '/coaches')
+                    .pipe(
+                        shareReplay(1)
+                    );
+            }
+            return this.coaches$;
+        }
+
+             loadCoachees(): Observable<any[]> {
+            if (!this.coachees$) {
+                this.coachees$ =
+                this.http
+                    .get<any[]>(this.BASE_URL + '/coachees')
+                    .pipe(
+                        shareReplay(1)
+                    );
+            }
+            return this.coachees$;
         }
     }

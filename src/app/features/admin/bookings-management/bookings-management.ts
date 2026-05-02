@@ -34,6 +34,9 @@ import { Booking, BookingsQuery, BookingStatus, PaymentStatus } from './bookings
 import { ToastService } from '../../../core/services/toast.service';
 import { BookingDetailsModalComponent } from './booking-details-modal/booking-details-modal';
 import { RescheduleBookingModalComponent } from './reschedule-booking-modal.component/reschedule-booking-modal.component';
+import { Coach } from '../coaches-management/Coaches.model';
+import { LookupsService } from '../services/lookups.service';
+import { DatePicker } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-booking',
@@ -50,6 +53,7 @@ import { RescheduleBookingModalComponent } from './reschedule-booking-modal.comp
     ToastModule,
     SelectModule,
     DialogModule,
+    DatePicker,
     InputTextModule,
     BookingDetailsModalComponent,
     RescheduleBookingModalComponent
@@ -61,8 +65,10 @@ import { RescheduleBookingModalComponent } from './reschedule-booking-modal.comp
 })
 export class BookingsManagement implements OnInit, OnDestroy {
   private bookingsService = inject(BookingsService);
+  private lookupService = inject(LookupsService)
   private confirmationService = inject(ConfirmationService);
   private toastServices = inject(ToastService);
+
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private searchService = inject(SearchService);
@@ -82,6 +88,24 @@ export class BookingsManagement implements OnInit, OnDestroy {
     [BookingStatus.UPCOMING]: 'upcoming',
     [BookingStatus.CANCELED]: 'canceled',
   };
+
+  coaches: Coach[] = [];
+  coachees: any[] = [];
+  bookingStatusOptions: BookingStatus[] = [
+    BookingStatus.CANCELED,
+    BookingStatus.COMPLETED,
+    BookingStatus.PAST,
+    BookingStatus.RUNNING,
+    BookingStatus.UPCOMING,
+  ];
+  paymentStatusOptions: PaymentStatus[] = [
+    PaymentStatus.CANCELLED,
+    PaymentStatus.FAILED,
+    PaymentStatus.PENDING,
+    PaymentStatus.PAID,
+    PaymentStatus.REFUNDED,
+  ]
+
 
   // ─── State ────────────────────────────────────────────
   bookings = signal<Booking[]>([]);
@@ -130,24 +154,11 @@ export class BookingsManagement implements OnInit, OnDestroy {
 
   // ─── Lifecycle ────────────────────────────────────────
   ngOnInit(): void {
+    this.searchService.searchVisible.set(false);
     this.loadBookings();
-    this.searchService.searchVisible.set(true);
-  
-  // 2. Set the placeholder
-  this.searchService.searchPlaceholder.set('Search Bookings...');
+    this.loadCoaches();
+    this.loadCoachees();
 
-  // 3. Pass the Admin-specific search options
-  const options = [
-    { label: 'Coach', value: 'coachFullNameEn' },
-    { label: 'Coachee', value: 'coacheeFullName' },
-    // { label: 'Email', value: 'coacheeEmail' },
-    { label: 'Transaction', value: 'paymentTransaction' },
-    { label: 'Status', value: 'bookingStatus' }
-  ];
-  this.searchService.searchOptions.set(options);
-  
-  // 4. Set default selected field
-  // this.searchService.selectedField.set(options[0].value);
   }
 
   ngOnDestroy(): void {
@@ -165,8 +176,6 @@ export class BookingsManagement implements OnInit, OnDestroy {
       pageSize: this.tableConfig.pageSize(),
       sortBy: '',
       sortDir: this.tableConfig.sortOrder(),
-      name: this.searchService.searchTerm()?.trim() || '',
-      searchField: this.searchService.selectedField()
     };
 
     this.bookingsService.getBookings(query)
@@ -264,23 +273,23 @@ export class BookingsManagement implements OnInit, OnDestroy {
   }
 
   onRescheduleComplete(updatedBooking: Booking): void {
-  this.closeRescheduleModal();
+    this.closeRescheduleModal();
 
-  this.loadBookings();
+    this.loadBookings();
 
-  // ✅ Optional: instant UI update (better UX)
-  this.bookings.update(list =>
-    list.map(b => (b.id === updatedBooking.id ? updatedBooking : b))
-  );
-}
+    // ✅ Optional: instant UI update (better UX)
+    this.bookings.update(list =>
+      list.map(b => (b.id === updatedBooking.id ? updatedBooking : b))
+    );
+  }
   openRescheduleModal(booking: Booking): void {
-  this.bookingToReschedule.set(booking);
-  this.rescheduleModalVisible.set(true);
-}
-closeRescheduleModal(): void {
-  this.rescheduleModalVisible.set(false);
-  this.bookingToReschedule.set(null);
-}
+    this.bookingToReschedule.set(booking);
+    this.rescheduleModalVisible.set(true);
+  }
+  closeRescheduleModal(): void {
+    this.rescheduleModalVisible.set(false);
+    this.bookingToReschedule.set(null);
+  }
 
   // ─── Sorting ──────────────────────────────────────────
   onSort(field: string): void {
@@ -362,4 +371,116 @@ closeRescheduleModal(): void {
       currency: 'USD'
     }).format(amount);
   }
+
+  loadCoaches(){
+    this.lookupService.loadCoaches()
+      .pipe(
+        finalize(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (res:any) => {
+          this.coaches = res.data;          
+        }
+      });
+  }
+ loadCoachees(){
+    this.lookupService.loadCoachees()
+      .pipe(
+        finalize(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (res:any) => {
+          this.coachees = res.data;          
+        }
+      });
+  }
+  
+  // filters logic
+  filtersOpen = signal(false);
+
+  filters = signal({
+    coachId: null,
+    coacheeId: null,
+    bookingStatus: null,
+    paymentStatus: null,
+    dateRange: null as Date[] | null,
+    transaction: ''
+  });
+
+  toggleFilters() {
+    this.filtersOpen.update(v => !v);
+  }
+
+  updateFilter(key: string, value: any) {
+    this.filters.update(f => ({
+      ...f,
+      [key]: value
+    }));
+  }
+
+  clearFilters() {
+    this.filters.set({
+      coachId: null,
+      coacheeId: null,
+      bookingStatus: null,
+      paymentStatus: null,
+      dateRange: null,
+      transaction: ''
+    });
+  }
+
+ applyFilters() {
+  const f = this.filters();
+
+  const query: BookingsQuery = {
+    pageIndex: this.tableConfig.backendPageIndex(),
+    pageSize: this.tableConfig.pageSize(),
+
+    coachId: f.coachId,
+    coacheeId: f.coacheeId,
+    bookingStatus: f.bookingStatus,
+    paymentStatus: f.paymentStatus,
+    transaction: f.transaction,
+
+    startDate: f.dateRange?.[0] || null,
+    endDate: f.dateRange?.[1] || null,
+
+    search: this.searchService.searchTerm()?.trim() || ''
+  };
+
+  this
+  .loadBookingsWithFilters(query);
+}
+loadBookingsWithFilters(query: BookingsQuery): void {
+  if (this.isLoading()) return;
+
+  this.isLoading.set(true);
+
+  this.bookingsService.getBookings(query)
+    .pipe(
+      finalize(() => this.isLoading.set(false)),
+      takeUntilDestroyed(this.destroyRef)
+    )
+    .subscribe({
+      next: res => {
+        this.bookings.set(res.data);
+        this.tableConfig.totalRecords.set(res.count);
+        this.tableConfig.pageCount.set(res.pageCount);
+        this.tableConfig.pageIndex.set((res.pageIndex ?? 0) + 1);
+      }
+    });
+}
+hasActiveFilters = computed(() => {
+  const f = this.filters();
+  return !!(
+    f.coachId ||
+    f.coacheeId ||
+    f.bookingStatus ||
+    f.paymentStatus ||
+    f.transaction ||
+    f.dateRange?.length
+  );
+});
 }

@@ -3,28 +3,112 @@
 <p-confirmDialog />
 
 <!-- Booking Details Modal - Pass regular values, not signals -->
-<app-booking-details-modal
-  [visible]="detailsModalVisible()"
-  [booking]="selectedBooking()"
-  (onClose)="closeDetailsModal()"
-  (onActionComplete)="onBookingActionComplete($event)"
-></app-booking-details-modal>
+<app-booking-details-modal [visible]="detailsModalVisible()" [booking]="selectedBooking()"
+  (onClose)="closeDetailsModal()" (onActionComplete)="onBookingActionComplete($event)"></app-booking-details-modal>
 
- 
+
 <!-- Reschedule Booking Modal -->
-<app-reschedule-booking-modal
-  [visible]="rescheduleModalVisible()"
-  [booking]="bookingToReschedule()!"
-  (onClose)="closeRescheduleModal()"
-  (onRescheduleComplete)="onRescheduleComplete($event)"
-/>
+<app-reschedule-booking-modal [visible]="rescheduleModalVisible()" [booking]="bookingToReschedule()!"
+  (onClose)="closeRescheduleModal()" (onRescheduleComplete)="onRescheduleComplete($event)" />
 
 <!-- Main Page Content -->
 <div class="admin-page main-page">
   <h1 class="page-title">Booking</h1>
+  <div class="filter-container">
+
+    <!-- Header -->
+    <div class="filter-header" (click)="toggleFilters()">
+      <div class="left">
+        <i class="pi pi-filter"></i>
+        <span>Filters</span>
+      </div>
+
+      <i class="pi" [ngClass]="filtersOpen() ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+    </div>
+
+    <!-- Collapsible Body -->
+    <div class="filter-body" *ngIf="filtersOpen()">
+
+      <div class="filter-grid">
+
+        <!-- Coach -->
+        <div class="filter-item">
+          <label>Coach</label>
+          <p-select 
+            class="no-radius"
+            [options]="coaches"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Filter by Name or Email"
+            [ngModel]="filters().coachId"
+            (ngModelChange)="updateFilter('coachId', $event)"
+            [filter]="true"
+            filterBy="name,email"
+            [showClear]="true">
+          </p-select>
+        </div>
+
+        <!-- Coachee -->
+        <div class="filter-item">
+          <label>Coachee</label>
+             <p-select 
+            class="no-radius"
+            [options]="coachees"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Filter by Name or Email"
+            [ngModel]="filters().coacheeId"
+            (ngModelChange)="updateFilter('coacheeId', $event)"
+            [filter]="true"
+            filterBy="name,email"
+            [showClear]="true">
+          </p-select>
+        </div>
+
+        <!-- Booking Status -->
+        <div class="filter-item">
+          <label>Booking Status</label>
+          <p-select [options]="bookingStatusOptions" placeholder="Select Status" [ngModel]="filters().bookingStatus"
+            (ngModelChange)="updateFilter('bookingStatus', $event)" [showClear]="true"></p-select>
+        </div>
+
+        <!-- Payment Status -->
+        <div class="filter-item">
+          <label>Payment Status</label>
+          <p-select class="no-radius" [options]="paymentStatusOptions" placeholder="Select Status" [ngModel]="filters().paymentStatus"
+            (ngModelChange)="updateFilter('paymentStatus', $event)" [showClear]="true"></p-select>
+        </div>
+        <div class="filter-item">
+          <label>Transaction</label>
+          <input 
+            pInputText
+            class="no-raduis"
+            placeholder="Enter transaction..."
+            [ngModel]="filters().transaction"
+            (ngModelChange)="updateFilter('transaction', $event)"
+          />
+        </div>
+        <!-- Date Range -->
+        <div class="filter-item">
+          <label>Date Range</label>
+          <p-date-picker selectionMode="range" class="no-radius" [ngModel]="filters().dateRange"
+            (ngModelChange)="updateFilter('dateRange', $event)" placeholder="Select date range"></p-date-picker>
+        </div>
+
+      </div>
+
+      <!-- Actions -->
+      <div class="filter-actions">
+        <button pButton label="Clear" class="p-button-secondary no-radius" (click)="clearFilters()"></button>
+
+        <button pButton label="Apply" class="p-button-primary no-radius"   [disabled]="!hasActiveFilters()"
+ (click)="applyFilters()"></button>
+      </div>
+
+    </div>
+  </div>
 
   <div class="table-card">
-
     <!-- ─── Skeleton ─────────────────────────────────── -->
     <div class="skeleton-wrapper" *ngIf="isLoading()">
       <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
@@ -41,13 +125,8 @@
       <thead>
         <tr>
           <th class="col-check">
-            <input 
-              type="checkbox" 
-              class="ch-checkbox" 
-              [checked]="isAllSelected()"
-              (change)="toggleSelectAll($any($event.target).checked)" 
-              aria-label="Select all bookings" 
-            />
+            <input type="checkbox" class="ch-checkbox" [checked]="isAllSelected()"
+              (change)="toggleSelectAll($any($event.target).checked)" aria-label="Select all bookings" />
           </th>
 
           <th class="col-name sortable" (click)="onSort('coachFullNameEn')">
@@ -105,20 +184,13 @@
       </thead>
 
       <tbody>
-        <tr 
-          *ngFor="let booking of bookings(); trackBy: trackByCoachId" 
-          class="booking-row"
-          [class.selected]="isRowSelected(booking)"
-        >
+        <tr *ngFor="let booking of bookings(); trackBy: trackByCoachId" class="booking-row"
+          [class.selected]="isRowSelected(booking)">
 
           <td class="col-check">
-            <input 
-              type="checkbox" 
-              class="ch-checkbox" 
-              [checked]="isRowSelected(booking)"
+            <input type="checkbox" class="ch-checkbox" [checked]="isRowSelected(booking)"
               (change)="toggleRow(booking, $any($event.target).checked)"
-              [attr.aria-label]="'Select booking ' + booking.id" 
-            />
+              [attr.aria-label]="'Select booking ' + booking.id" />
           </td>
 
           <td class="col-name">
@@ -134,63 +206,41 @@
           </td>
 
           <td class="col-status">
-            <span 
-              class="chip"
-              [ngClass]="statusClassMap[booking.paymentStatus]"
-            >
+            <span class="chip" [ngClass]="statusClassMap[booking.paymentStatus]">
               {{ booking.paymentStatus }}
             </span>
           </td>
 
           <td class="col-date">
-            <span class="chip" [ngClass]="bookingstatusClassMap[booking.bookingStatus]">{{ booking.bookingStatus}}</span>
+            <span class="chip" [ngClass]="bookingstatusClassMap[booking.bookingStatus]">{{
+              booking.bookingStatus}}</span>
           </td>
 
           <td class="col-actions">
             <div class="action-btns">
-              <button 
-                class="action-btn view-btn" 
-                type="button" 
-                pTooltip="View Details" 
-                tooltipPosition="top" 
-                (click)="viewBooking(booking)"
-              >
+              <button class="action-btn view-btn" type="button" pTooltip="View Details" tooltipPosition="top"
+                (click)="viewBooking(booking)">
                 <i class="pi pi-eye"></i>
               </button>
-                @if (booking.bookingStatus == 'UPCOMING') {
-               <button 
-                class="action-btn delete-btn" 
-                type="button" 
-                pTooltip="Cancel" 
-                tooltipPosition="top" 
-                (click)="cancelBooking(booking)"
-              >
+              @if (booking.bookingStatus == 'UPCOMING') {
+              <button class="action-btn delete-btn" type="button" pTooltip="Cancel" tooltipPosition="top"
+                (click)="cancelBooking(booking)">
                 <i class="pi pi-times"></i>
               </button>
-            }
-                  @if (booking.paymentStatus == 'PAID') {
+              }
+              @if (booking.paymentStatus == 'PAID') {
 
-               <button
-                class="action-btn refund" 
-                type="button" 
-                pTooltip="Refund"
-                tooltipPosition="top" 
-                (click)="refundBoking(booking)"
-              >
+              <button class="action-btn refund" type="button" pTooltip="Refund" tooltipPosition="top"
+                (click)="refundBoking(booking)">
                 <i class="pi pi-money-bill"></i>
               </button>
-            }
-                  @if (booking.bookingStatus == 'UPCOMING') {
-               <button 
-                class="action-btn restore-btn" 
-                type="button" 
-                pTooltip="Reschedule" 
-                tooltipPosition="top" 
-                (click)="openRescheduleModal(booking)"
-              >
+              }
+              @if (booking.bookingStatus == 'UPCOMING') {
+              <button class="action-btn restore-btn" type="button" pTooltip="Reschedule" tooltipPosition="top"
+                (click)="openRescheduleModal(booking)">
                 <i class="pi pi-calendar-clock"></i>
               </button>
- }
+              }
             </div>
           </td>
         </tr>
@@ -210,12 +260,8 @@
       <!-- Per page -->
       <div class="per-page">
         <span class="per-page-label">View</span>
-        <select 
-          class="per-page-select" 
-          [ngModel]="tableConfig.pageSize()" 
-          (ngModelChange)="onPageSizeChange($event)"
-          aria-label="Rows per page"
-        >
+        <select class="per-page-select" [ngModel]="tableConfig.pageSize()" (ngModelChange)="onPageSizeChange($event)"
+          aria-label="Rows per page">
           <option *ngFor="let opt of pageSizeOptions()" [value]="opt.value">
             {{ opt.label }}
           </option>
@@ -227,48 +273,29 @@
       <div class="pagination" *ngIf="pageItems().length > 0">
 
         <!-- Prev -->
-        <button 
-          class="page-btn nav-btn" 
-          type="button" 
-          [disabled]="tableConfig.pageIndex() === 1"
-          (click)="goToPage(tableConfig.pageIndex() - 1)" 
-          aria-label="Previous page"
-        >
+        <button class="page-btn nav-btn" type="button" [disabled]="tableConfig.pageIndex() === 1"
+          (click)="goToPage(tableConfig.pageIndex() - 1)" aria-label="Previous page">
           <i class="pi pi-chevron-left"></i>
         </button>
 
         <ng-container *ngFor="let item of pageItems(); trackBy: trackByPageItem">
 
-          <button 
-            *ngIf="item.type === 'page'" 
-            class="page-btn" 
-            type="button"
-            [class.active]="item.value === tableConfig.pageIndex()" 
-            (click)="goToPage(item.value)"
+          <button *ngIf="item.type === 'page'" class="page-btn" type="button"
+            [class.active]="item.value === tableConfig.pageIndex()" (click)="goToPage(item.value)"
             [attr.aria-label]="'Page ' + item.value"
-            [attr.aria-current]="item.value === tableConfig.pageIndex() ? 'page' : null"
-          >
+            [attr.aria-current]="item.value === tableConfig.pageIndex() ? 'page' : null">
             {{ item.value }}
           </button>
 
-          <span 
-            *ngIf="item.type === 'ellipsis'" 
-            class="page-ellipsis" 
-            aria-hidden="true"
-          >
+          <span *ngIf="item.type === 'ellipsis'" class="page-ellipsis" aria-hidden="true">
             ...
           </span>
 
         </ng-container>
 
         <!-- Next -->
-        <button 
-          class="page-btn nav-btn" 
-          type="button" 
-          [disabled]="tableConfig.pageIndex() === totalPages()"
-          (click)="goToPage(tableConfig.pageIndex() + 1)" 
-          aria-label="Next page"
-        >
+        <button class="page-btn nav-btn" type="button" [disabled]="tableConfig.pageIndex() === totalPages()"
+          (click)="goToPage(tableConfig.pageIndex() + 1)" aria-label="Next page">
           <i class="pi pi-chevron-right"></i>
         </button>
 
