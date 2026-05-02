@@ -278,16 +278,25 @@
           <i class="pi pi-chevron-left"></i>
         </button>
 
-        <ng-container *ngFor="let item of pageItems(); trackBy: trackByPageItem">
+         <ng-container *ngFor="let item of pageItems(); trackBy: trackByPageItem">
 
-          <button *ngIf="item.type === 'page'" class="page-btn" type="button"
-            [class.active]="item.value === tableConfig.pageIndex()" (click)="goToPage(item.value)"
+          <button
+            *ngIf="item.type === 'page'"
+            class="page-btn"
+            type="button"
+            [class.active]="item.value === tableConfig.pageIndex()"
+            (click)="goToPage(item.value)"
             [attr.aria-label]="'Page ' + item.value"
-            [attr.aria-current]="item.value === tableConfig.pageIndex() ? 'page' : null">
+            [attr.aria-current]="item.value === tableConfig.pageIndex() ? 'page' : null"
+          >
             {{ item.value }}
           </button>
 
-          <span *ngIf="item.type === 'ellipsis'" class="page-ellipsis" aria-hidden="true">
+          <span
+            *ngIf="item.type === 'ellipsis'"
+            class="page-ellipsis"
+            aria-hidden="true"
+          >
             ...
           </span>
 

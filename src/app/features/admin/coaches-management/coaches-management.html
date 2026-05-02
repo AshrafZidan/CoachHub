@@ -127,6 +127,9 @@
                 <i class="pi pi-chevron-right"></i>
               </button> -->
             </div>
+             <div class="chip cancelled text-center" style="text-align: center;" *ngIf="coach.status == 'REJECTED'">
+                  {{coach.status }}
+             </div>
           </td>
         </tr>
 
