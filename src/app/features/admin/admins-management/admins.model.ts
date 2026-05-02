@@ -6,6 +6,7 @@ export interface Admin {
   id: number;
       fullName: string;
       email: string;
+      enabled:boolean;
       permissions: [
         {
           code: string;
@@ -17,7 +18,7 @@ export interface Admin {
 export interface AdminsQuery {
   pageIndex:     number;
   pageSize: number;
-  name?:  string;
+  search?:  string;
   sortBy?:  string;
   sortDir?: 'ASC' | 'DESC'; 
 }

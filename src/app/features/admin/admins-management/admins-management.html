@@ -1,4 +1,6 @@
 <div class="admin-page main-page">
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
   <div class="main-title">
 
     <h1 class="page-title">Admins</h1>
@@ -14,6 +16,7 @@
         <div class="skeleton-cell wide"></div>
         <div class="skeleton-cell"></div>
         <div class="skeleton-cell"></div>
+        <div class="skeleton-cell actions"></div>
       </div>
     </div>
 
@@ -37,7 +40,7 @@
           </th>
 
           <th class="col-type sortable" (click)="onSort('email')">
-            <span>Role</span>
+            <span>Email</span>
             <span class="sort-icons">
               <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'email' && tableConfig.sortOrder() === 'ASC'"></i>
               <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'email' && tableConfig.sortOrder() === 'DESC'"></i>
@@ -79,7 +82,39 @@
               {{ perm.nameEn }}<span *ngIf="i < admin.permissions.length - 1">, </span>
             </span>
           </ng-container>
-        </td>
+           <td class="col-actions">
+            <div  class="action-btns">
+              <button 
+                *ngIf="admin.enabled" 
+                class="action-btn delete-btn" 
+                type="button" 
+                pTooltip="Deactivate" 
+                tooltipPosition="top"
+                (click)="toggleAdminStatus(admin)"
+              >
+                <i class="pi pi-times-circle"></i>
+              </button>
+
+              <button 
+                *ngIf="!admin.enabled" 
+                class="action-btn restore-btn" 
+                type="button" 
+                pTooltip="Activate" 
+                tooltipPosition="top"
+                (click)="toggleAdminStatus(admin)"
+              >
+                <i class="pi pi-undo"></i>
+              </button>
+               <button class="action-btn deactivate-btn reset"  type="button" pTooltip="Reset Password" tooltipPosition="top" (click)="sendForgetPasswordMail(admin)">
+                <i class="pi pi-key"></i>
+              </button>
+
+              <button class="action-btn delete-btn"  type="button" pTooltip="Delete" tooltipPosition="top" (click)="deleteAdmin(admin)">
+                <i class="pi pi-trash"></i>
+              </button>
+           
+            </div>
+          </td>
 
   
         </tr>

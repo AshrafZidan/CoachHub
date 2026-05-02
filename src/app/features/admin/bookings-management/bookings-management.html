@@ -1,0 +1,279 @@
+<!-- Toast & Confirmation Dialogs -->
+<p-toast position="top-right" />
+<p-confirmDialog />
+
+<!-- Booking Details Modal - Pass regular values, not signals -->
+<app-booking-details-modal
+  [visible]="detailsModalVisible()"
+  [booking]="selectedBooking()"
+  (onClose)="closeDetailsModal()"
+  (onActionComplete)="onBookingActionComplete($event)"
+></app-booking-details-modal>
+
+ 
+<!-- Reschedule Booking Modal -->
+<app-reschedule-booking-modal
+  [visible]="rescheduleModalVisible()"
+  [booking]="bookingToReschedule()!"
+  (onClose)="closeRescheduleModal()"
+  (onRescheduleComplete)="onRescheduleComplete($event)"
+/>
+
+<!-- Main Page Content -->
+<div class="admin-page main-page">
+  <h1 class="page-title">Booking</h1>
+
+  <div class="table-card">
+
+    <!-- ─── Skeleton ─────────────────────────────────── -->
+    <div class="skeleton-wrapper" *ngIf="isLoading()">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
+        <div class="skeleton-cell wide"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell actions"></div>
+      </div>
+    </div>
+
+    <!-- ─── Table ─────────────────────────────────────── -->
+    <table class="admin-table" *ngIf="!isLoading()" aria-label="Bookings list">
+      <thead>
+        <tr>
+          <th class="col-check">
+            <input 
+              type="checkbox" 
+              class="ch-checkbox" 
+              [checked]="isAllSelected()"
+              (change)="toggleSelectAll($any($event.target).checked)" 
+              aria-label="Select all bookings" 
+            />
+          </th>
+
+          <th class="col-name sortable" (click)="onSort('coachFullNameEn')">
+            <span>Coach Name</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"
+                [class.active]="tableConfig.sortField() === 'coachFullNameEn' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down"
+                [class.active]="tableConfig.sortField() === 'coachFullNameEn' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-type sortable" (click)="onSort('coacheeFullName')">
+            <span>Coachee Name</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"
+                [class.active]="tableConfig.sortField() === 'coacheeFullName' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down"
+                [class.active]="tableConfig.sortField() === 'coacheeFullName' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-price sortable" (click)="onSort('finalPrice')">
+            <span>Price</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"
+                [class.active]="tableConfig.sortField() === 'finalPrice' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down"
+                [class.active]="tableConfig.sortField() === 'finalPrice' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-status sortable" (click)="onSort('paymentStatus')">
+            <span>Payment Status</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"
+                [class.active]="tableConfig.sortField() === 'paymentStatus' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down"
+                [class.active]="tableConfig.sortField() === 'paymentStatus' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-date sortable" (click)="onSort('startTime')">
+            <span>Booking Status</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"
+                [class.active]="tableConfig.sortField() === 'startTime' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down"
+                [class.active]="tableConfig.sortField() === 'startTime' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th>
+
+          <th class="col-actions"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr 
+          *ngFor="let booking of bookings(); trackBy: trackByCoachId" 
+          class="booking-row"
+          [class.selected]="isRowSelected(booking)"
+        >
+
+          <td class="col-check">
+            <input 
+              type="checkbox" 
+              class="ch-checkbox" 
+              [checked]="isRowSelected(booking)"
+              (change)="toggleRow(booking, $any($event.target).checked)"
+              [attr.aria-label]="'Select booking ' + booking.id" 
+            />
+          </td>
+
+          <td class="col-name">
+            <span class="booking-name">{{ booking.coachFullNameEn }}</span>
+          </td>
+
+          <td class="col-type">
+            <span class="booking-coachee">{{ booking.coacheeFullName }}</span>
+          </td>
+
+          <td class="col-price">
+            <span class="booking-price">{{ booking.finalPrice | currency }}</span>
+          </td>
+
+          <td class="col-status">
+            <span 
+              class="chip"
+              [ngClass]="statusClassMap[booking.paymentStatus]"
+            >
+              {{ booking.paymentStatus }}
+            </span>
+          </td>
+
+          <td class="col-date">
+            <span class="chip" [ngClass]="bookingstatusClassMap[booking.bookingStatus]">{{ booking.bookingStatus}}</span>
+          </td>
+
+          <td class="col-actions">
+            <div class="action-btns">
+              <button 
+                class="action-btn view-btn" 
+                type="button" 
+                pTooltip="View Details" 
+                tooltipPosition="top" 
+                (click)="viewBooking(booking)"
+              >
+                <i class="pi pi-eye"></i>
+              </button>
+                @if (booking.bookingStatus == 'UPCOMING') {
+               <button 
+                class="action-btn delete-btn" 
+                type="button" 
+                pTooltip="Cancel" 
+                tooltipPosition="top" 
+                (click)="cancelBooking(booking)"
+              >
+                <i class="pi pi-times"></i>
+              </button>
+            }
+                  @if (booking.paymentStatus == 'PAID') {
+
+               <button
+                class="action-btn refund" 
+                type="button" 
+                pTooltip="Refund"
+                tooltipPosition="top" 
+                (click)="refundBoking(booking)"
+              >
+                <i class="pi pi-money-bill"></i>
+              </button>
+            }
+                  @if (booking.bookingStatus == 'UPCOMING') {
+               <button 
+                class="action-btn restore-btn" 
+                type="button" 
+                pTooltip="Reschedule" 
+                tooltipPosition="top" 
+                (click)="openRescheduleModal(booking)"
+              >
+                <i class="pi pi-calendar-clock"></i>
+              </button>
+ }
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="bookings().length === 0 && !isLoading()">
+          <td colspan="7" class="empty-state">
+            <i class="pi pi-inbox"></i>
+            <p>No bookings found</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ─── Footer ───────────────────────────────────── -->
+    <div class="table-footer" *ngIf="!isLoading() && tableConfig.totalRecords() > 0">
+
+      <!-- Per page -->
+      <div class="per-page">
+        <span class="per-page-label">View</span>
+        <select 
+          class="per-page-select" 
+          [ngModel]="tableConfig.pageSize()" 
+          (ngModelChange)="onPageSizeChange($event)"
+          aria-label="Rows per page"
+        >
+          <option *ngFor="let opt of pageSizeOptions()" [value]="opt.value">
+            {{ opt.label }}
+          </option>
+        </select>
+        <span class="per-page-label">Bookings per page</span>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="pageItems().length > 0">
+
+        <!-- Prev -->
+        <button 
+          class="page-btn nav-btn" 
+          type="button" 
+          [disabled]="tableConfig.pageIndex() === 1"
+          (click)="goToPage(tableConfig.pageIndex() - 1)" 
+          aria-label="Previous page"
+        >
+          <i class="pi pi-chevron-left"></i>
+        </button>
+
+        <ng-container *ngFor="let item of pageItems(); trackBy: trackByPageItem">
+
+          <button 
+            *ngIf="item.type === 'page'" 
+            class="page-btn" 
+            type="button"
+            [class.active]="item.value === tableConfig.pageIndex()" 
+            (click)="goToPage(item.value)"
+            [attr.aria-label]="'Page ' + item.value"
+            [attr.aria-current]="item.value === tableConfig.pageIndex() ? 'page' : null"
+          >
+            {{ item.value }}
+          </button>
+
+          <span 
+            *ngIf="item.type === 'ellipsis'" 
+            class="page-ellipsis" 
+            aria-hidden="true"
+          >
+            ...
+          </span>
+
+        </ng-container>
+
+        <!-- Next -->
+        <button 
+          class="page-btn nav-btn" 
+          type="button" 
+          [disabled]="tableConfig.pageIndex() === totalPages()"
+          (click)="goToPage(tableConfig.pageIndex() + 1)" 
+          aria-label="Next page"
+        >
+          <i class="pi pi-chevron-right"></i>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</div>

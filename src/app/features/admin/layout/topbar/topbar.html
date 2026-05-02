@@ -1,12 +1,7 @@
 <header class="topbar">
 
   <!-- ─── Hamburger (mobile only) ──────────────────────── -->
-  <button
-    class="hamburger"
-    type="button"
-    aria-label="Toggle sidebar"
-    (click)="sidebar.toggle()"
-  >
+  <button class="hamburger" type="button" aria-label="Toggle sidebar" (click)="sidebar.toggle()">
     <i class="pi pi-bars"></i>
   </button>
 
@@ -27,30 +22,52 @@
 
   <!-- ─── CENTER: Search bar ───────────────────────────── -->
   <div class="topbar-center" *ngIf="searchService.searchVisible()">
+
     <div class="search-box">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="m21 21-4.35-4.35"/>
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
       </svg>
-      <input
-        type="text"
-        class="app-input"
-        [placeholder]="searchService.searchPlaceholder()"
-        [value]="searchTerm()"
-         (input)="onSearchInput($any($event.target).value);
-             onSearchClear($any($event.target).value)"
-      (keydown.enter)="onSearchEnter()"
-        autocomplete="off"
-      />
+      <input type="text" class="app-input no-radius" [placeholder]="searchService.searchPlaceholder()"
+        [value]="searchTerm()" (input)="onSearchInput($any($event.target).value);
+             onSearchClear($any($event.target).value)" (keydown.enter)="onSearchEnter()" autocomplete="off" />
+      <!-- Only show dropdown if options are provided by the current page -->
+      <div>
+
+
+        <p-select *ngIf="searchService.searchOptions().length > 0" [options]="searchService.searchOptions()"
+          [ngModel]="searchService.selectedField()" (ngModelChange)="searchService.selectedField.set($event)"
+          optionLabel="label" optionValue="value" class="search-dropdown"
+          placeholder="Filter By">
+
+
+            <!-- Case B: Default / Placeholder state -->
+            <ng-template #dropdownicon>
+              <div class="flex align-items-center">
+                <svg class="filter-icon mr-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                  viewBox="0 0 24 24" fill="none">
+                  <path d="M4 6H20" stroke="#25324B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M6 12H18" stroke="#25324B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M8 18H16" stroke="#25324B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <!-- <span class="placeholder-text">{{ searchService.searchPlaceholder() }}</span> -->
+              </div>
+          </ng-template>
+
+        </p-select>
+
+      </div>
+
     </div>
+
   </div>
 
   <!-- ─── RIGHT: Notifications ─────────────────────────── -->
   <div class="topbar-right">
     <button class="notif-btn" type="button" aria-label="Notifications">
       <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
       </svg>
       <span class="notif-dot"></span>
     </button>

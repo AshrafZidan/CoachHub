@@ -141,3 +141,25 @@ nationality:Nationality;
   // ─── Nested User ────────────────────────
   user: User;
 }
+/**
+ * CoachSlot - Represents a single available time slot for a coach
+ */
+export interface CoachSlot {
+  id: number;
+  createdDate: string; // ISO 8601 datetime
+  createdBy: string;
+  updatedDate: string;
+  updatedBy: string;
+  coach: Coach;
+  startTimeUtc: string; // ISO 8601 datetime
+  endTimeUtc: string;   // ISO 8601 datetime
+  periodMinutes: number;
+  status: SlotStatus;
+  slotType: SlotType;
+}
+
+// ─── Coach Slot Types ────────────────────────────────────
+
+export type SlotType = 'HALF_HOUR' | 'HOUR' | 'HALF_AND_HOUR' | 'TWO_HOURS';
+export type SlotStatus = 'AVAILABLE' | 'BOOKED' | 'UNAVAILABLE';
+

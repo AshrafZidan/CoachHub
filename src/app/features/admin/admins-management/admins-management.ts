@@ -25,6 +25,9 @@ import { TableConfig } from '../../../core/models/table-config';
 import { ToastService } from '../../../core/services/toast.service';
 import { Adminservice } from './services/admins-management.service';
 import { Admin, AdminsQuery } from './admins.model';
+import { ConfirmationService } from 'primeng/api';
+import {  TooltipModule } from 'primeng/tooltip';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 @Component({
@@ -38,8 +41,10 @@ import { Admin, AdminsQuery } from './admins.model';
     CheckboxModule,
     ButtonModule,
     ToastModule,
+    TooltipModule,
+    ConfirmDialogModule
   ],
-  providers: [],
+  providers: [ConfirmationService],
   templateUrl: './admins-management.html',
   styleUrls: ['./admins-management.scss']
 })
@@ -50,6 +55,8 @@ export class AdminsManagement implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private searchService = inject(SearchService);
   private route = inject(ActivatedRoute);
+  private confirmationService = inject(ConfirmationService);
+
   // ─── State ────────────────────────────────────────────
   admins = signal<Admin[]>([]);
   isLoading = signal(false);
@@ -109,9 +116,9 @@ constructor() {
       pageSize: this.tableConfig.pageSize(),
       sortBy: 'fullName', // default sort field
       sortDir: this.tableConfig.sortOrder(),
-      name: this.searchService.searchTerm()?.trim() || ''
+      search: this.searchService.searchTerm()?.trim() || ''
     };
-
+    
     this.adminsService.getAdmins(query)
       .pipe(
         finalize(() => this.isLoading.set(false)),
@@ -130,7 +137,130 @@ constructor() {
         }
       });
   }
+  sendForgetPasswordMail(admin:Admin){
+    this.confirmationService.confirm({
+    message: `Are you sure you want to send reset password email to <strong>${admin.fullName}</strong>?`,
+    header: 'Reset Password',
+    acceptLabel: 'Send Mail',
+    rejectLabel: 'Cancel',
+    acceptButtonStyleClass: 'no-radius p-button-primary p-button-sm',
+    rejectButtonStyleClass: 'no-radius p-button-secondary p-button-sm',
 
+    accept: () => {
+      this.adminsService.sendForgetPasswordMail(admin.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.toast.show('success','Email Sent',`Reset password email sent to ${admin.fullName}`
+            );
+          },
+          error: () => {
+            this.toast.show('error','Error','Failed to send reset password email'
+            );
+          }
+        });
+    }
+  });
+  }
+
+
+  deleteAdmin(admin: Admin) {
+  this.confirmationService.confirm({
+    message: `Are you sure you want to delete <strong>${admin.fullName}</strong>?`,
+    header: 'Delete Admin',
+    acceptLabel: 'Delete',
+    rejectLabel: 'Cancel',
+    acceptButtonStyleClass: 'no-radius p-button-danger p-button-sm',
+    rejectButtonStyleClass: 'no-radius p-button-secondary p-button-sm',
+
+    accept: () => {
+      this.isLoading.set(true);
+
+      this.adminsService.deleteAdmin(admin.id)
+        .pipe(
+          finalize(() => this.isLoading.set(false)),
+          takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe({
+          next: () => {
+            this.toast.show(
+              'success',
+              'Deleted',
+              'Admin has been deleted successfully'
+            );
+            setTimeout(() => {
+              
+              this.loadAdmins();
+            }, 10);
+
+            // ✅ إزالة من selected لو موجود
+            this.selectedRows.update(rows =>
+              rows.filter(r => r.id !== admin.id)
+            );
+          },
+          error: () => {
+            this.toast.show(
+              'error',
+              'Error',
+              'Failed to delete admin'
+            );
+          }
+        });
+    }
+  });
+}
+toggleAdminStatus(admin: Admin) {
+  const action = admin.enabled ? 'deactivate' : 'activate';
+  const actionLabel = admin.enabled ? 'Deactivate' : 'Activate';
+
+  const request$ = admin.enabled
+    ? this.adminsService.deactivate(admin.id)
+    : this.adminsService.activate(admin.id);
+
+  this.confirmationService.confirm({
+    message: `Are you sure you want to ${action} <strong>${admin.fullName}</strong>?`,
+    header: `${actionLabel} Admin`,
+    acceptLabel: actionLabel,
+    rejectLabel: 'Cancel',
+    acceptButtonStyleClass: 'no-radius p-button-primary p-button-sm',
+    rejectButtonStyleClass: 'no-radius p-button-secondary p-button-sm',
+
+    accept: () => {
+      this.isLoading.set(true);
+
+      request$
+        .pipe(
+          finalize(() => this.isLoading.set(false)),
+          takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe({
+          next: () => {
+            this.toast.show(
+              'success',
+              actionLabel,
+              `Admin has been ${action}d successfully`
+            );
+
+            // ✅ Optimistic update
+            this.admins.update(list =>
+              list.map(a =>
+                a.id === admin.id
+                  ? { ...a, enabled: !a.enabled }
+                  : a
+              )
+            );
+          },
+          error: () => {
+            this.toast.show(
+              'error',
+              'Error',
+              `Failed to ${action} admin`
+            );
+          }
+        });
+    }
+  });
+}
   // ─── Sorting ──────────────────────────────────────────
   onSort(field: string): void {
     this.tableConfig.onSort(field);

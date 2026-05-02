@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, Input, computed } from '@angular/core';
+import { Component, inject, signal, OnInit, Input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,15 +9,16 @@ import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Sidebar } from '../sidebar/sidebar';
 import { SearchService } from '../../services/global-table-search.service';
+import { SelectModule } from 'primeng/select';
 
 
 
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuModule],
+  imports: [CommonModule, FormsModule, MenuModule,SelectModule],
   templateUrl: './topbar.html',
-  styleUrls: ['./topbar.scss']
+  styleUrls: ['./topbar.scss'],
 })
 export class Topbar implements OnInit {
   private auth   = inject(AuthService);

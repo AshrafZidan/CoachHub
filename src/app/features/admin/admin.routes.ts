@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { adminGuard, authGuard } from '../../core/guards/auth-guard';
 import { permissionGuard } from '../../core/guards/permission.guard';
 import { ForbiddenComponent } from '../../core/components/forbidden/forbidden.component';
-
+import {Permissions} from './../../core/services/permission.service'
 export const ADMIN_ROUTES: Routes = [
   {
     path: '',
@@ -19,51 +19,58 @@ export const ADMIN_ROUTES: Routes = [
         path: 'coaches',
         loadComponent: () =>
           import('./coaches-management/coaches-management').then(c => c.CoachesManagement),
-        title: 'coaches — CoachHub Admin'
+        title: 'coaches — CoachHub Admin',
+        canActivate: [permissionGuard([Permissions.Coaches])]
       },
       {
         path: 'coaches/edit-coach/:id',
         loadComponent: () =>
           import('./coaches-management/edit-coach/edit-coach').then(c => c.EditCoachComponent),
-        title: 'Edit Coache — CoachHub Admin'
+        title: 'Edit Coache — CoachHub Admin',
+        canActivate: [permissionGuard([Permissions.Coaches])]
+
       },
-      // {
-      //   path: 'coaches',
-      //   loadComponent: () =>
-      //     import('./coaches/coaches.component').then(c => c.CoachesComponent),
-      //   title: 'Coaches — CoachHub Admin'
-      // },
-      // {
-      //   path: 'bookings',
-      //   loadComponent: () =>
-      //     import('./bookings/bookings.component').then(c => c.BookingsComponent),
-      //   title: 'Bookings — CoachHub Admin'
-      // },
+
+      {
+        path: 'booking',
+        loadComponent: () =>
+          import('./bookings-management/bookings-management').then(c => c.BookingsManagement),
+        title: 'Bookings — CoachHub Admin',
+        canActivate: [permissionGuard([Permissions.Booking])]
+
+      },
       {
         path: 'coupons',
-        canActivate: [permissionGuard(['coupons'], false)], // false = OR logic
         loadComponent: () =>
           import('./coupons-management/coupones-management').then(c => c.CouponsManagement),
-        title: 'Coupons — CoachHub Admin'
+        title: 'Coupons — CoachHub Admin',
+        canActivate: [permissionGuard([Permissions.Coupons])]
+
 
       },
       {
         path: 'coupons/create',
         loadComponent: () =>
           import('./coupons-management/create-coupon/create-coupon/create-coupon.component').then(c => c.CreateCouponComponent),
-        title: 'Create Coupon — CoachHub Admin'
+        title: 'Create Coupon — CoachHub Admin',
+        canActivate: [permissionGuard([Permissions.Coupons])]
+
       },
       {
-        path: 'admins-List',
+        path: 'admins-list',
         loadComponent: () =>
           import('./admins-management/admins-management').then(c => c.AdminsManagement),
-        title: 'Admins  List — CoachHub Admin'
+        title: 'Admins  List — CoachHub Admin',
+        canActivate: [permissionGuard([Permissions.Admins])]
+
       },
       {
         path: 'admins-List/create',
         loadComponent: () =>
           import('./admins-management/create-admin/create-admin.component').then(c => c.CreateAdminComponent),
-        title: 'Create Admin — CoachHub Admin'
+        title: 'Create Admin — CoachHub Admin',
+        canActivate: [permissionGuard([Permissions.Admins])]
+
       },
         {
         path: 'forbidden',

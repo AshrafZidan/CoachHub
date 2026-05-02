@@ -128,7 +128,25 @@ $search-radius: 10px;
   position: relative;
   width: 100%;
   max-width: 520px;
-
+      display: flex;
+    gap: 12px;
+    & > div{
+      width: 30%;
+    }
+    p-select{
+      border-radius: 0 !important;
+      direction: rtl;
+      align-items: center;
+      text-align: end;
+      .p-select-label{
+        padding: .5rem .25rem !important;
+      }
+    }
+  .align-items-center{
+        display: flex;
+    align-items: center;
+    gap: 5px;
+  }
   .search-icon {
     position: absolute;
     left: 14px;

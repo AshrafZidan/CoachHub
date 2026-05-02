@@ -29,7 +29,7 @@ export class Adminservice {
     const key = JSON.stringify({
       pageIndex: query.pageIndex,
       pageSize: query.pageSize,
-      name: query.name ?? null,
+      search: query.search ?? null,
       sortBy: query.sortBy ?? null,
       sortDir: query.sortDir ?? null
     });
@@ -42,7 +42,7 @@ export class Adminservice {
       .set('pageIndex', query.pageIndex.toString())
       .set('pageSize', query.pageSize.toString());
 
-    if (query.name) params = params.set('name', query.name);
+    if (query.search) params = params.set('search', query.search);
     if (query.sortBy) params = params.set('sortBy', query.sortBy);
     if (query.sortDir) params = params.set('sortDir', query.sortDir);
 
@@ -66,5 +66,24 @@ export class Adminservice {
     return this.http
       .post<ApiResponse<void>>(`${this.BASE_URL}/invite`, adminData)
       .pipe(catchError(this.handleError));
+  }
+    sendForgetPasswordMail(id:number|string){
+    return this.http
+      .post<ApiResponse<void>>(`${this.BASE_URL}/${id}/reset-password`, {})
+      .pipe(catchError(err => throwError(() => err)));
+  }
+
+   deleteAdmin(id:number|string){
+    return this.http
+      .delete<ApiResponse<void>>(`${this.BASE_URL}/${id}`, {})
+      .pipe(catchError(err => throwError(() => err)));
+  }
+
+    activate(id: number|string) {
+    return this.http.put(`${this.BASE_URL}/${id}/enable`, {});
+  }
+
+  deactivate(id: number| string) {
+    return this.http.put(`${this.BASE_URL}/${id}/disable`, {});
   }
 }

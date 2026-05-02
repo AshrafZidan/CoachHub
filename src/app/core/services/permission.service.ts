@@ -5,6 +5,7 @@ export interface PermissionResponse {
   permissions: Permissions[];
 }
 
+
 export enum Permissions {
   Transactions = 'TRANSACTIONS',
   Reports = 'REPORTS',

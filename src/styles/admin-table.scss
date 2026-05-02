@@ -134,8 +134,8 @@
         }
         &.restore-btn {
           background: #fff;
-          border: 1px solid var(--app-primary-color);
-          color: var(--app-primary-color);
+          border: 1px solid var(--app-success);
+          color: var(--app-success);
         }
         &.reject-btn {
           background: #fff;
@@ -146,6 +146,12 @@
           background-color: #fff;
           border-color: #092fd3;
           color: #092fd3;
+        }
+        &.refund{
+          background: #fff;
+          border: 1px solid #b4a333;
+          color: #b4a333;
+          
         }
 
         &.arrow-btn {

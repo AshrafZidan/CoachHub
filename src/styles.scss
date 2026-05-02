@@ -2,63 +2,64 @@
 // @import "./app/shared-lib/_variables.scss";
 @import 'primeicons/primeicons.css';
 @import './styles/admin-table.scss';
-:root{
-  --title-color:#25324B;
-  --title-secondary-color:#515B6F;
-  --app-primary-color:#833C88;
-    --app-primary-color-dark: #75347a;
 
-  --p-button-primary-background:#833C88 !important; 
-  --p-button-primary-border-color:#833C88 !important;
-  --p-button-primary-hover-background:#833C88 !important;
-  --p-button-primary-hover-border-color:#833C88 !important;
-  --p-button-primary-focus-ring-color:#833C88 !important;
-    --p-button-primary-active-background: #833C88 !important;
-    --p-button-primary-border-color:  #833C88 !important;
-    --p-button-primary-hover-border-color:  #833C88 !important;
-    --p-button-primary-active-border-color:  #833C88 !important;
-    --p-inputtext-focus-border-color:#833C88 !important;
+:root {
+  --title-color: #25324B;
+  --title-secondary-color: #515B6F;
+  --app-primary-color: #833C88;
+  --app-primary-color-dark: #75347a;
 
-    --p-select-option-selected-background:#833C88 !important;
-    --p-select-option-selected-color:#fff !important;
-    --p-select-option-selected-focus-background:#833C88 !important;
-     --p-select-option-selected-focus-color:#fff !important;
-    --p-select-focus-border-color:#833C88 !important;
+  --p-button-primary-background: #833C88 !important;
+  --p-button-primary-border-color: #833C88 !important;
+  --p-button-primary-hover-background: #833C88 !important;
+  --p-button-primary-hover-border-color: #833C88 !important;
+  --p-button-primary-focus-ring-color: #833C88 !important;
+  --p-button-primary-active-background: #833C88 !important;
+  --p-button-primary-border-color: #833C88 !important;
+  --p-button-primary-hover-border-color: #833C88 !important;
+  --p-button-primary-active-border-color: #833C88 !important;
+  --p-inputtext-focus-border-color: #833C88 !important;
 
-   --p-datepicker-date-selected-background:#f1e9f2 !important;
+  --p-select-option-selected-background: #833C88 !important;
+  --p-select-option-selected-color: #fff !important;
+  --p-select-option-selected-focus-background: #833C88 !important;
+  --p-select-option-selected-focus-color: #fff !important;
+  --p-select-focus-border-color: #833C88 !important;
 
-   --p-multiselect-option-selected-background:#f1e9f2 !important;
-   --p-multiselect-option-selected-color:#833C88 !important;
-   --p-checkbox-checked-border-color:#833C88 !important;
-   --p-checkbox-checked-background:#833C88 !important;
-   --p-multiselect-option-selected-focus-background:#833C88 !important;
-   --p-multiselect-option-selected-focus-color:#fff !important;
-    --p-chip-background: #F8F8FD !important;
-    --p-chip-color: #833C88 !important;
-    --p-checkbox-checked-hover-background: #833C88 !important;
-    --p-checkbox-checked-hover-border-color: #833C88 !important;
+  --p-datepicker-date-selected-background: #f1e9f2 !important;
 
-    --p-chip-gap: .3rem !important;
+  --p-multiselect-option-selected-background: #f1e9f2 !important;
+  --p-multiselect-option-selected-color: #833C88 !important;
+  --p-checkbox-checked-border-color: #833C88 !important;
+  --p-checkbox-checked-background: #833C88 !important;
+  --p-multiselect-option-selected-focus-background: #833C88 !important;
+  --p-multiselect-option-selected-focus-color: #fff !important;
+  --p-chip-background: #F8F8FD !important;
+  --p-chip-color: #833C88 !important;
+  --p-checkbox-checked-hover-background: #833C88 !important;
+  --p-checkbox-checked-hover-border-color: #833C88 !important;
+
+  --p-chip-gap: .3rem !important;
   --p-chip-remove-icon-color: #833C88 !important;
-    --p-message-text-font-size:12px !important;
-    --p-dialog-title-font-size:1.1rem !important;
-  --p-button-success-background:#169E3F !important;
-   --p-button-success-border-color:#169E3F !important;
-   --p-button-danger-background:#F06565 !important;
-    --p-button-danger-border-color:#F06565 !important;
+  --p-message-text-font-size: 12px !important;
+  --p-dialog-title-font-size: 1.1rem !important;
+  --p-button-success-background: #169E3F !important;
+  --p-button-success-border-color: #169E3F !important;
+  --p-button-danger-background: #F06565 !important;
+  --p-button-danger-border-color: #F06565 !important;
 
 
 
-  --app-border-color:#D6DDEB;
-  --app-text-color:#A8ADB7;
-  --p-button-border-radius:15px !important;
-  --app-error:#f87171;
-  --p-inputtext-border-radius:15px !important;
-  --text-dark:       #111827;
-  --text-muted:      #7C8493;
-  --odd-row-bg:     #F8F8FD;
-  --app-success:#169E3F;
-  --app-delete:#F06565;
+  --app-border-color: #D6DDEB;
+  --app-text-color: #A8ADB7;
+  --p-button-border-radius: 15px !important;
+  --app-error: #f87171;
+  --p-inputtext-border-radius: 15px !important;
+  --text-dark: #111827;
+  --text-muted: #7C8493;
+  --odd-row-bg: #F8F8FD;
+  --app-success: #169E3F;
+  --app-delete: #F06565;
 }
 
 
@@ -88,148 +89,201 @@
   font-style: normal;
   font-display: swap;
 }
+
 body,
 .p-component {
   font-family: 'Poppins', sans-serif;
 }
-body{
-  margin:0;
+
+body {
+  margin: 0;
 }
-.main-title{
-    display: flex;
-    justify-content: space-between;
+
+.main-title {
+  display: flex;
+  justify-content: space-between;
 }
+
 .p-button {
-    border-radius: 12px !important;
-    font-weight: 500;
-    font-size: 14px !important;
-    cursor: pointer;
-    &:disabled {
-      opacity: 0.6;
-    }
+  border-radius: 12px !important;
+  font-weight: 500;
+  font-size: 14px !important;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
   }
-  
-  .p-button-primary.p-button {
-    background: var(--app-primary-color);
-    color: #fff;
-    border: none;
-    padding:10px 30px;
-    &:hover {
+}
+
+.p-button-primary.p-button {
+  background: var(--app-primary-color);
+  color: #fff;
+  border: none;
+  padding: 10px 30px;
+
+  &:hover {
     background: var(--app-primary-color-dark) !important;
     border: 0 !important;
-     
+
+  }
+
+}
+
+.p-button-sm {
+  padding: 7px 13px !important;
+  font-size: 12px !important;
+
+}
+
+.no-radius,
+.p-button.no-radius,
+.app-input.no-radius,
+.p-datepicker.no-radius input,
+.no-radius .p-datepicker-input.p-inputtext,
+.no-raduis .p-inputtext {
+  border-radius: 0 !important;
+}
+
+.required {
+  color: var(--app-error);
+  margin-left: 2px;
+}
+
+
+
+
+.p-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--surface-border);
+}
+
+.p-error {
+  color: var(--app-error);
+  font-size: 12px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+// ─── PrimeNG overrides ────────────────────────────────────
+.p-motion {
+  display: block;
+  width: auto;
+  min-width: 200px !important;
+}
+
+.p-progressspinner {
+  position: absolute !important;
+  left: 50%;
+}
+
+.w-30 {
+  width: 30%;
+}
+
+.p-dialog {
+  border: 0 !important;
+  border-radius: 0 !important;
+
+  .p-dialog-header {
+    border-top: 4px solid var(--app-primary-color);
+
+    .p-dialog-close-button {
+      border-radius: 0 !important;
     }
+  }
+
+  .p-dialog-content {
+    // padding: .5rem 1.25rem;
+    font-size: 14px;
 
   }
-   .p-button-sm {
-       padding: 7px 13px !important;
-    font-size: 12px !important;
 
+  .p-dialog-footer {
+    padding: 1.25rem;
   }
-  .no-radius, .p-button.no-radius, .app-input.no-radius,.p-datepicker.no-radius input , .no-radius .p-datepicker-input.p-inputtext , .no-raduis .p-inputtext{
-     border-radius: 0 !important;
-  }
-.required { color: var(--app-error); margin-left: 2px; }
-  
-
-
-
-  .p-card {
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--surface-border);
-  }
-  .p-error{
-    color: var(--app-error);
-    font-size: 12px;
-  }
-  .w-full{
-    width:100%;}
-  .w-50{width: 50%;}
-   // ─── PrimeNG overrides ────────────────────────────────────
- .p-motion {
-    display: block;
-    width: auto;
-    min-width: 200px !important;
 }
-.p-progressspinner{
-      position: absolute !important;
-    left: 50%;
-}
-.w-30{
-  width:30%;
-}
-  .p-dialog{
-    border: 0 !important;
-    border-radius: 0 !important;
-    .p-dialog-header {
-          border-top: 4px solid var(--app-primary-color);
-          .p-dialog-close-button {
-            border-radius: 0 !important;
-          }
-    }
-      .p-dialog-content {
-        padding: .5rem 1.25rem;
-        font-size: 14px;
 
-      }
-      .p-dialog-footer {
-        padding: 1.25rem;
-      }
+.app-input,
+.p-select,
+.p-dropdown,
+.p-inputtext,
+.p-datepicker {
+  width: 100%;
+  height: 42px;
+  padding: 0 16px 0 42px;
+  border-radius: 12px !important;
+  background: #fff;
+  border: 1px solid var(--app-border-color);
+  font-size: 14.5px;
+  color: var(--text-dark);
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+
+  &::placeholder {
+    color: var(--text-muted);
   }
-  .app-input , .p-select , .p-dropdown, .p-inputtext , .p-datepicker{
-    width: 100%;
-    height: 42px;
-    padding: 0 16px 0 42px;
-    border-radius: 12px !important;
+
+  &.invalid:not(:focus) {
+    border-color: var(--app-delete);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #c4b5fd;
     background: #fff;
-    border: 1px solid var(--app-border-color);
-    font-size: 14.5px;
-    color: var(--text-dark);
-    font-family: inherit;
-    box-sizing: border-box;
-    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-    &::placeholder { color: var(--text-muted); }
- &.invalid:not(:focus) {
-      border-color: var(--app-delete);
-    }
-    &:focus {
-      outline: none;
-      border-color: #c4b5fd;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
-    }
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
   }
-  .full-widtth{
-    width:100%;
-  }
-  .form-container{
-    label{
-      display: block;
-      margin-bottom: 0.5rem;
-      color:var(--title-secondary-color);
-      font-size: 13px;
-    font-weight: 600;
-    }
-    .field{
-      margin-bottom: 1rem;
-  }}
+}
 
- .p-select , .p-datepicker {
+.full-widtth {
+  width: 100%;
+}
+
+.form-container {
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--title-secondary-color);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .field {
+    margin-bottom: 1rem;
+  }
+}
+
+.p-select,
+.p-datepicker {
   padding: 0;
 
- }
- .p-datepicker{border: 0;
-  
 }
+
+.p-datepicker {
+  border: 0;
+
+}
+
 // ─── Form actions ─────────────────────────────────────────
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 20px;
+
   // padding-top: 16px;
-  button{width: 50%;}
+  button {
+    width: 50%;
+  }
+
   .btn-spinner {
     width: 14px;
     height: 14px;
@@ -241,9 +295,58 @@ body{
   }
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
-  // .p-toast .p-toast-message-success { border-left: 4px solid $green; }
-  // .p-toast .p-toast-message-error   { border-left: 4px solid $red;   }
+.chip {
+  padding: 5px 10px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 12px;
+
+  &.pending {
+    background-color: var(--app-primary-color);
+  }
+
+  &.paid {
+    background-color: var(--app-success);
+  }
+
+  &.failed {
+    background-color: #dc3545; // 🔥 red
+  }
+
+  &.refunded {
+    background-color: #6c757d; // gray
+  }
+
+  &.cancelled {
+    background-color: var(--app-delete);
+  }
+
+  // Booking Status
+  &.running {
+    background-color: #17a2b8; // blue
+  }
+
+  &.completed {
+    background-color: var(--app-success);
+  }
+
+  &.upcoming {
+    background-color: #e0a705; // yellow
+  }
+
+  &.past {
+    background-color: #6c757d;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// .p-toast .p-toast-message-success { border-left: 4px solid $green; }
+// .p-toast .p-toast-message-error   { border-left: 4px solid $red;   }
 //   .page-ellipsis {
 //   display: inline-flex;
 //   align-items: center;
@@ -254,3 +357,14 @@ body{
 //   color: var(--text-muted);
 //   user-select: none;
 // }
+.rescdule-modal {
+  .p-datepicker:has(.p-datepicker-dropdown) .p-datepicker-input {
+    border-radius: 0 !important;
+  }
+}
+
+.topbar-center .p-select-list{
+  direction: ltr !important;
+
+}
+.topbar-center .p-select-label{padding-inline-end: 0;}

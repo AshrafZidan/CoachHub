@@ -32,52 +32,50 @@ export class Sidebar implements OnInit {
   screenWidth = signal(0);
 
   // ─── All nav items (unfiltered) ──────────────────
-  private allMainNavItems: NavItem[] = [
-    { 
-      label: 'Coaches', 
-      icon: 'pi pi-users', 
-      route: '/admin/coaches',
-      permission: Permissions.Coaches
-    },
-    { 
-      label: 'Bookings', 
-      icon: 'pi pi-calendar', 
-      route: '/admin/bookings',
-      permission: Permissions.Booking
-    },
-    { 
-      label: 'Coupons', 
-      icon: 'pi pi-tag', 
-      route: '/admin/coupons',
-      permission: 'view_coupons'
-    },
-    { 
-      label: 'Admins', 
-      icon: 'pi pi-shield', 
-      route: '/admin/admins-list',
-      permission: 'manage_admins'
-    },
-    { 
-      label: 'Reports', 
-      icon: 'pi pi-chart-bar', 
-      route: '/admin/reports', 
-      badge: 1,
-      permission: 'view_reports'
-    },
-    { 
-      label: 'Gateways', 
-      icon: 'pi pi-credit-card', 
-      route: '/admin/gateways',
-      permission: ['view_gateways', 'manage_gateways'],
-      requireAllPermissions: false // User needs either permission (OR logic)
-    },
-    { 
-      label: 'Transactions', 
-      icon: 'pi pi-arrow-right-arrow-left', 
-      route: '/admin/transactions',
-      permission: 'view_transactions'
-    }
-  ];
+ private allMainNavItems: NavItem[] = [
+  { 
+    label: 'Coaches', 
+    icon: 'pi pi-users', 
+    route: '/admin/coaches',
+    permission: Permissions.Coaches
+  },
+  { 
+    label: 'Bookings', 
+    icon: 'pi pi-calendar', 
+    route: '/admin/booking',
+    permission: Permissions.Booking
+  },
+  { 
+    label: 'Coupons', 
+    icon: 'pi pi-tag', 
+    route: '/admin/coupons',
+    permission: Permissions.Coupons
+  },
+  { 
+    label: 'Admins', 
+    icon: 'pi pi-shield', 
+    route: '/admin/admins-list',
+    permission: Permissions.Admins
+  },
+  { 
+    label: 'Reports', 
+    icon: 'pi pi-chart-bar', 
+    route: '/admin/reports',
+    permission: Permissions.Reports
+  },
+  { 
+    label: 'Gateways', 
+    icon: 'pi pi-credit-card', 
+    route: '/admin/gateways',
+    permission: Permissions.Gateways
+  },
+  { 
+    label: 'Transactions', 
+    icon: 'pi pi-arrow-right-arrow-left', 
+    route: '/admin/transactions',
+    permission: Permissions.Transactions
+  }
+];
 
   private allSettingsNavItems: NavItem[] = [
     { 

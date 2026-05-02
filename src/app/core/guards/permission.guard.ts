@@ -11,25 +11,27 @@ import { PermissionService } from '../services/permission.service';
  *   component: CoachesComponent
  * }
  */
-export const permissionGuard = (requiredPermissions: string[], requireAll = true): CanActivateFn => {
-  return (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+export const permissionGuard = (
+  requiredPermissions: string[],
+  requireAll = true
+): CanActivateFn => {
+  return (route, state) => {
     const permissionService = inject(PermissionService);
     const router = inject(Router);
 
-    // Check permissions based on requireAll flag
+    if (!requiredPermissions || requiredPermissions.length === 0) {
+      return true;
+    }
+
     const hasAccess = requireAll
       ? permissionService.hasAllPermissions(requiredPermissions)
       : permissionService.hasAnyPermission(requiredPermissions);
 
-    if (hasAccess) {
-      return true;
-    }
+    if (hasAccess) return true;
 
-    // Redirect to 403 page on unauthorized access
-    router.navigate(['/admin/forbidden'], { 
-      queryParams: { returnUrl: state.url } 
+    return router.createUrlTree(['/admin/forbidden'], {
+      queryParams: { returnUrl: state.url }
     });
-    return false;
   };
 };
 
