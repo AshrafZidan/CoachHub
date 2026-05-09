@@ -2,15 +2,11 @@
 
   <!-- ✅ Loading Overlay -->
   <div class="loading-overlay" *ngIf="isLoading()">
-    <p-progressSpinner
-      strokeWidth="4"
-      animationDuration=".8s"
-    ></p-progressSpinner>
+    <p-progressSpinner strokeWidth="4" animationDuration=".8s"></p-progressSpinner>
   </div>
 
 
-  <!-- ✅ Content -->
-  <ng-container >
+  <ng-container>
 
     <div class="section">
 
@@ -18,15 +14,8 @@
       <div class="field">
         <label>What is the industry you can give coaching in? *</label>
 
-       <p-multiSelect
-  [options]="(options$ | async)?.industries || []"
-  formControlName="coachingIndustriesIds"
-  optionLabel="label"
-  optionValue="value"
-  class="w-full"
-  [maxSelectedLabels]="6"
-  display="chip"
-></p-multiSelect>
+        <p-multiSelect [options]="(options$ | async)?.industries || []" formControlName="coachingIndustriesIds"
+          optionLabel="label" optionValue="value" class="w-full" [maxSelectedLabels]="6" display="chip"></p-multiSelect>
 
 
         <small class="p-error" *ngIf="isInvalid('coachingIndustriesIds')">
@@ -38,12 +27,7 @@
       <div class="field">
         <label>Years of Experience *</label>
 
-        <input
-          pInputText
-          type="number"
-          formControlName="yearsOfExperience"
-          placeholder="Enter years of experience"
-        />
+        <input pInputText type="number" formControlName="yearsOfExperience" placeholder="Enter years of experience" />
 
         <small class="p-error" *ngIf="isInvalid('yearsOfExperience')">
           {{ getError('yearsOfExperience') }}
@@ -54,15 +38,8 @@
       <div class="field">
         <label>What are your languages? *</label>
 
-        <p-multiSelect
-  [options]="(options$ | async)?.languages || []"
-  formControlName="languageIds"
-  [maxSelectedLabels]="6"
-  optionLabel="label"
-  optionValue="value"
-  class="w-full"
-   display="chip"
-></p-multiSelect>
+        <p-multiSelect [options]="(options$ | async)?.languages || []" formControlName="languageIds"
+          [maxSelectedLabels]="6" optionLabel="label" optionValue="value" class="w-full" display="chip"></p-multiSelect>
 
         <small class="p-error" *ngIf="isInvalid('languageIds')">
           {{ getError('languageIds') }}
@@ -73,14 +50,8 @@
       <div class="field">
         <label>Are you available at least 2–3 hours per week? *</label>
 
-        <p-select
-          [options]="availabilityOptions"
-          formControlName="availableEveryWeek"
-          placeholder="Select availability"
-          optionLabel="label"
-          optionValue="value"
-          class="w-full"
-        ></p-select>
+        <p-select [options]="availabilityOptions" formControlName="availableEveryWeek" placeholder="Select availability"
+          optionLabel="label" optionValue="value" class="w-full"></p-select>
 
         <small class="p-error" *ngIf="isInvalid('availableEveryWeek')">
           {{ getError('availableEveryWeek') }}
@@ -91,17 +62,49 @@
       <div class="field">
         <label>Job Title *</label>
 
-        <input
-          pInputText
-          formControlName="jobTitle"
-          placeholder="Enter job title"
-        />
+        <input pInputText formControlName="jobTitle" placeholder="Enter job title" />
 
         <small class="p-error" *ngIf="isInvalid('jobTitle')">
           {{ getError('jobTitle') }}
         </small>
       </div>
 
+    </div>
+
+    <!-- BIO -->
+    <div class="field">
+      <label>Bio *</label>
+
+      <textarea pInputText formControlName="bio" placeholder="Write a short professional bio"
+        class="w-full lg-textarea"></textarea>
+
+      <small class="p-error" *ngIf="isInvalid('bio')">
+        Bio is required (min 10 characters)
+      </small>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="field">
+      <label>Education *</label>
+
+      <textarea pInputText rows="4" formControlName="education" placeholder="Write your education background"
+        class="w-full lg-textarea"></textarea>
+
+      <small class="p-error" *ngIf="isInvalid('education')">
+        Education is required
+      </small>
+    </div>
+
+    <!-- EXPERIENCE DESCRIPTION -->
+    <div class="field">
+      <label>Experience Details *</label>
+
+      <textarea pInputText rows="4" formControlName="experience" placeholder="Describe your experience in detail"
+        class="w-full lg-textarea"></textarea>
+
+      <small class="p-error" *ngIf="isInvalid('experience')">
+        Experience is required
+      </small>
     </div>
 
   </ng-container>

@@ -19,7 +19,9 @@
   --p-button-primary-hover-border-color: #833C88 !important;
   --p-button-primary-active-border-color: #833C88 !important;
   --p-inputtext-focus-border-color: #833C88 !important;
-
+  --p-tabs-tab-active-border-color: #833C88 !important;
+  --p-tabs-tab-active-color: #833C88 !important;
+  --p-tabs-active-bar-background: #833C88 !important;
   --p-select-option-selected-background: #833C88 !important;
   --p-select-option-selected-color: #fff !important;
   --p-select-option-selected-focus-background: #833C88 !important;
@@ -168,9 +170,16 @@ body {
 }
 
 .w-50 {
-  width: 50%;
+  width: 50% !important;
 }
 
+.lg-textarea {
+    min-height: 100px;
+    max-height: 300px;
+    resize: vertical;
+    padding: 12px;
+    line-height: 1.6;
+}
 // ─── PrimeNG overrides ────────────────────────────────────
 .p-motion {
   display: block;
@@ -317,7 +326,7 @@ body {
     background-color: #6c757d; // gray
   }
 
-  &.cancelled {
+  &.cancelled , &.canceled {
     background-color: var(--app-delete);
   }
 
@@ -368,4 +377,4 @@ body {
 
 }
 .topbar-center .p-select-label{padding-inline-end: 0;}
-.p-select{border-radius: 0 !important;}
+.filter-container .p-select{border-radius: 0 !important;}

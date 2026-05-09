@@ -5,3 +5,7 @@
   font-weight: 600;
   color: #555;
 }
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;}

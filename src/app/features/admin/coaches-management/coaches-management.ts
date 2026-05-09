@@ -33,6 +33,7 @@ import { Coach, CoachesQuery } from './Coaches.model';
 import { TableConfig } from '../../../core/models/table-config';
 import { ApproveCoachDialogComponent } from './approve-coach-dialog/approve-coach-dialog.component';
 import { SearchService } from '../services/global-table-search.service';
+import { CoachDetailsDialogComponent } from './coache-details-modal/coache-details-modal';
 
 @Component({
   selector: 'app-coaches',
@@ -50,7 +51,8 @@ import { SearchService } from '../services/global-table-search.service';
     SelectModule,
     DialogModule,
     InputTextModule,
-    ApproveCoachDialogComponent
+    ApproveCoachDialogComponent,
+    CoachDetailsDialogComponent
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './coaches-management.html',
@@ -69,6 +71,8 @@ export class CoachesManagement implements OnInit, OnDestroy {
   isLoading = signal(false);
   selectedRows = signal<Coach[]>([]);
 
+  detailsVisible = signal(false);
+selectedCoachId = signal<number | null>(null);
   approvalDialogVisible = signal(false);
   selectedCoachForApproval = signal<Coach | null>(null);
 
@@ -178,14 +182,26 @@ constructor() {
   }
 
   // ─── Navigation ───────────────────────────────────────
-  viewCoach(coach: Coach): void {
-    this.router.navigate(['/admin/coaches', coach.id]);
-  }
+
+
+// 🔥 VIEW FUNCTION
+    viewCoach(coach: any) {
+      this.selectedCoachId.set(coach.id);
+      this.detailsVisible.set(true);
+    }
+
+    // optional
+    closeDetails() {
+      this.detailsVisible.set(false);
+      this.selectedCoachId.set(null);
+    }
 
   editCoach(coach: Coach): void {
     this.router.navigate(['/admin/coaches/edit-coach', coach.id]);
   }
-
+  openCreateCoach(): void {
+      this.router.navigate(['/admin/coaches/add-coach']);
+    }
   // ─── Approval dialog ──────────────────────────────────
   openApprovalDialog(coach: Coach): void {
     this.selectedCoachForApproval.set(coach);

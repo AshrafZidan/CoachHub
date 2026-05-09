@@ -95,7 +95,18 @@
       Location is required
     </small>
   </div>
+  <!-- WhatsApp -->
+     <div class="field">
 
+  <app-whatsapp-input
+    formControlName="whatsAppNumber"
+    [selectedCountry]="selectedCountry"
+    [countries]="countries">
+  </app-whatsapp-input>
+  <small class="p-error" *ngIf="isInvalid('whatsAppNumber')">
+    WhatsApp number is required and must be valid
+  </small>
+</div>
   <!-- Email -->
   <div class="field">
     <label>Email Address</label>
@@ -110,11 +121,81 @@
     </small>
   </div>
 
-  <!-- WhatsApp -->
-  <app-whatsapp-input
-    formControlName="whatsAppNumber"
-    [selectedCountry]="selectedCountry"
-    [countries]="countries">
-  </app-whatsapp-input>
+    <!-- ─── PRICING ─────────────────────── -->
+<div class="section">
+  <!-- PRICING -->
+<div class="price-grid">
+
+  <!-- 30 min -->
+  <div class="price-field ">
+    <label>30 min *</label>
+
+    <input
+      pInputText
+      type="number"
+      formControlName="halfHourPrice"
+      placeholder="Enter price"
+      class="w-full"
+    />
+
+    <small class="p-error" *ngIf="isInvalid('halfHourPrice')">
+      Price is required and must be greater than 0
+    </small>
+  </div>
+
+  <!-- 1 hour -->
+  <div class="price-field">
+    <label>1 hour *</label>
+
+    <input
+      pInputText
+      type="number"
+      formControlName="hourlyPrice"
+      placeholder="Enter price"
+      class="w-full"
+    />
+
+    <small class="p-error" *ngIf="isInvalid('hourlyPrice')">
+      Price is required and must be greater than 0
+    </small>
+  </div>
+
+  <!-- 1.5 hour -->
+  <div class="price-field">
+    <label>1.5 hour *</label>
+
+    <input
+      pInputText
+      type="number"
+      formControlName="oneAndHalfHourPrice"
+      placeholder="Enter price"
+      class="w-full"
+    />
+
+    <small class="p-error" *ngIf="isInvalid('oneAndHalfHourPrice')">
+      Price is required and must be greater than 0
+    </small>
+  </div>
+
+  <!-- 2 hours -->
+  <div class="price-field">
+    <label>2 hours *</label>
+
+    <input
+      pInputText
+      type="number"
+      formControlName="twoHoursPrice"
+      placeholder="Enter price"
+      class="w-full"
+    />
+
+    <small class="p-error" *ngIf="isInvalid('twoHoursPrice')">
+      Price is required and must be greater than 0
+    </small>
+  </div>
+
+</div>
+
+</div>
 
 </div>

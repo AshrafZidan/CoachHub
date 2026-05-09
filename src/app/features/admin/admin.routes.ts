@@ -30,6 +30,14 @@ export const ADMIN_ROUTES: Routes = [
         canActivate: [permissionGuard([Permissions.Coaches])]
 
       },
+      {
+        path: 'coaches/add-coach',
+        loadComponent: () =>
+          import('./coaches-management/edit-coach/edit-coach').then(c => c.EditCoachComponent),
+        title: 'Add Coach — CoachHub Admin',
+        canActivate: [permissionGuard([Permissions.Coaches])]
+
+      },
 
       {
         path: 'booking',

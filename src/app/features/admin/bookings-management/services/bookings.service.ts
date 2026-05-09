@@ -50,24 +50,21 @@ export class BookingsService {
     .set('pageSize', query.pageSize.toString());
 
 
-  // 🔽 sorting
   if (query.sortBy) params = params.set('sortBy', query.sortBy);
   if (query.sortDir) params = params.set('sortDir', query.sortDir);
 
-  // ✅ FILTERS
   if (query.coachId) params = params.set('coachId', query.coachId);
   if (query.coacheeId) params = params.set('coacheeId', query.coacheeId);
   if (query.bookingStatus) params = params.set('bookingStatus', query.bookingStatus);
   if (query.paymentStatus) params = params.set('paymentStatus', query.paymentStatus);
 
-  if (query.startDate) {
-    params = params.set('startDate', query.startDate.toISOString());
-  }
+ if (query.startDate) {
+  params = params.set('startDate', String(query.startDate));
+}
 
-  if (query.endDate) {
-    params = params.set('endDate', query.endDate.toISOString());
-  }
-
+if (query.endDate) {
+  params = params.set('endDate', String(query.endDate));
+}
   const request$ = this.http
     .get<BookingListResponse>(`${this.BASE_URL}/admin-list`, { params })
     .pipe(

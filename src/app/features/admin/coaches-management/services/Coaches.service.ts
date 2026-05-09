@@ -48,6 +48,11 @@ private handleError = (err: unknown) => {
       .pipe(catchError(err => throwError(() => err)));
   }
 
+    addCoach(coachDetails: any): Observable<ApiResponse<void>> {
+    return this.http
+      .post<ApiResponse<void>>(`${this.BASE_URL}`, coachDetails)
+      .pipe(catchError(err => throwError(() => err)));
+  }
   // ─── GET all coaches (paginated) ──────────────────────
   getCoaches(query: CoachesQuery): Observable<CoachesResponse> {
     const key = JSON.stringify({

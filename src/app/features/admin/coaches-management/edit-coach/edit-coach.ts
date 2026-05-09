@@ -79,6 +79,7 @@ export class EditCoachComponent implements OnInit, OnDestroy {
   // STATE
   // =========================
   step = signal(1);
+  isEditMode = signal(false);
   coach = signal<CoachDetail | null>(null);
   isLoading = signal(false);
 
@@ -102,11 +103,11 @@ export class EditCoachComponent implements OnInit, OnDestroy {
     countryId: ['', Validators.required],
     nationalityId:['',Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    halfHourPrice:[0,],
-    hourlyPrice:[0],
-    twoHoursPrice:[0],
     whatsAppNumber: ['', [Validators.required, Validators.pattern(/^\+?\d+$/) ]],
-    oneAndHalfHourPrice:[0],
+    halfHourPrice: [0, [Validators.required, Validators.min(1)]],
+    hourlyPrice: [0, [Validators.required, Validators.min(1)]],
+    oneAndHalfHourPrice: [0, [Validators.required, Validators.min(1)]],
+    twoHoursPrice: [0, [Validators.required, Validators.min(1)]],
   });
 
   // =========================
@@ -118,6 +119,11 @@ export class EditCoachComponent implements OnInit, OnDestroy {
     languageIds: [[] as string[], Validators.required],
     availableEveryWeek: [false as boolean, Validators.required],
     jobTitle: ['', Validators.required],
+    bio: ['', [Validators.required, Validators.minLength(10)]],
+    education: ['', [Validators.required]],
+    experience: ['', [Validators.required]],
+
+    
   });
 
   // =========================
@@ -174,7 +180,18 @@ export class EditCoachComponent implements OnInit, OnDestroy {
   // =========================
   constructor() {
     this.searchService.hide();
+    this.route.paramMap.pipe(
+  map(params => params.get('id')),
+).subscribe(id => {
+  if (id) {
+    this.isEditMode.set(true);
+  } else {
+    this.isEditMode.set(false);
+    this.step.set(1); // create mode start fresh
   }
+});
+  }
+  
 
 ngOnInit() {
   this.loadCountriesfromBcApi();
@@ -218,7 +235,7 @@ ngOnInit() {
         halfHourPrice:data.halfHourPrice??0,
         hourlyPrice:data.hourlyPrice??0,
         twoHoursPrice:data.twoHoursPrice??0,
-        oneAndHalfHourPrice: data.oneAndHalfHourPrice ?? 0,
+        oneAndHalfHourPrice: data.OneAndHalfHourPrice ?? 0,
         whatsAppNumber: data.whatsAppNumber,
       });
 
@@ -230,7 +247,10 @@ ngOnInit() {
         jobTitle: data.jobTitle,
         availableEveryWeek: data.availableEveryWeek,
         coachingIndustriesIds: data.coachingIndustries?.map((i: any) => i.id) || [],
-        languageIds: data.languages?.map((l: any) => l.id) || []
+        languageIds: data.languages?.map((l: any) => l.id) || [],
+        bio: data.bio || '',
+        education: data.education || '',
+        experience: data.experience || ''
       });
 
       // =========================
@@ -316,11 +336,11 @@ async submit() {
   const media = this.mediaForm.value;
 
   // =========================
-  // PROFILE IMAGE (ONLY ID OR BASE64)
+  // PROFILE IMAGE
   // =========================
   let profileImage = null;
 
-  if (media.profileImageUrl && media.profileImageUrl.startsWith('data:')) {
+  if (media.profileImageUrl?.startsWith('data:')) {
     profileImage = {
       contentType: 'image/jpeg',
       content: this.extractBase64(media.profileImageUrl),
@@ -333,41 +353,39 @@ async submit() {
   }
 
   // =========================
-  // CERTIFICATES (FULL OBJECT)
+  // CERTIFICATES
   // =========================
- const certificates = await Promise.all(
-  this.certificates.controls.map(async (c: any) => {
-    const v = c.value;
+  const certificates = await Promise.all(
+    this.certificates.controls.map(async (c: any) => {
+      const v = c.value;
 
-    // ✅ NEW FILE (File object)
-    if (v.file instanceof File) {
-      const base64 = await this.fileToBase64(v.file);
+      if (v.file instanceof File) {
+        const base64 = await this.fileToBase64(v.file);
+
+        return {
+          contentType: v.contentType || 'image/jpeg',
+          content: this.extractBase64(base64),
+          attachmentName: v.name
+        };
+      }
+
+      if (typeof v.file === 'string' && v.file.startsWith('data:')) {
+        return {
+          contentType: v.contentType || 'image/jpeg',
+          content: this.extractBase64(v.file),
+          attachmentName: v.name
+        };
+      }
 
       return {
-        contentType: v.contentType || 'image/jpeg',
-        content: this.extractBase64(base64),
-        attachmentName: v.name
+        id: v.id,
+        contentType: v.contentType,
+        attachmentName: v.name,
+        fileUrl: v.fileUrl
       };
-    }
+    })
+  );
 
-    // ✅ ALREADY BASE64 STRING (rare case)
-    if (typeof v.file === 'string' && v.file.startsWith('data:')) {
-      return {
-        contentType: v.contentType || 'image/jpeg',
-        content: this.extractBase64(v.file),
-        attachmentName: v.name
-      };
-    }
-
-    // ✅ KEEP FULL OBJECT
-    return {
-      id: v.id,
-      contentType: v.contentType,
-      attachmentName: v.name,
-      fileUrl: v.fileUrl
-    };
-  })
-);
   // =========================
   // DATE
   // =========================
@@ -407,32 +425,44 @@ async submit() {
     availableEveryWeek: this.professionalForm.value.availableEveryWeek,
     jobTitle: this.professionalForm.value.jobTitle,
 
-    username: media.username,
+    bio: this.professionalForm.value.bio,
+    education: this.professionalForm.value.education,
+    experience: this.professionalForm.value.experience,
 
+    username: media.username,
     profileImage,
     certificates
   };
 
   // =========================
-  // API CALL
+  // SWITCH ADD / EDIT
   // =========================
   const coachId = this.coach()?.id;
 
-  if (!coachId) {
-    this.isLoading.set(false);
-    return;
-  }
+  const request$ = coachId
+    ? this.coachesService.updateCoach(coachId, payload)
+    : this.coachesService.addCoach(payload);
 
-  this.coachesService.updateCoach(coachId, payload)
+  request$
     .pipe(finalize(() => this.isLoading.set(false)))
     .subscribe({
       next: () => {
-        this.toast.show('success', 'Coach updated successfully', '');
+        this.toast.show(
+          'success',
+          coachId ? 'Coach updated successfully' : 'Coach created successfully',
+          ''
+        );
+
         this.router.navigate(['/admin/coaches']);
       },
       error: (err) => {
         console.error(err);
-        this.toast.show('error', 'Failed to update coach', '');
+
+        this.toast.show(
+          'error',
+          coachId ? 'Failed to update coach' : 'Failed to create coach',
+          ''
+        );
       }
     });
 }

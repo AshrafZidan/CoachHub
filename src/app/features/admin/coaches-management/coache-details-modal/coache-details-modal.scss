@@ -1,0 +1,209 @@
+::ng-deep .coach-modal {
+
+  // ─────────────────────────────────────────
+  // DIALOG BASE
+  // ─────────────────────────────────────────
+  .p-dialog {
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      .cert {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border: 1px solid var(--app-border-color);
+      }
+    }
+  }
+
+  .p-dialog-header {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border-bottom: 2px solid var(--app-border-color);
+  }
+
+  .p-dialog-content {
+    padding: 2rem;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  // ─────────────────────────────────────────
+  // HEADER
+  // ─────────────────────────────────────────
+  .header-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    .booking-meta{
+      div{
+        display: flex;
+        gap: 6px;
+      }
+    }
+    .avatar-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--app-border-color);
+    }
+  }
+
+  .booking-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+  }
+
+  .booking-email {
+    color: #6b7280;
+    font-size: 0.95rem;
+  }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--app-border-color);
+  }
+
+  // ─────────────────────────────────────────
+  // SECTIONS
+  // ─────────────────────────────────────────
+  .details-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  // ─────────────────────────────────────────
+  // GRIDS
+  // ─────────────────────────────────────────
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .detail-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+  }
+
+  .detail-value {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 4px;
+  }
+
+  // ─────────────────────────────────────────
+  // PRICE GRID (Booking-style preserved)
+  // ─────────────────────────────────────────
+  .price-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .price-value {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  // ─────────────────────────────────────────
+  // CHIPS / STATUS (optional but consistent)
+  // ─────────────────────────────────────────
+  .chip {
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  // ─────────────────────────────────────────
+  // ACTIONS
+  // ─────────────────────────────────────────
+  .action-section {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 1rem;
+  }
+
+  .approve {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .reject {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  // ─────────────────────────────────────────
+  // AVATAR (kept safe override)
+  // ─────────────────────────────────────────
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--app-border-color);
+  }
+
+  // ─────────────────────────────────────────
+  // RESPONSIVE
+  // ─────────────────────────────────────────
+  @media (max-width: 768px) {
+    .booking-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .details-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .price-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

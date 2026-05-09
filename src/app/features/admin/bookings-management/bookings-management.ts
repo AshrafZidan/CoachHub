@@ -72,11 +72,11 @@ export class BookingsManagement implements OnInit, OnDestroy {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private searchService = inject(SearchService);
-
+ currentQuery = signal<BookingsQuery | null>(null);
   statusClassMap: Record<PaymentStatus, string> = {
     [PaymentStatus.PENDING]: 'pending',
     [PaymentStatus.FAILED]: 'failed',
-    [PaymentStatus.CANCELLED]: 'cancelled',
+    [PaymentStatus.CANCELLED]: 'canceled',
     [PaymentStatus.REFUNDED]: 'refunded',
     [PaymentStatus.PAID]: 'paid'
   };
@@ -162,36 +162,56 @@ export class BookingsManagement implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.searchService.searchVisible.set(true);
     this.searchService.clearSearch();
     this.searchService.searchOptions.set([]); // Reset options for next page
   }
 
   // ─── Load Bookings ────────────────────────────────────
-  loadBookings(): void {
-    if (this.isLoading()) return;
-    this.isLoading.set(true);
+loadBookings(): void {
+  if (this.isLoading()) return;
 
-    const query: BookingsQuery = {
-      pageIndex: this.tableConfig.backendPageIndex(), // 0-based for API
-      pageSize: this.tableConfig.pageSize(),
-      sortBy: '',
-      sortDir: this.tableConfig.sortOrder(),
-    };
+  this.isLoading.set(true);
 
-    this.bookingsService.getBookings(query)
-      .pipe(
-        finalize(() => this.isLoading.set(false)),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
-        next: res => {
-          this.bookings.set(res.data);
-          this.tableConfig.totalRecords.set(res.count);
-          this.tableConfig.pageCount.set(res.pageCount);
-          this.tableConfig.pageIndex.set((res.pageIndex ?? 0) + 1); // keep UI 1-based
-        }
-      });
-  }
+  const f = this.filters();
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return null;
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  };
+
+  const query: BookingsQuery = {
+    pageIndex: this.tableConfig.backendPageIndex(),
+    pageSize: this.tableConfig.pageSize(),
+
+    coachId: f.coachId,
+    coacheeId: f.coacheeId,
+    bookingStatus: f.bookingStatus,
+    paymentStatus: f.paymentStatus,
+    transaction: f.transaction,
+
+    startDate: formatDate(f.dateRange?.[0] || null),
+    endDate: formatDate(f.dateRange?.[1] || null),
+
+    search: this.searchService.searchTerm()?.trim() || ''
+  };
+
+  this.currentQuery.set(query); // 👈 خزّنها
+
+  this.bookingsService.getBookings(query)
+    .pipe(
+      finalize(() => this.isLoading.set(false)),
+      takeUntilDestroyed(this.destroyRef)
+    )
+    .subscribe({
+      next: res => {
+        this.bookings.set(res.data);
+        this.tableConfig.totalRecords.set(res.count);
+        this.tableConfig.pageCount.set(res.pageCount);
+        this.tableConfig.pageIndex.set((res.pageIndex ?? 0) + 1);
+      }
+    });
+}
   refundBoking(booking: Booking): void {
     if (!booking) return;
 
@@ -267,7 +287,7 @@ export class BookingsManagement implements OnInit, OnDestroy {
 
   onRescheduleComplete(updatedBooking: Booking): void {
     this.closeRescheduleModal();
-
+    this.toastServices.show('success', 'Rescheduled', 'The booking has been rescheduled successfully');
     this.loadBookings();
 
     // ✅ Optional: instant UI update (better UX)
@@ -424,8 +444,18 @@ export class BookingsManagement implements OnInit, OnDestroy {
     });
   }
 
- applyFilters() {
+applyFilters() {
   const f = this.filters();
+
+ const formatDate = (date: Date | null) => {
+  if (!date) return null;
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
 
   const query: BookingsQuery = {
     pageIndex: this.tableConfig.backendPageIndex(),
@@ -437,14 +467,13 @@ export class BookingsManagement implements OnInit, OnDestroy {
     paymentStatus: f.paymentStatus,
     transaction: f.transaction,
 
-    startDate: f.dateRange?.[0] || null,
-    endDate: f.dateRange?.[1] || null,
+    startDate: formatDate(f.dateRange?.[0] || null),
+    endDate: formatDate(f.dateRange?.[1] || null),
 
     search: this.searchService.searchTerm()?.trim() || ''
   };
 
-  this
-  .loadBookingsWithFilters(query);
+  this.loadBookings();
 }
 loadBookingsWithFilters(query: BookingsQuery): void {
   if (this.isLoading()) return;

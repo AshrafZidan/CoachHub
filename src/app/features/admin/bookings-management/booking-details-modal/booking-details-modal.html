@@ -12,149 +12,215 @@
   [styleClass]="'booking-details-dialog'"
   class="booking-modal"
 >
+
   <!-- Toast & Confirmation -->
   <p-toast position="top-right"></p-toast>
   <p-confirmDialog></p-confirmDialog>
 
-  <!-- Content -->
-  <div class="modal-content" *ngIf="booking">
-    <!-- Header Section -->
-    <div class="header-section">
-      <div class="booking-header">
-        <div class="booking-title">
-          <h2>{{ booking.coacheeFullName }}</h2>
-          <p class="booking-email">{{ booking.coacheeEmail }}</p>
-        </div>
-
-        <div class="booking-meta">
-            <div>
-
-                <span 
-                class="chip" 
-                [ngClass]="getBookingStatusLabel(booking.bookingStatus)"
-                >
-                {{ getBookingStatusLabel(booking.bookingStatus) }}
-            </span>
-            
-            <span 
-            class="chip" 
-            [ngClass]="getStatusLabel(booking.paymentStatus)"
-            >
-            {{ getStatusLabel(booking.paymentStatus) }}
-        </span>
-        </div>
-          <div class="booking-date">
-            <i class="pi pi-calendar"></i>
-            <span>{{ formatDate(booking.startTime) }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <p-divider></p-divider>
-
-    <!-- Session Details -->
-    <div class="details-section">
-      <h3 class="section-title">Session Details</h3>
-
-      <div class="details-grid">
-        <!-- Coach Info -->
-        <div class="detail-item">
-          <label class="detail-label">Coach Name (EN)</label>
-          <p class="detail-value">{{ booking.coachFullNameEn }}</p>
-        </div>
-
-
-        <div class="detail-item">
-          <label class="detail-label">Coach Email</label>
-          <p class="detail-value">
-            <a [href]="'mailto:' + booking.coachEmail" class="email-link">
-              {{ booking.coachEmail }}
-            </a>
-          </p>
-        </div>
-
-        <!-- Session Info -->
-        <div class="detail-item">
-          <label class="detail-label">Session Type</label>
-          <p class="detail-value">{{ getSlotTypeLabel(booking.slotType) }}</p>
-        </div>
-
-        <div class="detail-item">
-          <label class="detail-label">Session Duration</label>
-          <p class="detail-value">{{ booking.periodMinutes }} minutes</p>
-        </div>
-
-        <div class="detail-item">
-          <label class="detail-label">Start Time</label>
-          <p class="detail-value">{{ formatDate(booking.startTime) }}</p>
-        </div>
-
-        <div class="detail-item">
-          <label class="detail-label">End Time</label>
-          <p class="detail-value">{{ formatDate(booking.endTime) }}</p>
-        </div>
-      </div>
-    </div>
-
-    <p-divider></p-divider>
-
-    <!-- Price Information -->
-    <div class="details-section">
-      <h3 class="section-title">Payment Information</h3>
-
-      <div class="price-grid">
-        <!-- Original Price -->
-        <div class="price-item">
-          <label class="price-label">Original Price</label>
-          <p class="price-value original">{{ formatCurrency(booking.price) }}</p>
-        </div>
-
-        <!-- Discount -->
-        <div class="price-item" >
-          <label class="price-label">Discount</label>
-          <div class="discount-info">
-            <p class="price-value discount">{{ formatCurrency(booking.discount) }}</p>
-            <span class="discount-badge">{{ discountPercentage() }}%</span>
-          </div>
-        </div>
-
-        <!-- Final Price -->
-        <div class="price-item final-price-container">
-          <label class="price-label">Final Price</label>
-          <p class="price-value final">{{ formatCurrency(booking.finalPrice) }}</p>
-        </div>
-
-        <!-- Payment Status -->
-        <div class="price-item">
-          <label class="price-label">Payment Status</label>
-            <span 
-            class="chip" 
-            [ngClass]="getStatusLabel(booking.paymentStatus)"
-            >
-            {{ getStatusLabel(booking.paymentStatus) }}
-            </span>
-        </div>
-
-        <!-- Payment Date -->
-        <div class="price-item" *ngIf="booking.paymentDateTime">
-          <label class="price-label">Payment Date</label>
-          <p class="price-value">{{ formatDate(booking.paymentDateTime) }}</p>
-        </div>
-
-        <!-- Transaction ID -->
-        <div class="price-item" *ngIf="booking.paymentTransaction">
-          <label class="price-label">Transaction ID</label>
-          <p class="price-value transaction-id">{{ booking.paymentTransaction }}</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Loading State -->
+  <!-- Loading -->
   <div class="loading-overlay" *ngIf="isLoading()">
     <div class="spinner"></div>
     <p>Processing...</p>
   </div>
+
+  <!-- Content -->
+  <div class="modal-content" *ngIf="booking" >
+
+    <!-- 🔥 PRIME NG TABS (NEW API) -->
+    <p-tabs value="0">
+
+      <!-- TAB HEADERS -->
+      <p-tablist>
+
+        <p-tab value="0">
+          <i class="pi pi-info-circle"></i>
+          Booking Details
+        </p-tab>
+
+        <p-tab value="1">
+          <i class="pi pi-file"></i>
+          Form Answers
+        </p-tab>
+
+      </p-tablist>
+
+      <!-- TAB PANELS -->
+      <p-tabpanels>
+
+        <!-- ===================== -->
+        <!-- TAB 1: BOOKING DETAILS -->
+        <!-- ===================== -->
+        <p-tabpanel value="0">
+
+          <!-- Header -->
+          <div class="header-section">
+            <div class="booking-header">
+
+              <div class="booking-title">
+                <h2>{{ booking.coacheeFullName }}</h2>
+                <p class="booking-email">{{ booking.coacheePhoneNumber }}</p>
+                <p class="booking-email">{{ booking.coacheeEmail }}</p>
+              </div>
+
+              <div class="booking-meta">
+
+                <div>
+                  <span class="chip" [ngClass]="getBookingStatusLabel(booking.bookingStatus)">
+                    {{ getBookingStatusLabel(booking.bookingStatus) }}
+                  </span>
+
+                  <span class="chip" [ngClass]="getStatusLabel(booking.paymentStatus)">
+                    {{ getStatusLabel(booking.paymentStatus) }}
+                  </span>
+                </div>
+
+                <div class="booking-date">
+                  <i class="pi pi-calendar"></i>
+                  <span>{{ formatDate(booking.startTime) }}</span>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Session Details -->
+          <div class="details-section">
+            <h3 class="section-title">Session Details</h3>
+
+            <div class="details-grid">
+
+              <div class="detail-item">
+                <label class="detail-label">Coach Name (EN)</label>
+                <p class="detail-value">{{ booking.coachFullNameEn }}</p>
+              </div>
+
+              <div class="detail-item">
+                <label class="detail-label">Coach Email</label>
+                <p class="detail-value">
+                  <a [href]="'mailto:' + booking.coachEmail">
+                    {{ booking.coachEmail }}
+                  </a>
+                </p>
+              </div>
+
+              <div class="detail-item">
+                <label class="detail-label">Session Type</label>
+                <p class="detail-value">{{ getSlotTypeLabel(booking.slotType) }}</p>
+              </div>
+
+              <div class="detail-item">
+                <label class="detail-label">Duration</label>
+                <p class="detail-value">{{ booking.periodMinutes }} min</p>
+              </div>
+
+              <div class="detail-item">
+                <label class="detail-label">Start</label>
+                <p class="detail-value">{{ formatDate(booking.startTime) }}</p>
+              </div>
+
+              <div class="detail-item">
+                <label class="detail-label">End</label>
+                <p class="detail-value">{{ formatDate(booking.endTime) }}</p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Payment -->
+          <div class="details-section">
+            <h3 class="section-title">Payment Information</h3>
+
+            <div class="price-grid">
+
+              <div class="price-item">
+                <label>Original</label>
+                <p>{{ formatCurrency(booking.price) }}</p>
+              </div>
+
+              <div class="price-item">
+                <label>Discount</label>
+                <p>{{ formatCurrency(booking.discount) }}</p>
+              </div>
+
+              <div class="price-item">
+                <label>Final</label>
+                <p>{{ formatCurrency(booking.finalPrice) }}</p>
+              </div>
+
+              <div class="price-item">
+                <label>Status</label>
+                <span class="chip" [ngClass]="getStatusLabel(booking.paymentStatus)">
+                  {{ getStatusLabel(booking.paymentStatus) }}
+                </span>
+              </div>
+
+              <div class="price-item" *ngIf="booking.paymentDateTime">
+                <label>Payment Date</label>
+                <p>{{ formatDate(booking.paymentDateTime) }}</p>
+              </div>
+
+              <div class="price-item" *ngIf="booking.paymentTransaction">
+                <label>Transaction</label>
+                <p>{{ booking.paymentTransaction }}</p>
+              </div>
+
+            </div>
+          </div>
+
+        </p-tabpanel>
+
+        <!-- ===================== -->
+        <!-- TAB 2: FORM ANSWERS -->
+        <!-- ===================== -->
+        <p-tabpanel value="1">
+
+          <div class="details-section">
+
+
+            <div class="details-grid">
+
+              <div class="detail-item">
+                <label class="detail-label">Challenge</label>
+                <p class="detail-value">{{ booking.formAnswers?.challenge ?? 'N/A' }}</p>
+              </div>
+
+              <div class="detail-item">
+                <label class="detail-label">Why Important</label>
+                <p class="detail-value">{{ booking.formAnswers?.whyImportant ?? 'N/A' }}</p>
+              </div>
+
+              <div class="detail-item">
+                <label class="detail-label">Commitment (1-10)</label>
+                <p class="detail-value">{{ booking.formAnswers?.commitment ?? 'N/A' }}</p>
+              </div>
+
+              <div class="detail-item">
+                <label class="detail-label">Open to Help</label>
+                <p class="detail-value">
+                  {{
+                    booking.formAnswers?.openToHelp == null
+                      ? 'N/A'
+                      : (booking.formAnswers?.openToHelp ? 'Yes' : 'No')
+                  }}
+                </p>
+              </div>
+
+              <div class="detail-item">
+                <label class="detail-label">Tried Before</label>
+                <p class="detail-value">{{ booking.formAnswers?.triedBefore ?? 'N/A' }}</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </p-tabpanel>
+
+      </p-tabpanels>
+
+    </p-tabs>
+
+  </div>
+
 </p-dialog>

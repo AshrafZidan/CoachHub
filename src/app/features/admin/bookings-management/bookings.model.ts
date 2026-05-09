@@ -43,8 +43,16 @@ export interface Booking {
   coachId:number|string;
   coacheeId:number|string;
   coacheeFullName: string;
+  coacheePhoneNumber: string;
   coacheeEmail: string;
-  bookingStatus:BookingStatus
+  bookingStatus:BookingStatus;
+  formAnswers?: {
+  challenge?: string;
+  whyImportant?: string;
+  commitment?: number;
+  openToHelp?: boolean;
+  triedBefore?: string;
+};
 }
 
 export interface BookingsQuery {
@@ -63,8 +71,8 @@ export interface BookingsQuery {
   bookingStatus?: string | null;
   paymentStatus?: string | null;
 
-  startDate?: Date | null;
-  endDate?: Date | null;
+  startDate?: Date |string| null;
+  endDate?: Date | string | null;
 }
 
 // ─── Booking List Request ─────────────────────────────────

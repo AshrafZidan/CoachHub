@@ -1,0 +1,222 @@
+<p-dialog [visible]="visible" (onHide)="close()" [modal]="true" [header]="'Coach #' + (coach()?.id || 'N/A')"
+  [style]="{ width: '100%', maxWidth: '1000px' }" [draggable]="false" [resizable]="true" [maximizable]="true"
+  [closeOnEscape]="true" [styleClass]="'coach-details-dialog'" class="coach-modal">
+
+  <!-- CONTENT -->
+  <div class="modal-content" *ngIf="coach() as c">
+
+    <!-- ─── HEADER ───────────────────────── -->
+    <div class="header-section">
+
+      <div class="booking-header">
+
+        <!-- LEFT -->
+        <div class="booking-title left">
+
+          <img *ngIf="c.profileImageUrl; else emptyProfileAvatar" [src]="getImageUrl(c.profileImageUrl)"
+            class="avatar-img" alt="Profile photo" (error)="onImageError($event)" />
+          <ng-template #emptyProfileAvatar>
+            <div class="avatar-placeholder">
+              <i class="pi pi-user"></i>
+            </div>
+          </ng-template>
+
+          <div>
+            <h2>{{ c.fullNameEn }}</h2>
+            <p class="booking-email">{{ c.email }}</p>
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="booking-meta right">
+
+          <div>
+            <span class="chip" [ngClass]="getCoachStatusClass(c.status)">
+              {{ getCoachStatusLabel(c.status) }}
+            </span>
+
+            <span class="chip" [ngClass]="c.enabled ? 'completed' : 'failed'">
+              {{ c.enabled ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ─── BASIC INFO ───────────────────── -->
+    <div class="details-section">
+      <h3 class="section-title">Basic Information</h3>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <label class="detail-label">Full Name (AR)</label>
+          <p class="detail-value">{{ c.fullNameAr }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label class="detail-label">Username</label>
+          <p class="detail-value">{{ c.username }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label class="detail-label">Gender</label>
+          <p class="detail-value">{{ c.gender }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label class="detail-label">Birth Date</label>
+          <p class="detail-value">{{ c.birthDate | date }}</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ─── PROFESSIONAL INFO ───────────── -->
+    <div class="details-section">
+      <h3 class="section-title">Professional Info</h3>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <label class="detail-label">Job Title</label>
+          <p class="detail-value">{{ c.jobTitle }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label class="detail-label">Experience</label>
+          <p class="detail-value">
+            {{ c.yearsOfExperience || 'N/A' }} years
+          </p>
+        </div>
+
+        <div class="detail-item">
+          <label class="detail-label">Available Weekly</label>
+          <p class="detail-value">
+            {{ c.availableEveryWeek ? 'Yes' : 'No' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="text-block">
+        <label>Bio</label>
+        <p>{{ c.bio || 'N/A' }}</p>
+      </div>
+
+      <div class="text-block">
+        <label>Education</label>
+        <p>{{ c.education || 'N/A' }}</p>
+      </div>
+
+      <div class="text-block">
+        <label>Experience Details</label>
+        <p>{{ c.experience || 'N/A' }}</p>
+      </div>
+    </div>
+
+
+    <!-- ─── PRICING ─────────────────────── -->
+     <!-- ─── PRICING ─────────────────────── -->
+<div class="details-section">
+  <h3 class="section-title">Pricing</h3>
+
+  <div class="price-grid">
+
+    <div class="price-item">
+      <label class="price-label">30 min</label>
+      <p class="price-value">
+        {{ c.halfHourPrice ?? 'N/A' }} $
+      </p>
+    </div>
+
+    <div class="price-item">
+      <label class="price-label">1 hour</label>
+      <p class="price-value">
+        {{ c.hourlyPrice ?? 'N/A' }} $
+      </p>
+    </div>
+
+    <div class="price-item">
+      <label class="price-label">1.5 hour</label>
+      <p class="price-value">
+        {{ c.OneAndHalfHourPrice ?? 'N/A' }} $
+      </p>
+    </div>
+
+    <div class="price-item">
+      <label class="price-label">2 hours</label>
+      <p class="price-value">
+        {{ c.twoHoursPrice ?? 'N/A' }} $
+      </p>
+    </div>
+
+  </div>
+</div>
+
+    <!-- ─── CONTACT ─────────────────────── -->
+    <div class="details-section">
+      <h3 class="section-title">Contact</h3>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <label class="detail-label">WhatsApp</label>
+          <p class="detail-value">{{ c.whatsAppNumber || 'N/A' }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label class="detail-label">Country</label>
+          <p class="detail-value">{{ c.country?.nameEn || 'N/A' }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label class="detail-label">Nationality</label>
+          <p class="detail-value">{{ c.nationality?.nameEn || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ─── SKILLS ──────────────────────── -->
+    <div class="details-section">
+      <h3 class="section-title">Skills</h3>
+
+      <div class="chips">
+        <span class="chip pending" *ngFor="let i of c.coachingIndustries">
+          {{ i.nameEn }}
+        </span>
+      </div>
+    </div>
+
+
+    <!-- ─── CERTIFICATES ───────────────── -->
+    <div class="details-section">
+      <h3 class="section-title">Certificates</h3>
+
+      <div class="chips">
+        <img class="cert" *ngFor="let cert of c.certificates" [src]="getImageUrl(cert.fileUrl)" />
+
+        <span *ngIf="!c.certificates?.length">
+          No certificates
+        </span>
+      </div>
+    </div>
+
+
+    <!-- ─── STATS ───────────────────────── -->
+    <div class="details-section">
+      <h3 class="section-title">Stats</h3>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <label class="detail-label">Bookings</label>
+          <p class="detail-value">{{ c.bookingCount }}</p>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+</p-dialog>

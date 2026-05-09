@@ -8,10 +8,21 @@
   (visibleChange)="onDialogVisibleChange($event)"
   (approved)="onCoachApproved()"
 />
+<app-coache-details-dialog
+  *ngIf="detailsVisible() && selectedCoachId()"
+  [visible]="detailsVisible()"
+  [coachId]="selectedCoachId()"
+  (visibleChange)="detailsVisible.set($event)"
+/>
 
-<div class="admin-page main-page">
 
-  <h1 class="page-title">Coaches</h1>
+    <div class="admin-page main-page">
+  <div class="main-title">
+
+    <h1 class="page-title">Coaches</h1>
+    <button class="p-button p-button-primary no-radius" (click)="openCreateCoach()">
+Add New Coach    </button>
+  </div>
 
   <div class="table-card">
 
@@ -54,7 +65,7 @@
           </th>
 
           <th class="col-price sortable" (click)="onSort('hourlyPrice')">
-            <span>Price</span>
+            <span>Hourly Price</span>
             <span class="sort-icons">
               <i class="pi pi-chevron-up"   [class.active]="tableConfig.sortField() === 'hourlyPrice' && tableConfig.sortOrder() === 'ASC'"></i>
               <i class="pi pi-chevron-down" [class.active]="tableConfig.sortField() === 'hourlyPrice' && tableConfig.sortOrder() === 'DESC'"></i>
@@ -89,11 +100,14 @@
           </td>
 
           <td class="col-type">
-            <span class="coach-type">{{ coach.coachingIndustries[0]?.nameEn || 'N/A' }}</span>
+            <span class="coach-type">{{     coach.coachingIndustries?.length
+      ? coach.coachingIndustries.map(i => i.nameEn).join(', ')
+      : 'N/A'
+ }}</span>
           </td>
 
           <td class="col-price">
-            <span class="coach-price">{{ coach.hourlyPrice || 'N/A' }} L.E</span>
+            <span class="coach-price">{{ coach.hourlyPrice || 'N/A' }} $</span>
           </td>
 
           <td class="col-bookings">

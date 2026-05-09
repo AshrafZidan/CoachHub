@@ -49,7 +49,7 @@ availabilityOptions = [
         value: item.id
       }))
     })),
-    finalize(() => this.isLoading.set(false)), // ✅ يقفل loading بعد ما يخلص
+    finalize(() => this.isLoading.set(false)),
     shareReplay(1)
   );
 

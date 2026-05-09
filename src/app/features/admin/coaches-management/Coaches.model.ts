@@ -60,7 +60,7 @@ export interface CoachesQuery {
 export interface Country {
   id:number;
   code:        string;   // ISO 3166-1 alpha-2 e.g. 'EG'
-  name:        string;   // 'Egypt'
+  nameEn:        string;   // 'Egypt'
   dialCode:    string;   // '+20'
   flag:        string;   // '🇪🇬'
   phoneLength: number[]; // [10] — valid local digit counts
@@ -103,6 +103,10 @@ export interface CoachDetail {
   yearsOfExperience: number | null;
   availableEveryWeek: boolean;
 
+  bio: string | null;
+  education: string | null;
+  experience: string | null;
+
   // ─── Status ─────────────────────────────
   status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'DEACTIVATED';
   enabled: boolean;
@@ -117,7 +121,7 @@ nationality:Nationality;
   // ─── Pricing ────────────────────────────
   halfHourPrice: number;
   hourlyPrice: number;
-  oneAndHalfHourPrice: number;
+  OneAndHalfHourPrice: number;
   twoHoursPrice: number;
 
   // ─── Media ──────────────────────────────

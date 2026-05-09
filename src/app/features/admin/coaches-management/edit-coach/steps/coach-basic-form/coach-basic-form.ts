@@ -69,6 +69,13 @@ export class CoachBasicForm implements OnInit {
   loadCountries(): void {
   this.isLoading = true;
 
+   this.form.patchValue({
+    halfHourPrice: this.form.get('halfHourPrice')?.value ?? 0,
+    hourlyPrice: this.form.get('hourlyPrice')?.value ?? 0,
+    oneAndHalfHourPrice: this.form.get('oneAndHalfHourPrice')?.value ?? 0,
+    twoHoursPrice: this.form.get('twoHoursPrice')?.value ?? 0,
+  });
+  
   this.service.getCountries().subscribe(res => {
     this.countries = res?.map((c: any) => ({
       label: c.name?.common,
