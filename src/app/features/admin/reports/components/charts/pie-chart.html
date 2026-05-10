@@ -1,0 +1,15 @@
+<p-card header="Paid Bookings by Industry">
+    <div style="margin-bottom: 5px;">
+      <small>Distribution of paid bookings across industries</small>
+    </div>
+
+  <p-chart
+    type="pie"
+    [data]="chartData"
+    [options]="chartOptions"
+    [style]="{ height: '300px' , display: 'flex', justifyContent: 'center'}"
+    *ngIf="!loading">
+  </p-chart>
+
+  <p *ngIf="loading">Loading...</p>
+</p-card>

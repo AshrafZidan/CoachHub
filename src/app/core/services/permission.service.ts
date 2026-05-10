@@ -13,7 +13,7 @@ export enum Permissions {
   Gateways = 'GATEWAYS',
   Coaches = 'COACHES',
   Coupons = 'COUPONS',
-  Booking = 'BOOKING'
+  Booking = 'BOOKING',
 }
 @Injectable({
   providedIn: 'root',

@@ -17,141 +17,189 @@ export default {
   {
     "renderMode": 2,
     "preload": [
-      "chunk-EK327WZM.js",
-      "chunk-FEMV6SCU.js",
-      "chunk-BAEXMWNY.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-S2AEVCHJ.js",
+      "chunk-HM6PS3D6.js",
+      "chunk-4AAJI7HO.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/auth/login"
   },
   {
     "renderMode": 2,
     "preload": [
-      "chunk-EK327WZM.js",
-      "chunk-FEMV6SCU.js",
-      "chunk-BAEXMWNY.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-S2AEVCHJ.js",
+      "chunk-HM6PS3D6.js",
+      "chunk-4AAJI7HO.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/auth/login-admin"
   },
   {
     "renderMode": 1,
     "preload": [
-      "chunk-K7RK2KEL.js",
-      "chunk-UBKAKEA6.js",
-      "chunk-MJKOYZLJ.js",
-      "chunk-TJS24OOI.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/admin"
   },
   {
     "renderMode": 1,
     "preload": [
-      "chunk-K7RK2KEL.js",
-      "chunk-UBKAKEA6.js",
-      "chunk-MJKOYZLJ.js",
-      "chunk-TJS24OOI.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/admin/coaches"
   },
   {
     "renderMode": 1,
     "preload": [
-      "chunk-K7RK2KEL.js",
-      "chunk-UBKAKEA6.js",
-      "chunk-MJKOYZLJ.js",
-      "chunk-TJS24OOI.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/admin/coaches/edit-coach/*"
   },
   {
     "renderMode": 1,
     "preload": [
-      "chunk-K7RK2KEL.js",
-      "chunk-UBKAKEA6.js",
-      "chunk-MJKOYZLJ.js",
-      "chunk-TJS24OOI.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
+    ],
+    "route": "/admin/coaches/add-coach"
+  },
+  {
+    "renderMode": 1,
+    "preload": [
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/admin/booking"
   },
   {
     "renderMode": 1,
     "preload": [
-      "chunk-K7RK2KEL.js",
-      "chunk-UBKAKEA6.js",
-      "chunk-MJKOYZLJ.js",
-      "chunk-TJS24OOI.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/admin/coupons"
   },
   {
     "renderMode": 1,
     "preload": [
-      "chunk-K7RK2KEL.js",
-      "chunk-UBKAKEA6.js",
-      "chunk-MJKOYZLJ.js",
-      "chunk-TJS24OOI.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/admin/coupons/create"
   },
   {
     "renderMode": 1,
     "preload": [
-      "chunk-K7RK2KEL.js",
-      "chunk-UBKAKEA6.js",
-      "chunk-MJKOYZLJ.js",
-      "chunk-TJS24OOI.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/admin/admins-list"
   },
   {
     "renderMode": 1,
     "preload": [
-      "chunk-K7RK2KEL.js",
-      "chunk-UBKAKEA6.js",
-      "chunk-MJKOYZLJ.js",
-      "chunk-TJS24OOI.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/admin/admins-List/create"
   },
   {
     "renderMode": 1,
     "preload": [
-      "chunk-K7RK2KEL.js",
-      "chunk-UBKAKEA6.js",
-      "chunk-MJKOYZLJ.js",
-      "chunk-TJS24OOI.js",
-      "chunk-VJ3CIMRR.js",
-      "chunk-DWDF5FHL.js"
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
+    ],
+    "route": "/admin/reports"
+  },
+  {
+    "renderMode": 1,
+    "preload": [
+      "chunk-ECCJNLVF.js",
+      "chunk-57M2STID.js",
+      "chunk-AEDFS72Z.js",
+      "chunk-5NN2NAF4.js",
+      "chunk-OOFQO2P3.js",
+      "chunk-PJIANAUL.js",
+      "chunk-Q55XNV6Z.js",
+      "chunk-45OW2QD6.js"
     ],
     "route": "/admin/forbidden"
   }
 ],
   entryPointToBrowserMapping: undefined,
   assets: {
-    'index.csr.html': {size: 3768, hash: '36a2a4539e542e590d5ad638d3c89c407a0cdb1e3a1e65a0129d52b1783ae2b2', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
-    'index.server.html': {size: 1472, hash: 'e072b20306bb9e0c18df64f4422685f0d67a838c395866fd32361449365f65c5', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
-    'auth/index.html': {size: 36942, hash: '1c0b8621d87a4e3b1c30a2bfd133dcaba5ca131aa0166d8aece3e3c7b0ca403b', text: () => import('./assets-chunks/auth_index_html.mjs').then(m => m.default)},
-    'auth/login-admin/index.html': {size: 94895, hash: '099269e515053863a193607053115ea5d292fd159daecbada0d15e6f1a0aad6b', text: () => import('./assets-chunks/auth_login-admin_index_html.mjs').then(m => m.default)},
-    'auth/login/index.html': {size: 94889, hash: '501e405788e13f1db3d6a10ace84716ecb4a61c6981d8538c80cba9c4e121cca', text: () => import('./assets-chunks/auth_login_index_html.mjs').then(m => m.default)},
-    'styles-LYHHMJGS.css': {size: 25131, hash: 'WY8qjkIA5CE', text: () => import('./assets-chunks/styles-LYHHMJGS_css.mjs').then(m => m.default)}
+    'index.csr.html': {size: 3915, hash: '65f5ad957f52855b02bb8e56a5ac7f2d7b6587f2826b784ecfda12db4575abd7', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
+    'index.server.html': {size: 1472, hash: '3d3dfe8643bcf9fcd31bb4354b180b491932f1e7d2b39114f8c8cf19e5815119', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
+    'auth/index.html': {size: 37092, hash: '8ac710f50043a18f871180b0d415b27521053c09f287fececbf438c561ee4bbc', text: () => import('./assets-chunks/auth_index_html.mjs').then(m => m.default)},
+    'auth/login/index.html': {size: 95091, hash: 'b9e3b2ff5e267fbadd7a5bdf4216c3c22dfa3f2e1e7dfe05772c6ea7d4ee7afe', text: () => import('./assets-chunks/auth_login_index_html.mjs').then(m => m.default)},
+    'auth/login-admin/index.html': {size: 95097, hash: '39602078ba4a2558f4c055ed4f77b53c0853013da9db63b3e248290e2d39de1e', text: () => import('./assets-chunks/auth_login-admin_index_html.mjs').then(m => m.default)},
+    'styles-2QB5QC57.css': {size: 26066, hash: 'FNennTXfIXs', text: () => import('./assets-chunks/styles-2QB5QC57_css.mjs').then(m => m.default)}
   },
 };

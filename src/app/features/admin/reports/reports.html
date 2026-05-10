@@ -1,0 +1,33 @@
+<!-- Filters -->
+<app-report-filters
+  (apply)="onApplyFilters($event)"
+  (clear)="onClearFilters()">
+</app-report-filters>
+
+<!-- Charts -->
+<div class="charts-container">
+  <app-pie-chart [filters]="filters"></app-pie-chart>
+  <app-bar-chart [filters]="filters"></app-bar-chart>
+</div>
+
+<!-- Tables -->
+<p-tabs [(value)]="activeTabIndex">
+
+  <p-tablist>
+    <p-tab [value]="0">Table A</p-tab>
+    <p-tab [value]="1">Table B</p-tab>
+  </p-tablist>
+
+  <p-tabpanels>
+
+    <p-tabpanel [value]="0">
+     table 1
+    </p-tabpanel>
+
+    <p-tabpanel [value]="1">
+   table 2
+    </p-tabpanel>
+
+  </p-tabpanels>
+
+</p-tabs>

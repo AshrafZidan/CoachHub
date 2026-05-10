@@ -1,0 +1,63 @@
+<div class="filter-container">
+
+  <!-- Header -->
+  <div class="filter-header" (click)="toggleFilters()">
+    <div class="left">
+      <i class="pi pi-filter"></i>
+      <span>Filters</span>
+    </div>
+
+    <i class="pi" [ngClass]="filtersOpen() ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+  </div>
+
+  <!-- Collapsible Body -->
+  <div class="filter-body" *ngIf="filtersOpen()">
+
+    <div class="filter-grid">
+
+      <!-- Start Date -->
+      <div class="filter-item">
+        <label>Start Date</label>
+        <p-date-picker
+          class="no-radius"
+          [ngModel]="filters().startDate"
+          (ngModelChange)="updateFilter('startDate', $event)"
+          placeholder="Select start date"
+          [showClear]="true">
+        </p-date-picker>
+      </div>
+
+      <!-- End Date -->
+      <div class="filter-item">
+        <label>End Date</label>
+        <p-date-picker
+          class="no-radius"
+          [ngModel]="filters().endDate"
+          (ngModelChange)="updateFilter('endDate', $event)"
+          placeholder="Select end date"
+          [showClear]="true">
+        </p-date-picker>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="filter-actions">
+      <button
+        pButton
+        label="Clear"
+        class="p-button-secondary no-radius"
+        (click)="clearFilters()">
+      </button>
+
+      <button
+        pButton
+        label="Apply"
+        class="p-button-primary no-radius"
+        [disabled]="!hasActiveFilters()"
+        (click)="applyFilters()">
+      </button>
+    </div>
+
+  </div>
+</div>

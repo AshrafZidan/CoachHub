@@ -81,16 +81,17 @@ export const ADMIN_ROUTES: Routes = [
 
       },
         {
+        path: 'reports',
+        loadComponent: () =>
+          import('./reports/reports').then(c => c.ReportPageComponent),
+        title: 'Reports — CoachHub Admin',
+        canActivate: [permissionGuard([Permissions.Reports])]
+
+      },
+        {
         path: 'forbidden',
         component: ForbiddenComponent,
       },
-
-      // {
-      //   path: 'reports',
-      //   loadComponent: () =>
-      //     import('./reports/reports.component').then(c => c.ReportsComponent),
-      //   title: 'Reports — CoachHub Admin'
-      // },
       // {
       //   path: 'gateways',
       //   loadComponent: () =>

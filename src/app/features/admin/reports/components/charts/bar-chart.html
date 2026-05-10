@@ -1,0 +1,14 @@
+<p-card header="Booking Status Overview">
+    <div style="margin-bottom: 5px;">
+      <small>Distribution of bookings by status</small>
+    </div>
+
+    <p-chart
+    [style]="{ height: '300px' }"
+    type="bar"
+    [data]="chartData"
+    *ngIf="!loading">
+  </p-chart>
+
+  <p *ngIf="loading">Loading...</p>
+</p-card>
