@@ -549,7 +549,7 @@
         type="submit"
         class="w-full mt-3 p-button p-button-secondary app-custom  p-component"
         (click)="back()"
-        [disabled]="activeStep == 1">
+        [disabled]="activeStep == 1 || !isLoading">
 
        
 
@@ -560,7 +560,7 @@
       <button
         type="button"
         class="w-full mt-3 p-button p-button-primary"
-        [disabled]="activeStep == 3"
+        [disabled]="activeStep == 3 || !isLoading"
         (click)="next()">
 
         Next
