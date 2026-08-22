@@ -32,7 +32,7 @@
                 </ng-template>
                 </p-step>
 
-                <p-step  [value]="2" class="flex flex-row flex-auto gap-2">
+                <p-step [disabled]="isLoading"  [value]="2" class="flex flex-row flex-auto gap-2">
                 <ng-template #content let-activateCallback="activateCallback" let-value="value">
                     <button class="bg-transparent border-0 inline-flex flex-col gap-2" (click)="onStepIconClick(2, activateCallback)">
                     <span
@@ -48,7 +48,7 @@
                 </ng-template>
                 </p-step>
 
-                <p-step  [value]="3" class="flex flex-row flex-auto gap-2">
+                <p-step  [disabled]="isLoading" [value]="3" class="flex flex-row flex-auto gap-2">
                 <ng-template #content let-activateCallback="activateCallback" let-value="value">
                     <button class="bg-transparent border-0 inline-flex flex-col gap-2" (click)="onStepIconClick(3, activateCallback)">
                     <span
@@ -549,7 +549,7 @@
         type="submit"
         class="w-full mt-3 p-button p-button-secondary app-custom  p-component"
         (click)="back()"
-        [disabled]="activeStep == 1 || !isLoading">
+        [disabled]="activeStep == 1 || isLoading">
 
        
 
@@ -560,7 +560,7 @@
       <button
         type="button"
         class="w-full mt-3 p-button p-button-primary"
-        [disabled]="activeStep == 3 || !isLoading"
+        [disabled]="activeStep == 3 || isLoading"
         (click)="next()">
 
         Next
