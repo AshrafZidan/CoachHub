@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
@@ -9,6 +9,8 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { authInterceptor } from './core/interceptors/auth-interceptor';
 import { errorInterceptor } from './core/interceptors/error-interceptor';
 import { MessageService } from 'primeng/api';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PermissionService } from './core/services/permission.service';
 import { StorageService } from './core/services/storage.service';
 import { AuthService } from './core/services/auth.service';
@@ -47,6 +49,11 @@ export const appConfig: ApplicationConfig = {
 
     // ─── Routing ───────────────────────────────────────────────
     provideRouter(routes),
+
+    // ─── Translations (ngx-translate) ─────────────────────────
+    importProvidersFrom(TranslateModule.forRoot()),
+    // Provide the HTTP loader configuration for translations
+    ...provideTranslateHttpLoader({ prefix: '/assets/i18n/', suffix: '.json' }),
 
     // ─── Client Hydration (SSR) ────────────────────────────────
     provideClientHydration(withEventReplay())

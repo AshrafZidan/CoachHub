@@ -1,14 +1,29 @@
-<p-card header="Booking Status Overview">
-    <div style="margin-bottom: 5px;">
-      <small>Distribution of bookings by status</small>
-    </div>
+<p-card header="Paid Bookings by Industry">
+  <div style="margin-bottom: 5px;">
+    <small>Distribution of bookings by status</small>
+  </div>
 
-    <p-chart
-    [style]="{ height: '300px' }"
-    type="bar"
-    [data]="chartData"
-    *ngIf="!loading">
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="flex items-center justify-center" style="height: 300px;position: relative;">
+    <p-progressSpinner
+      [style]="{ width: '40px', height: '40px' }"
+      strokeWidth="4"
+      fill="transparent"
+      animationDuration=".5s">
+    </p-progressSpinner>
+  </div>
+
+  <!-- Chart -->
+  <p-chart
+    *ngIf="!loading() && chartData()"
+      type="bar"
+    [data]="chartData()"
+    [options]="chartOptions()"
+    [style]="{ height: '300px', display: 'flex', justifyContent: 'center' }">
   </p-chart>
 
-  <p *ngIf="loading">Loading...</p>
+  <!-- Empty State -->
+  <div *ngIf="!loading() && !chartData()" class="flex items-center justify-center" style="height: 300px;">
+    <p class="text-gray-500">No data available</p>
+  </div>
 </p-card>

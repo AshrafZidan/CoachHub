@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: '/api',
-  imagesBaseUrl: 'http://localhost:8080'
+  apiUrl: 'https://backend.coachinghub.ae',
+  imagesBaseUrl: 'https://backend.coachinghub.ae/images'
 };

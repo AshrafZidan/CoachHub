@@ -194,6 +194,7 @@ export class EditCoachComponent implements OnInit, OnDestroy {
   
 
 ngOnInit() {
+  // preload countries so child can receive them immediately
   this.loadCountriesfromBcApi();
   this.route.paramMap.pipe(
     map(params => params.get('id')),
@@ -212,7 +213,6 @@ ngOnInit() {
     next: (res) => {
       const data = res?.data;
 
-      // 🚨 SAFE CHECK (IMPORTANT FIX)
       if (!data) {
         this.isLoading.set(false);
         this.router.navigate(['/admin/coaches']);
@@ -229,14 +229,16 @@ ngOnInit() {
         fullNameAr: data.fullNameAr,
         gender: data.gender,
         birthDate: data.birthDate ? new Date(data.birthDate) : null,
-        countryId: data.country?.code ?? null,
-        nationalityId:data.nationality.code??null,
+        // keep controls as strings but prefer id when available (convert to string)
+        countryId: data.country?.id != null ? String(data.country.id) : (data.country?.code ?? null),
+        nationalityId: data.nationality?.id != null ? String(data.nationality.id) : (data.nationality?.code ?? null),
         email: data.email,
         halfHourPrice:data.halfHourPrice??0,
         hourlyPrice:data.hourlyPrice??0,
         twoHoursPrice:data.twoHoursPrice??0,
         oneAndHalfHourPrice: data.OneAndHalfHourPrice ?? 0,
-        whatsAppNumber: data.whatsAppNumber,
+        // sanitize whatsapp value to digits-only (remove letters/prefixes like 'EG')
+        whatsAppNumber: (data.whatsAppNumber || '')?.toString().replace(/\D+/g, ''),
       });
 
       // =========================
@@ -403,13 +405,19 @@ async submit() {
       ? this.formatDate(new Date(birthDateValue))
       : null,
 
-    countryId: this.basicForm.value.countryId
-      ? this.getCountryIdByCode(this.basicForm.value.countryId)
-      : null,
+    countryId: (() => {
+      const v = this.basicForm.value.countryId;
+      if (v == null || v === '') return null;
+      if (typeof v === 'number' || (typeof v === 'string' && /^\d+$/.test(v))) return Number(v);
+      return this.getCountryIdByCode(v);
+    })(),
 
-    nationalityId: this.basicForm.value.nationalityId
-      ? this.getCountryIdByCode(this.basicForm.value.nationalityId)
-      : null,
+    nationalityId: (() => {
+      const v = this.basicForm.value.nationalityId;
+      if (v == null || v === '') return null;
+      if (typeof v === 'number' || (typeof v === 'string' && /^\d+$/.test(v))) return Number(v);
+      return this.getCountryIdByCode(v);
+    })(),
 
     email: this.basicForm.value.email,
     whatsAppNumber: this.basicForm.value.whatsAppNumber,
@@ -481,6 +489,36 @@ private getCountryIdByCode(code: string): number | null {
   const country = this.countriesArray?.data?.find((c:any ) => c.code === code);
   return country ? country.id : null;
 }
+
+  /**
+   * Resolve a country identifier (number id, numeric string, code, or display name)
+   * to the backend numeric country id, or null if not found.
+   */
+  private resolveCountryToId(value: any): number | null {
+    if (value == null || value === '') return null;
+
+    // already numeric
+    if (typeof value === 'number') return value;
+
+    const s = String(value).trim();
+
+    // numeric string
+    if (/^\d+$/.test(s)) return Number(s);
+
+    // match by code exactly (case-insensitive)
+    const byCode = this.countriesArray?.data?.find((c: any) => String(c.code).toLowerCase() === s.toLowerCase());
+    if (byCode) return byCode.id;
+
+    // match by common/english name or alternative fields
+    const byName = this.countriesArray?.data?.find((c: any) => {
+      const nameFields = [c.nameEn, c.nameAr, c.name, c.fullName, c.displayName].filter(Boolean).map((x: any) => String(x).toLowerCase());
+      return nameFields.some((n: string) => n === s.toLowerCase() || n.includes(s.toLowerCase()));
+    });
+    if (byName) return byName.id;
+
+    // fallback: try getCountryIdByCode (keeps backwards compatibility)
+    return this.getCountryIdByCode(s);
+  }
 loadCountriesfromBcApi() {
   this.lookupService.getCountriesfrombackend().subscribe({
     next: (res) => {

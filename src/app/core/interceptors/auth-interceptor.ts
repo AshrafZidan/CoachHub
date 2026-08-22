@@ -7,9 +7,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const publicRoutes = [
     '/auth/login',
-    '/auth/admin-login',
-    '/auth/signup',
-    '/auth/forgot-password'
+    '/auth/login-admin',
+    '/auth/register',
+    '/auth/forgot-password',
+    '/mobile/api/coachees/register',
+    '/auth/forgot-password/send-otp',
   ];
 
   const isPublicRoute = publicRoutes.some(route => req.url.endsWith(route));

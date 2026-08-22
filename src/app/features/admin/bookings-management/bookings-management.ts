@@ -152,6 +152,12 @@ export class BookingsManagement implements OnInit, OnDestroy {
       });
   }
 
+  // ─── Utility Methods ──────────────────────────────────
+  private formatDate(date: Date | null): string | null {
+    if (!date) return null;
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
   // ─── Lifecycle ────────────────────────────────────────
   ngOnInit(): void {
     this.searchService.searchVisible.set(false);
@@ -175,11 +181,6 @@ loadBookings(): void {
 
   const f = this.filters();
 
-  const formatDate = (date: Date | null) => {
-    if (!date) return null;
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-  };
-
   const query: BookingsQuery = {
     pageIndex: this.tableConfig.backendPageIndex(),
     pageSize: this.tableConfig.pageSize(),
@@ -190,8 +191,8 @@ loadBookings(): void {
     paymentStatus: f.paymentStatus,
     transaction: f.transaction,
 
-    startDate: formatDate(f.dateRange?.[0] || null),
-    endDate: formatDate(f.dateRange?.[1] || null),
+    startDate: this.formatDate(f.dateRange?.[0] || null),
+    endDate: this.formatDate(f.dateRange?.[1] || null),
 
     search: this.searchService.searchTerm()?.trim() || ''
   };
@@ -447,16 +448,6 @@ loadBookings(): void {
 applyFilters() {
   const f = this.filters();
 
- const formatDate = (date: Date | null) => {
-  if (!date) return null;
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-};
-
   const query: BookingsQuery = {
     pageIndex: this.tableConfig.backendPageIndex(),
     pageSize: this.tableConfig.pageSize(),
@@ -467,8 +458,8 @@ applyFilters() {
     paymentStatus: f.paymentStatus,
     transaction: f.transaction,
 
-    startDate: formatDate(f.dateRange?.[0] || null),
-    endDate: formatDate(f.dateRange?.[1] || null),
+    startDate: this.formatDate(f.dateRange?.[0] || null),
+    endDate: this.formatDate(f.dateRange?.[1] || null),
 
     search: this.searchService.searchTerm()?.trim() || ''
   };

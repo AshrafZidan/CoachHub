@@ -57,6 +57,6 @@ export interface UserWithPermissions extends User {
 // ─── Role Enum ───────────────────────────────────────────
 export enum RoleName {
   ADMIN = 'ADMIN',
-  USER  = 'USER',
+  COACHEE  = 'COACHEE',
   COACH = 'COACH'
 }

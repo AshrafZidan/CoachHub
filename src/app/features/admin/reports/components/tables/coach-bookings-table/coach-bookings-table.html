@@ -1,0 +1,181 @@
+<div class="table-card">
+    <!-- ─── Skeleton ─────────────────────────────────── -->
+    <div class="skeleton-wrapper" *ngIf="isLoading()">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
+        <div class="skeleton-cell wide"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell"></div>
+        <div class="skeleton-cell"></div>
+      </div>
+    </div>
+
+    <!-- ─── Table ─────────────────────────────────────── -->
+    <table class="admin-table" *ngIf="!isLoading()" aria-label="Bookings list">
+      <thead>
+        <tr>
+  
+
+          <th class="col-name ">
+            <span>Coach Name</span>
+            
+          </th>
+
+            <th class="col-type">
+                <span>Total Bookings</span> 
+            </th>
+           <th class="col-type">
+            <span>Completed Bookings</span>
+           
+          </th>
+
+          <th class="col-type">
+            <span>Cancelled Bookings</span>
+           
+          </th>
+
+          <th class="col-price">
+            <span>Upcoming Bookings</span>
+            
+          </th>
+
+          <th class="col-status " >
+            <span>Lost Coachee</span>
+           
+          </th>
+
+           <th class="col-status " >
+            <span>Total Revenue</span>
+           
+          </th>
+
+          <!-- <th class="col-date sortable" (click)="onSort('startTime')">
+            <span>Booking Status</span>
+            <span class="sort-icons">
+              <i class="pi pi-chevron-up"
+                [class.active]="tableConfig.sortField() === 'startTime' && tableConfig.sortOrder() === 'ASC'"></i>
+              <i class="pi pi-chevron-down"
+                [class.active]="tableConfig.sortField() === 'startTime' && tableConfig.sortOrder() === 'DESC'"></i>
+            </span>
+          </th> -->
+
+        </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let booking of bookings(); trackBy: trackByBookingId">
+
+  <td class="col-name">
+    <span class="booking-name">
+      {{ booking.coachFullNameEn }}
+    </span>
+  </td>
+
+  <td class="col-type">
+    <span class="booking-coachee">
+      {{ booking.bookingCount }}
+    </span>
+  </td>
+
+  <td class="col-status">
+    <span>
+      {{ booking.completedBookingCount }} completed 
+    </span>
+  </td>
+  <td class="col-cancelled">
+    <span>
+      {{ booking.cancelledBookingCount }} cancelled
+    </span>
+  </td>
+
+    <td class="col-status">
+        <span>
+        {{ booking.upcomingBookingCount }} upcoming
+        </span>
+    </td>
+
+   
+
+      <td class="col-lost">
+        <span>
+        {{ booking.lostCoacheeCount }} lost
+        </span>
+
+    </td>        
+
+  <td class="col-price">
+    <span class="" style="font-weight: bold;">
+      {{ booking.totalRevenue }} $
+    </span>
+  </td>
+
+  
+
+</tr>
+
+        <tr *ngIf="bookings().length === 0 && !isLoading()">
+          <td colspan="7" class="empty-state">
+            <i class="pi pi-inbox"></i>
+            <p>No bookings found</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ─── Footer ───────────────────────────────────── -->
+    <div class="table-footer" *ngIf="!isLoading() && tableConfig.totalRecords() > 0">
+
+      <!-- Per page -->
+      <div class="per-page">
+        <span class="per-page-label">View</span>
+        <select class="per-page-select" [ngModel]="tableConfig.pageSize()" (ngModelChange)="onPageSizeChange($event)"
+          aria-label="Rows per page">
+          <option *ngFor="let opt of pageSizeOptions()" [value]="opt.value">
+            {{ opt.label }}
+          </option>
+        </select>
+        <span class="per-page-label">Bookings per page</span>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="pageItems().length > 0">
+
+        <!-- Prev -->
+        <button class="page-btn nav-btn" type="button" [disabled]="tableConfig.pageIndex() === 1"
+          (click)="goToPage(tableConfig.pageIndex() - 1)" aria-label="Previous page">
+          <i class="pi pi-chevron-left"></i>
+        </button>
+
+         <ng-container *ngFor="let item of pageItems(); trackBy: trackByPageItem">
+
+          <button
+            *ngIf="item.type === 'page'"
+            class="page-btn"
+            type="button"
+            [class.active]="item.value === tableConfig.pageIndex()"
+            (click)="goToPage(item.value)"
+            [attr.aria-label]="'Page ' + item.value"
+            [attr.aria-current]="item.value === tableConfig.pageIndex() ? 'page' : null"
+          >
+            {{ item.value }}
+          </button>
+
+          <span
+            *ngIf="item.type === 'ellipsis'"
+            class="page-ellipsis"
+            aria-hidden="true"
+          >
+            ...
+          </span>
+
+        </ng-container>
+
+        <!-- Next -->
+        <button class="page-btn nav-btn" type="button" [disabled]="tableConfig.pageIndex() === totalPages()"
+          (click)="goToPage(tableConfig.pageIndex() + 1)" aria-label="Next page">
+          <i class="pi pi-chevron-right"></i>
+        </button>
+
+      </div>
+    </div>
+
+  </div>

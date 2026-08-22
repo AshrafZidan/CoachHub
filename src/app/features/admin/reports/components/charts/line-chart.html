@@ -1,0 +1,28 @@
+<p-card [header]="'Monthly Revenue - ' + (totalRevenue | currency:'USD')">
+
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="flex items-center justify-center" style="height: 300px;position: relative;">
+    <p-progressSpinner
+      [style]="{ width: '40px', height: '40px' }"
+      strokeWidth="4"
+      fill="transparent"
+      animationDuration=".5s">
+    </p-progressSpinner>
+  </div>
+
+
+  <!-- Chart -->
+  <p-chart
+    *ngIf="!loading() && chartData()"
+    type="line"
+    [data]="chartData()"
+    [options]="chartOptions()"
+    [style]="{ height: '300px', display: 'flex', justifyContent: 'center' }">
+  </p-chart>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading() && !chartData()" class="flex items-center justify-center" style="height: 300px;">
+    <p class="text-gray-500">No data available</p>
+  </div>
+</p-card>

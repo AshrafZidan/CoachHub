@@ -1,0 +1,27 @@
+{
+  "AUTH": {
+    "FORGOT_PASSWORD": "Wachtwoord vergeten",
+    "ENTER_EMAIL": "Voer uw e-mail in om een OTP te ontvangen",
+    "SEND_OTP": "Stuur OTP",
+    "SENDING": "Bezig met verzenden...",
+    "SEND_OTP_SUCCESS": "OTP verzonden naar uw e-mail. Controleer uw inbox.",
+    "VERIFY_RESET_TITLE": "Verifieer OTP & Stel wachtwoord opnieuw in",
+    "ENTER_OTP_AND_PASSWORD": "Voer de OTP in die is verzonden naar {{email}} en maak een nieuw wachtwoord",
+    "VERIFY_RESET_BUTTON": "Verifieer & Stel wachtwoord opnieuw in",
+    "PROCESSING": "Bezig met verwerken...",
+    "BACK_TO_LOGIN": "Terug naar inloggen",
+
+    "EMAIL_REQUIRED": "E-mail is verplicht.",
+    "EMAIL_INVALID": "Voer een geldig e-mailadres in.",
+    "OTP_REQUIRED": "OTP is verplicht.",
+    "OTP_MINLENGTH": "OTP moet 6 cijfers bevatten.",
+    "PASSWORD_REQUIRED": "Wachtwoord is verplicht.",
+    "PASSWORD_MINLENGTH": "Wachtwoord moet minimaal 8 tekens zijn.",
+    "CONFIRM_PASSWORD_REQUIRED": "Bevestig uw wachtwoord.",
+    "PASSWORDS_MISMATCH": "Wachtwoorden komen niet overeen."
+  },
+  "USER": {
+    "DASHBOARD_TITLE": "Gebruikersdashboard",
+    "WELCOME": "Welkom op uw dashboard!"
+  }
+}

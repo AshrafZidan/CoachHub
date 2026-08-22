@@ -28,35 +28,45 @@ export class WhatsappInputComponent implements ControlValueAccessor {
   onChange = (_: any) => {};
   onTouched = () => {};
   ngOnChanges(): void {
-  this.applyPhoneFormat();
+    this.applyPhoneFormat();
 }
 
   writeValue(value: any): void {
-  if (!value) {
-    this.value = '';
-    this.fullValue = '';
-    return;
-  }
+    if (!value) {
+      this.value = '';
+      this.fullValue = '';
+      this.code = '';
+      return;
+    }
 
-  this.fullValue = value;
+    this.fullValue = value.toString();
 
-  // try parsing immediately if country is ready
-  this.applyPhoneFormat();
+    // normalize to digits-only for internal handling
+    const digitsOnly = this.fullValue.replace(/\D+/g, '');
+    const dialCode = (this.selectedCountry?.dialCode || '').toString().replace(/\D+/g, '');
+
+    if (dialCode && digitsOnly.startsWith(dialCode)) {
+      this.code = dialCode;
+      this.value = digitsOnly.slice(dialCode.length);
+    } else {
+      this.value = digitsOnly;
+      this.code = dialCode || '';
+    }
 }
-private applyPhoneFormat(): void {
-  const dialCode = this.selectedCountry?.dialCode;
+  private applyPhoneFormat(): void {
+    if (!this.fullValue) return;
 
-  if (!dialCode || !this.fullValue) {
-    return; // wait until country is ready
-  }
+    const digitsOnly = this.fullValue.toString().replace(/\D+/g, '');
+    const dialCode = (this.selectedCountry?.dialCode || '').toString().replace(/\D+/g, '');
 
-  if (this.fullValue.startsWith(dialCode)) {
-    this.value = this.fullValue.slice(dialCode.length);
-    this.code = dialCode;
-  } else {
-    this.value = this.fullValue;
+    if (dialCode && digitsOnly.startsWith(dialCode)) {
+      this.code = dialCode;
+      this.value = digitsOnly.slice(dialCode.length);
+    } else {
+      this.value = digitsOnly;
+      this.code = dialCode || '';
+    }
   }
-}
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -72,19 +82,23 @@ private applyPhoneFormat(): void {
   }
 
   onCountryChange(country: any) {
-    this.code = country?.phoneCode || '';
+    // ensure we store numeric dial code only
+    this.code = (country?.dialCode || '').toString().replace(/\D+/g, '');
+    this.selectedCountry = country;
     this.emitValue();
   }
 
   private emitValue() {
-    const fullNumber = `${this.code}${this.value}`;
-    this.onChange(fullNumber); 
+    const digitsValue = (this.value || '').toString().replace(/\D+/g, '');
+    const dial = (this.code || (this.selectedCountry?.dialCode || '')).toString().replace(/\D+/g, '');
+    const fullDigits = `${dial}${digitsValue}`.replace(/\D+/g, '');
+    // emit digits-only full number (no +)
+    this.onChange(fullDigits || '');
   }
   setValue(val: string) {
-  this.value = val;
-
-  const fullNumber = `${this.selectedCountry?.dialCode || ''}${val}`;
-  this.onChange(fullNumber);
+    const digitsOnly = (val || '').toString().replace(/\D+/g, '');
+    this.value = digitsOnly;
+    this.emitValue();
 }
 
 }

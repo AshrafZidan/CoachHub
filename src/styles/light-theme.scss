@@ -1,0 +1,28 @@
+:root {
+  /* ─── macOS Light Palette ─── */
+  --bg: #ffffff;
+  --surface: #f5f5f7;
+  --surface-2: #ffffff;
+
+  --text: #1d1d1f;
+  --text-muted: #6e6e73;
+
+  --border: #d2d2d7;
+
+  --primary: #007aff; /* mac blue */
+  --primary-dark: #005fcc;
+
+  --success: #34c759;
+  --danger: #ff3b30;
+  --warning: #ff9500;
+
+  --radius: 12px;
+
+  /* PrimeNG overrides */
+  --p-button-primary-background: var(--primary) !important;
+  --p-button-primary-border-color: var(--primary) !important;
+  --p-button-primary-hover-background: var(--primary-dark) !important;
+
+  --p-inputtext-border-radius: var(--radius) !important;
+  --p-button-border-radius: var(--radius) !important;
+}

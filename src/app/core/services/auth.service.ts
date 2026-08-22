@@ -13,6 +13,7 @@ import {
   ApiError,
   User,
 } from '../models/auth.model';
+import { error } from 'console';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -46,6 +47,21 @@ export class AuthService {
     }
   });
 
+  isCoach = computed(() => {
+    const token = this._accessToken();
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return (
+        payload.roles?.includes('ROLE_COACH') ||
+        payload.roles?.includes('COACH') ||
+        false
+      );
+    } catch {
+      return false;
+    }
+  });
+    
   constructor() {
     this.restoreSession();
   }
@@ -97,13 +113,81 @@ export class AuthService {
       );
   }
 
+registerCoachee(payload: any): Observable<any> {
+  return this.http.post(
+    `${this.BASE_URL}/mobile/api/coachees/register`,
+    payload
+  ).pipe(
+    catchError((error) => {
+      const apiError: ApiError = error.error;
+      const message =
+        apiError?.messageEn ?? 'Registration failed. Please try again.';
+      return throwError(() => new Error(message));
+    })
+  );
+}
+
+registerCoach(payload: any): Observable<any> {
+  return this.http.post(
+    `${this.BASE_URL}/mobile/api/coaches/register`,
+    payload
+  ).pipe(
+    catchError((error) => {
+      const apiError: ApiError = error.error;
+      const message =
+        apiError?.messageEn ?? 'Coach registration failed. Please try again.';
+      return throwError(() => new Error(message));
+    })
+  );
+}
+
+    // ─── forgotPassword ────────────────────────────────────────────
+  forgotPassword(email: string): Observable<any> {
+  return this.http.
+        post<ApiResponse<any>>(`${this.BASE_URL}/auth/forgot-password/send-otp?email=${email}`, {}).
+         pipe(
+    catchError((error) => {
+      const apiError: ApiError = error.error;
+      const message =
+        apiError?.messageEn ?? 'Registration failed. Please try again.';
+      return throwError(() => new Error(message));
+    })
+  );
+}
+
+  // ─── resetPassword ────────────────────────────────────────────
+  resetPassword(email: string, otp: string, newPassword: string): Observable<any> {
+    return this.http.
+      post<ApiResponse<any>>(`${this.BASE_URL}/auth/forgot-password/verify-otp`, { email, otp, newPassword }).
+      pipe(
+        catchError((error) => {
+          const apiError: ApiError = error.error;
+          const message =
+            apiError?.messageEn ?? 'Password reset failed. Please try again.';
+          return throwError(() => new Error(message));
+        })
+      );
+  } 
+
+
+
   // ─── LOGOUT ───────────────────────────────────────────
   logout(): void {
+    const isdmin = this.isAdmin();
     this.storage.clear();
     this._accessToken.set(null);
     this.permissionService.clearPermissions();
-    // ✅ Use createUrlTree-style navigation
-    this.router.navigateByUrl('/auth/login');
+    if (isdmin) {
+      
+      this.router.navigateByUrl('/auth/login-admin');
+    }else {
+      this.router.navigateByUrl('/auth/login');
+    }
+  }
+  cleartoken(): void {
+    this.storage.clear();
+    this._accessToken.set(null);
+    this.permissionService.clearPermissions();
   }
 
   // ─── TOKEN ────────────────────────────────────────────
@@ -135,9 +219,8 @@ export class AuthService {
   redirectAfterLogin(): void {
     const returnUrl =
       this.router.routerState.snapshot.root.queryParams['returnUrl'];
-
     this.router.navigateByUrl(
-      returnUrl || (this.isAdmin() ? '/admin/coaches' : '/user/dashboard')
+      returnUrl || (this.isAdmin() ? '/admin/coaches' :  (this.isCoach()? '/coach/bookings':'user/dashboard'))
     );
   }
 
@@ -151,7 +234,10 @@ export class AuthService {
    */
   private handleAuthSuccess(response: ApiResponse<LoginData>): void {
     const { accessToken, refreshToken, permissions } = response.data;
-
+  if (!response?.data?.accessToken) {
+    console.warn('Invalid auth response:', response);
+    return;
+  }
     // Store tokens
     this.storage.setAccessToken(accessToken);
     this.storage.setRefreshToken(refreshToken.token);

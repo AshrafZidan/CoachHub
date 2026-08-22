@@ -38,7 +38,7 @@
   <!-- Birth Date -->
   <div class="field">
     <label>Birth Date *</label>
-    <p-datePicker
+    <p-datePicker ngSkipHydration
       formControlName="birthDate"
       placeholder="Select Birth Date"
       class="w-full"
@@ -103,7 +103,7 @@
     [selectedCountry]="selectedCountry"
     [countries]="countries">
   </app-whatsapp-input>
-  <small class="p-error" *ngIf="isInvalid('whatsAppNumber')">
+  <small class="p-error" *ngIf="selectedCountry && isInvalid('whatsAppNumber')">
     WhatsApp number is required and must be valid
   </small>
 </div>
@@ -122,9 +122,9 @@
   </div>
 
     <!-- ─── PRICING ─────────────────────── -->
-<div class="section">
-  <!-- PRICING -->
-<div class="price-grid">
+    <div *ngIf="showPrices" class="section">
+      <!-- PRICING -->
+    <div class="price-grid">
 
   <!-- 30 min -->
   <div class="price-field ">
@@ -193,6 +193,7 @@
       Price is required and must be greater than 0
     </small>
   </div>
+
 
 </div>
 

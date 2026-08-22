@@ -1,0 +1,100 @@
+<div class="not-found-container" [class.loaded]="isLoaded">
+  <!-- Background Animation -->
+  <div class="bg-animation">
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+    <div class="bg-shape bg-shape-3"></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="not-found-content">
+    <!-- 404 Display -->
+    <div class="error-display">
+      <div class="error-code">
+        <span class="digit">4</span>
+        <span class="digit digit-middle">0</span>
+        <span class="digit">4</span>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <h1 class="error-title">Page Not Found</h1>
+
+    <p class="error-description">
+      Sorry! We couldn't find the page you're looking for.
+    </p>
+
+    <!-- Attempted URL Display -->
+    <div class="url-info" *ngIf="attemptedUrl">
+      <p class="url-label">Attempted URL:</p>
+      <code class="url-code">{{ attemptedUrl }}</code>
+    </div>
+
+    <!-- Error Details -->
+    <div class="error-details">
+      <p>
+        The page you requested might have been moved, deleted, or never existed.
+        Here are some helpful links to get you back on track:
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button
+        class="btn btn-primary"
+        (click)="goHome()"
+        aria-label="Go to home page">
+        <span class="btn-icon">🏠</span>
+        <span class="btn-text">Go Home</span>
+      </button>
+
+      <button
+        class="btn btn-secondary"
+        (click)="goBack()"
+        aria-label="Go back to previous page">
+        <span class="btn-icon">←</span>
+        <span class="btn-text">Go Back</span>
+      </button>
+
+      <button
+        class="btn btn-tertiary"
+        (click)="goToLogin()"
+        aria-label="Go to login page">
+        <span class="btn-icon">🔐</span>
+        <span class="btn-text">Login</span>
+      </button>
+    </div>
+
+    <!-- Additional Help -->
+    <div class="help-section">
+      <h2 class="help-title">Need Help?</h2>
+      <p class="help-text">
+        If you think this is a mistake, please
+        <a href="mailto:support@example.com" class="help-link">contact our support team</a>
+        or visit our
+        <button
+          type="button"
+          class="help-link"
+          (click)="goToHelp()">
+          help center
+        </button>.
+      </p>
+    </div>
+
+    <!-- Suggested Links -->
+    <div class="suggested-links">
+      <h3 class="suggested-title">Popular Pages</h3>
+      <ul class="links-list">
+        <li><a routerLink="/" class="suggestion-link">Home</a></li>
+        <li><a routerLink="/dashboard" class="suggestion-link">Dashboard</a></li>
+        <li><a routerLink="/about" class="suggestion-link">About Us</a></li>
+        <li><a routerLink="/contact" class="suggestion-link">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="not-found-footer">
+    <p>&copy; {{ currentYear }} CoachHub. All rights reserved.</p>
+  </footer>
+</div>

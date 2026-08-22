@@ -17,6 +17,19 @@ export const authGuard: CanActivateFn = (route, state) => {
     queryParams: { returnUrl: state.url }
   });
 };
+export const coachGuard: CanActivateFn = (route, state) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (!isPlatformBrowser(inject(PLATFORM_ID))) return true;
+
+  if (auth.isCoach()) return true;
+
+  return router.createUrlTree(['/auth/login'], {
+    queryParams: { returnUrl: state.url }
+  });
+};
+
 
 export const adminGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
@@ -34,9 +47,10 @@ export const guestGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!auth.isLoggedIn()) return true;
-
-  // ✅ NEVER return false → always redirect instead
+  
   return router.createUrlTree([
-    auth.isAdmin() ? '/admin/coaches' : '/user/dashboard'
+    // auth.isAdmin() ? '/admin/coaches' : '/dashboard',
+      auth.isAdmin() ? '/admin/coaches' :  (auth.isCoach()? '/coach/bookings':'user/dashboard')
+
   ]);
 };

@@ -44,10 +44,6 @@ export interface CouponPostData {
   unlimitedUsage:     boolean;
   timesOfUse:         number;
   allCoaches:         boolean;
-  coachIds: 
-          number[];
-    // fullNameEn: string;
-    // fullNameAr: string;
-     
+  coachIds: number[];
 }
  

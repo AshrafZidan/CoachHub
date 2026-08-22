@@ -1,0 +1,502 @@
+<div class="coach-appointment-container">
+
+  <p-confirmDialog></p-confirmDialog>
+
+  <!-- ===================================================== -->
+  <!-- TITLE -->
+  <!-- ===================================================== -->
+
+  <div class="title-wrapper">
+    <h2 class="title">Coach Profile</h2>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- MAIN CONTENT -->
+  <!-- ===================================================== -->
+
+  <div class="appointment-wrapper">
+
+    <!-- =================================================== -->
+    <!-- LEFT CARD — COACH PROFILE -->
+    <!-- =================================================== -->
+
+    <aside class="coach-card">
+
+      <div class="coach-info">
+
+        <!-- Avatar -->
+        <div class="avatar-wrap">
+
+          <ng-container
+            *ngIf="coach?.profileImageUrl; else avatarFallback"
+          >
+
+            <img
+              class="avatar-img"
+              [src]="getImageUrl(coach!.profileImageUrl)"
+              [alt]="coach!.fullNameEn"
+            />
+
+          </ng-container>
+
+          <ng-template #avatarFallback>
+
+            <div class="avatar-fallback">
+              {{ getInitial() }}
+            </div>
+
+          </ng-template>
+
+        </div>
+
+        <!-- Coach Main Info -->
+        <div class="coach-main-info">
+
+          <h2 class="coach-name">
+            {{ coach?.fullNameEn || '—' }}
+          </h2>
+
+          <div class="badges-row">
+
+            <span class="coach-job">
+
+              <i class="pi pi-briefcase"></i>
+
+              {{ coach?.jobTitle || 'Coach' }}
+
+            </span>
+
+            <span class="coach-job">
+
+              <i class="pi pi-calendar"></i>
+
+              <b>
+                +{{ coach?.bookingCount || 0 }}
+              </b>
+
+              Booking
+
+            </span>
+
+          </div>
+
+          <span class="badge badge-exp">
+
+            <i class="pi pi-star-fill"></i>
+
+            {{ coach?.yearsOfExperience || 0 }}
+
+            Yrs Exp
+
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- About -->
+      <div class="about-section">
+
+        <p class="about-title">
+          ABOUT COACH
+        </p>
+
+        <p class="about-text">
+          {{ coach?.bio || 'N/A' }}
+        </p>
+
+      </div>
+
+      <!-- Pricing -->
+      <div class="price-grid">
+
+        <div
+          class="price-item"
+          *ngFor="let row of pricingRows"
+        >
+
+          <span class="price-label">
+            {{ row.label }}
+          </span>
+
+          <span class="price-value">
+            ${{ row.value ?? 0 }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- =================================================== -->
+    <!-- RIGHT CARD — CALENDAR -->
+    <!-- =================================================== -->
+
+    <main class="calendar-card">
+
+      <div class="cal-header">
+
+        <h2 class="cal-title">
+          Select Date &amp; Time
+        </h2>
+
+      </div>
+
+      <!-- ================================================= -->
+      <!-- CALENDAR -->
+      <!-- ================================================= -->
+
+      <div class="cal-body">
+
+        <!--
+          IMPORTANT:
+          PrimeNG DatePicker is rendered only in browser.
+          This prevents SSR / hydration issues after refresh.
+        -->
+
+        <ng-container *ngIf="isBrowser">
+
+          <p-date-picker
+            [(ngModel)]="selectedDate"
+
+            (onSelect)="onDateSelect($event)"
+
+            (onMonthChange)="onCalendarViewChange($event)"
+
+            (onYearChange)="onCalendarViewChange($event)"
+
+            [inline]="true"
+
+            dateFormat="yy-mm-dd"
+
+            [showOtherMonths]="true"
+
+            styleClass="coach-inline-cal"
+
+          >
+          </p-date-picker>
+
+        </ng-container>
+
+      </div>
+
+      <!-- ================================================= -->
+      <!-- SLOTS -->
+      <!-- ================================================= -->
+
+      <div class="slots-section">
+
+        <p class="slots-label">
+          Time for Appointments
+        </p>
+
+        <!-- Loading -->
+        <div
+          class="slots-loading"
+          *ngIf="loadingSlots"
+        >
+
+          <div class="spinner-mini"></div>
+
+          <span>
+            Loading slots…
+          </span>
+
+        </div>
+
+        <!-- No Date -->
+        <p
+          class="slots-empty"
+          *ngIf="
+            !selectedDate &&
+            !loadingSlots
+          "
+        >
+          Select a date to view available slots
+        </p>
+
+        <!-- No Slots -->
+        <p
+          class="slots-empty"
+          *ngIf="
+            selectedDate &&
+            !loadingSlots &&
+            slotsForSelectedDate.length === 0
+          "
+        >
+          No slots available for this date
+        </p>
+
+        <!-- Slots -->
+        <div
+          class="slots-row"
+          *ngIf="
+            !loadingSlots &&
+            slotsForSelectedDate.length > 0
+          "
+        >
+
+          <div
+            class="slot-chip"
+            *ngFor="
+              let slot of slotsForSelectedDate
+            "
+          >
+
+            <span class="slot-time">
+              {{ formatTime(slot.startTime) }} -
+            </span>
+
+            <span class="slot-time">
+              {{ formatTime(slot.endTime)    }}
+            </span>
+
+            <button
+              class="slot-remove"
+              type="button"
+              (click)="removeSlot(slot)"
+              aria-label="Remove slot"
+            >
+
+              <i class="pi pi-times"></i>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ================================================= -->
+      <!-- ADD MORE -->
+      <!-- ================================================= -->
+
+      <button
+        pButton
+        type="button"
+        label="Add More Appointment"
+        class="btn-add-more"
+        (click)="openAddDialog()"
+      >
+      </button>
+
+    </main>
+
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- ADD APPOINTMENT DIALOG -->
+  <!-- ===================================================== -->
+
+  <p-dialog
+    [(visible)]="showAddDialog"
+
+    header="Add Appointment"
+
+    [modal]="true"
+
+    [style]="{ width: '560px' }"
+
+    (onHide)="closeDialog()"
+
+    styleClass="appt-dialog"
+  >
+
+    <form
+      [formGroup]="form"
+      class="dialog-body"
+    >
+
+      <!-- ================================================= -->
+      <!-- DATE -->
+      <!-- ================================================= -->
+
+      <div class="field">
+
+        <label>
+          Select Date
+          <span class="required">*</span>
+        </label>
+
+        <div class="input-with-icon">
+
+          <i
+            class="pi pi-calendar field-icon"
+          ></i>
+
+          <p-datePicker
+            formControlName="date"
+            dateFormat="yy-mm-dd"
+            placeholder="Select Date"
+            appendTo="body"
+          >
+          </p-datePicker>
+
+        </div>
+
+        <small
+          class="p-error"
+          *ngIf="isFieldInvalid('date')"
+        >
+          {{ getFieldError('date') }}
+        </small>
+
+      </div>
+
+      <!-- ================================================= -->
+      <!-- TIME -->
+      <!-- ================================================= -->
+
+      <div class="field">
+
+        <label>
+          Select Time
+          <span class="required">*</span>
+        </label>
+
+        <div class="input-with-icon">
+
+          <i
+            class="pi pi-clock field-icon"
+          ></i>
+
+          <p-datePicker
+            formControlName="time"
+            [timeOnly]="true"
+            hourFormat="12"
+            placeholder="Select Time"
+            appendTo="body"
+          >
+          </p-datePicker>
+
+        </div>
+
+        <small
+          class="p-error"
+          *ngIf="isFieldInvalid('time')"
+        >
+          {{ getFieldError('time') }}
+        </small>
+
+      </div>
+
+      <!-- ================================================= -->
+      <!-- PERIOD -->
+      <!-- ================================================= -->
+
+      <div class="field">
+
+        <label>
+          Session Period
+          <span class="required">*</span>
+        </label>
+
+        <div class="input-with-icon">
+
+          <i
+            class="pi pi-clock field-icon"
+          ></i>
+
+          <p-select
+            [options]="periodOptions"
+            formControlName="period"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select Period"
+            appendTo="body"
+          >
+          </p-select>
+
+        </div>
+
+        <small
+          class="p-error"
+          *ngIf="isFieldInvalid('period')"
+        >
+          {{ getFieldError('period') }}
+        </small>
+
+      </div>
+
+      <!-- ================================================= -->
+      <!-- TIMEZONE -->
+      <!-- ================================================= -->
+
+      <div class="field">
+
+        <label>
+          Timezone
+          <span class="required">*</span>
+        </label>
+
+        <div class="input-with-icon">
+
+          <i
+            class="pi pi-globe field-icon"
+          ></i>
+
+          <p-select
+            [options]="timezones"
+            formControlName="timezone"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select Timezone"
+            [filter]="true"
+            appendTo="body"
+          >
+          </p-select>
+
+        </div>
+
+        <small
+          class="p-error"
+          *ngIf="isFieldInvalid('timezone')"
+        >
+          {{ getFieldError('timezone') }}
+        </small>
+
+      </div>
+
+    </form>
+
+    <!-- ================================================= -->
+    <!-- DIALOG FOOTER -->
+    <!-- ================================================= -->
+
+    <ng-template pTemplate="footer">
+
+      <button
+        type="button"
+        pButton
+        class="p-button-primary w-full"
+
+        (click)="addSlot()"
+
+        [disabled]="
+          isLoading() ||
+          form.invalid
+        "
+      >
+
+        <span
+          class="btn-spinner"
+          *ngIf="isLoading()"
+        ></span>
+
+        <span>
+          {{
+            isLoading()
+              ? 'Adding...'
+              : 'Add Slot'
+          }}
+        </span>
+
+      </button>
+
+    </ng-template>
+
+  </p-dialog>
+
+</div>

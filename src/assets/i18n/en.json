@@ -1,0 +1,27 @@
+{
+  "AUTH": {
+    "FORGOT_PASSWORD": "Forgot Password",
+    "ENTER_EMAIL": "Enter your email to receive an OTP",
+    "SEND_OTP": "Send OTP",
+    "SENDING": "Sending...",
+    "SEND_OTP_SUCCESS": "OTP sent to your email. Check your inbox.",
+    "VERIFY_RESET_TITLE": "Verify OTP & Reset Password",
+    "ENTER_OTP_AND_PASSWORD": "Enter the OTP sent to {{email}} and create a new password",
+    "VERIFY_RESET_BUTTON": "Verify & Reset Password",
+    "PROCESSING": "Processing...",
+    "BACK_TO_LOGIN": "Back to Login",
+
+    "EMAIL_REQUIRED": "Email is required.",
+    "EMAIL_INVALID": "Please enter a valid email.",
+    "OTP_REQUIRED": "OTP is required.",
+    "OTP_MINLENGTH": "OTP must be 6 digits.",
+    "PASSWORD_REQUIRED": "Password is required.",
+    "PASSWORD_MINLENGTH": "Password must be at least 8 characters.",
+    "CONFIRM_PASSWORD_REQUIRED": "Please confirm your password.",
+    "PASSWORDS_MISMATCH": "Passwords do not match."
+  },
+  "USER": {
+    "DASHBOARD_TITLE": "User Dashboard",
+    "WELCOME": "Welcome to your dashboard!"
+  }
+}

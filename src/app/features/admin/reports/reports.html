@@ -6,28 +6,25 @@
 
 <!-- Charts -->
 <div class="charts-container">
-  <app-pie-chart [filters]="filters"></app-pie-chart>
-  <app-bar-chart [filters]="filters"></app-bar-chart>
+  <app-pie-chart [filters]="filters()"></app-pie-chart>
+  <app-bar-chart [filters]="filters()"></app-bar-chart>
+  <app-line-chart style="grid-column: span 2;" [filters]="filters()"></app-line-chart>
 </div>
 
-<!-- Tables -->
-<p-tabs [(value)]="activeTabIndex">
-
+<!-- Tabs -->
+<p-tabs [value]="0">
   <p-tablist>
-    <p-tab [value]="0">Table A</p-tab>
-    <p-tab [value]="1">Table B</p-tab>
+    <p-tab [value]="0">Coach Bookings</p-tab>
+    <p-tab [value]="1">Coach Tasks</p-tab>
   </p-tablist>
 
   <p-tabpanels>
-
     <p-tabpanel [value]="0">
-     table 1
+      <app-coach-bookings-table [filters]="filters()"></app-coach-bookings-table>
     </p-tabpanel>
 
     <p-tabpanel [value]="1">
-   table 2
+      <app-coach-tasks-table [filters]="filters()"></app-coach-tasks-table>
     </p-tabpanel>
-
   </p-tabpanels>
-
 </p-tabs>

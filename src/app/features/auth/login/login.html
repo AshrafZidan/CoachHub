@@ -30,19 +30,40 @@
         <!-- Login Form -->
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
   
+        @if (websiteView) {
+          <div class="role-toggle">
+            
+            <button
+              type="button"
+              class="role-btn"
+              [class.active]="selectedRole === 'COACHEE'"
+              (click)="selectRole(RoleName.COACHEE)">
+              Coachee
+            </button>
+
+            <button
+              type="button"
+              class="role-btn"
+              [class.active]="selectedRole === 'COACH'"
+              (click)="selectRole(RoleName.COACH)">
+              Life Coach
+            </button>
+
+          </div>
+        }
+
           <!-- Email -->
           <div class="form-group">
             <label for="email">Email Address</label>
   
             <span class="p-input-icon-left w-full">
-              <i class="pi pi-envelope"></i>
               <input
                 pInputText
                 id="email"
                 type="email"
                 formControlName="email"
                 placeholder="Enter your email"
-                class="w-full"
+                class="w-full p-inputtext"
                 [ngClass]="{'ng-invalid ng-dirty': email.invalid && email.touched}"
                 autocomplete="email"
               />
@@ -76,7 +97,10 @@
           </div>
   
           <!-- Forgot Password -->
-          <!-- <a routerLink="/auth/forgot-password" class="forgot-link">Forgot Password?</a> -->
+           @if (websiteView) {
+             <a routerLink="/auth/forgot-password" class="forgot-link">Forgot Password?</a>
+          }
+          
   
           <!-- Submit -->
           <button
@@ -87,14 +111,31 @@
             [loading]="isLoading"
             [disabled]="isLoading">
           </button>
+
+            @if (selectedRole === 'COACHEE') {
+
+              <button
+              style="margin-top: 10px;"
+              pButton
+              label="Continue as Guest"
+              class="w-full mt-3 p-button p-button-secondary app-custom">
+            </button>
+          }
   
         </form>
   
         <!-- Footer -->
-        <!-- <p class="auth-footer">
-          Don't have an account?
-          <a routerLink="/auth/signup">Sign Up</a>
-        </p> -->
+         @if (websiteView) {
+           <p class="auth-footer">
+             Don't have an account?
+             <a 
+               routerLink="/auth/register"
+               [queryParams]="{ role: selectedRole }">
+               Sign Up
+             </a>
+            </p>
+            
+          }
   
       </div>
     </div>

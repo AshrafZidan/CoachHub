@@ -2,7 +2,9 @@ import {
   Component,
   Input,
   inject,
-  OnInit
+  OnInit,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -34,6 +36,8 @@ import { log } from 'console';
 export class CoachBasicForm implements OnInit {
 
   @Input() form!: FormGroup;
+  @Input() showPrices: boolean = true;
+  @Input() countriesInput: any[] | null = null;
 
   private service = inject(LookupsService);
 
@@ -56,58 +60,98 @@ export class CoachBasicForm implements OnInit {
   // INIT
   // =========================
   ngOnInit(): void {
-    this.loadCountries();
+    // If parent provided countries, use them; otherwise load from service
+    if (this.countriesInput && this.countriesInput.length) {
+      this.countries = this.countriesInput.map((c: any) => ({
+        label: c.nameEn,
+        value: c.id,
+        flag: c.flags?.png,
+        dialCode: c.code,
+        countryId: c.id
+      }));
+      
+      this.matchFormValuesWithCountries();
+    } else {
+      this.loadCountries();
+    }
 
+    // Listen for country selection changes
     this.form.get('countryId')?.valueChanges.subscribe(countryId => {
-      this.selectedCountry = this.countries.find(c => c.value === countryId);
+      const numCountryId = Number(countryId);
+      this.selectedCountry = this.countries.find(c => c.value === numCountryId);
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['countriesInput'] && changes['countriesInput'].currentValue) {
+      const list = changes['countriesInput'].currentValue as any[];
+      this.countries = list.map((c: any) => ({
+        label: c.nameEn,
+        value: c.id,
+        flag: c.flags?.png,
+        dialCode: c.code,
+        countryId: c.id
+      }));
+
+      this.matchFormValuesWithCountries();
+    }
   }
 
   // =========================
   // COUNTRIES
   // =========================
   loadCountries(): void {
-  this.isLoading = true;
+    this.isLoading = true;
 
-   this.form.patchValue({
-    halfHourPrice: this.form.get('halfHourPrice')?.value ?? 0,
-    hourlyPrice: this.form.get('hourlyPrice')?.value ?? 0,
-    oneAndHalfHourPrice: this.form.get('oneAndHalfHourPrice')?.value ?? 0,
-    twoHoursPrice: this.form.get('twoHoursPrice')?.value ?? 0,
-  });
-  
-  this.service.getCountries().subscribe(res => {
-    this.countries = res?.map((c: any) => ({
-      label: c.name?.common,
-      value: c.cca2,
-      flag: c.flags?.png,
-      dialCode: c.idd?.root + (c.idd?.suffixes?.[0] || ''),
-      countryId:c.cca2
-    }));
-
-    this.isLoading = false;
-
-    setTimeout(() => {
-      
-      const countryId = this.form.get('countryId')?.value;
-      const nationalityId = this.form.get('nationalityId')?.value;
-      
-      if (countryId ) {
-        const match = this.countries.find(c => c.value === countryId);
-        const matchNa = this.countries.find(c => c.value === nationalityId)
-        if (match) {
-          this.selectedCountry = match;
-          
-          this.form.get('countryId')?.setValue(countryId, { emitEvent: false });
-        }
-        
-        if (matchNa) {
-            this.form.get('nationalityId')?.setValue(nationalityId, { emitEvent: false });
-
-        }
-      }
-    }, 10);
+    this.form.patchValue({
+      halfHourPrice: this.form.get('halfHourPrice')?.value ?? 0,
+      hourlyPrice: this.form.get('hourlyPrice')?.value ?? 0,
+      oneAndHalfHourPrice: this.form.get('oneAndHalfHourPrice')?.value ?? 0,
+      twoHoursPrice: this.form.get('twoHoursPrice')?.value ?? 0,
     });
+  
+    this.service.getCountriesfrombackend().subscribe((res:any) => {
+      this.isLoading = false;
+
+      this.countries = res?.data?.map((c: any) => ({
+        label: c.nameEn,
+        value: c.id,
+        flag: c.flags?.png,
+        dialCode: c.code,
+        countryId: c.id
+      }));
+      this.matchFormValuesWithCountries();
+    });
+  }
+
+  private matchFormValuesWithCountries(): void {
+    const countryIdValue = this.form.get('countryId')?.value;
+    const nationalityIdValue = this.form.get('nationalityId')?.value;
+    
+    // Convert to number for comparison since dropdown values are numbers
+    const countryId = countryIdValue ? Number(countryIdValue) : null;
+    const nationalityId = nationalityIdValue ? Number(nationalityIdValue) : null;
+    
+    if (countryId) {
+      const match = this.countries.find(c => c.value === countryId);
+      if (match) {
+        this.selectedCountry = match;
+        this.form.get('countryId')?.setValue(countryId, { emitEvent: false });
+      }
+    }
+    
+    if (nationalityId) {
+      const matchNa = this.countries.find(c => c.value === nationalityId);
+      if (matchNa) {
+        this.form.get('nationalityId')?.setValue(nationalityId, { emitEvent: false });
+      }
+    }
+
+    // If form values are empty but countries exist, parent may still be loading coach data
+    // Retry after a delay to catch values once parent patches the form
+    if (!countryId && !nationalityId && this.countries.length) {
+      setTimeout(() => this.matchFormValuesWithCountries(), 300);
+    }
   }
 
   // =========================

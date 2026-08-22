@@ -9,7 +9,7 @@
 
   .p-password-input {
     width: 100% !important;
-    height: 36px;
+    height: 40px;
   }
 }
 .auth-wrapper {
@@ -49,10 +49,11 @@
 
   .p-button{
     width: 100%;
+    height: 40px;
   }
   .p-inputtext,.p-inputwrapper{
     width: 100% !important;
-    height: 36px;
+    height: 40px;
     &::placeholder {
       color:var(--title-secondary-color) !important;
     }
@@ -120,10 +121,11 @@
   display: block;
   text-align: right;
   font-size: 13px;
-  margin-top: 5px;
-  margin-bottom: 10px;
   color: #666;
   cursor: pointer;
+      text-align: start;
+    margin: 25px 0;
+    margin-bottom: 15px;
 }
 
 /* BUTTON */
@@ -133,9 +135,10 @@
   text-align: center;
   font-size: 13px;
   margin-top: 20px;
+  text-align: start;
 
   a {
-    color: #7b3f98;
+    color: var(--app-primary-color);
     font-weight: 500;
   }
 }
@@ -264,5 +267,55 @@
       height: 40px;
       font-size: 18px;
     }
+  }
+}
+
+.role-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+
+  .role-btn {
+    border: none;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: #eee;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+
+    &.active {
+      background: #e7ad3b;
+      color: #000;
+      font-weight: 600;
+    }
+
+    &:not(.active):hover {
+      background: #ddd;
+    }
+  }
+}
+.auth-form {
+  // Standard text inputs
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    &::placeholder {
+      color: #A8ADB7 !important;
+      opacity: 1 !important;
+    }
+  }
+
+  // PrimeNG pInputText directive
+  .p-input-icon-left input::placeholder {
+    color: #A8ADB7 !important;
+    opacity: 1 !important;
+  }
+
+  // PrimeNG p-password component
+  .p-password input::placeholder {
+    color: #A8ADB7 !important;
+    opacity: 1 !important;
   }
 }

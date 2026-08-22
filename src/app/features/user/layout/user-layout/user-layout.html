@@ -1,0 +1,20 @@
+<div class="page-shell">
+  <header class="page-header">
+    <div class="header-brand">
+      <a routerLink="/user/dashboard" class="brand-logo">CoachHub</a>
+      <span class="brand-subtitle">Coachee portal</span>
+    </div>
+    <nav class="header-nav">
+      <a routerLink="/user/dashboard" routerLinkActive="active">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <router-outlet />
+  </main>
+
+  <footer class="page-footer">
+    <div>© CoachHub {{ currentYear }}</div>
+    <div class="footer-note">Your coaching journey starts here.</div>
+  </footer>
+</div>

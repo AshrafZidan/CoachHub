@@ -21,6 +21,7 @@ export class StorageService {
 
   setAccessToken(token: string): void {
     if (!this.isBrowser) return;
+    if  (token) 
     localStorage.setItem(this.ACCESS_TOKEN_KEY, token);
   }
 

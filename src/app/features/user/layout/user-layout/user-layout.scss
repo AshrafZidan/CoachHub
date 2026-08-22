@@ -1,0 +1,95 @@
+.page-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--p-card-background, #f8f8fb);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  background: var(--app-primary-color);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+}
+
+.brand-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+}
+
+.header-nav {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.header-nav a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.header-nav a.active,
+.header-nav a:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.page-content {
+  flex: 1;
+  padding: 24px;
+  background: var(--p-card-background, #f4f5f9);
+}
+
+.page-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--title-secondary-color);
+  font-size: 0.95rem;
+}
+
+.footer-note {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .page-header,
+  .page-footer {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .header-nav {
+    justify-content: center;
+  }
+
+  .page-footer {
+    gap: 8px;
+  }
+}

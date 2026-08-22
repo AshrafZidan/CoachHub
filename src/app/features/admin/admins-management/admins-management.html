@@ -78,11 +78,15 @@
           </td>
 
          <td class="col-bookings">
-          <ng-container *ngFor="let perm of admin.permissions; let i = index">
-            <span>
-              {{ perm.nameEn }}<span *ngIf="i < admin.permissions.length - 1">, </span>
-            </span>
-          </ng-container>
+          <div style="display: flex;">
+
+            <ng-container *ngFor="let perm of admin.permissions; let i = index">
+              <div style="display: flex;">
+                {{ perm.nameEn }}<div *ngIf="i < admin.permissions.length - 1">,
+                </div>
+              </div>
+            </ng-container>
+          </div>
            <td class="col-actions">
             <div  class="action-btns">
               <button 

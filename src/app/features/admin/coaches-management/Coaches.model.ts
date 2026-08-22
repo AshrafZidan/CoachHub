@@ -58,7 +58,7 @@ export interface CoachesQuery {
 }
 
 export interface Country {
-  id:number;
+  id:number| string;
   code:        string;   // ISO 3166-1 alpha-2 e.g. 'EG'
   nameEn:        string;   // 'Egypt'
   dialCode:    string;   // '+20'

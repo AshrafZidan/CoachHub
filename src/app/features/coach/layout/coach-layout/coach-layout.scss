@@ -1,0 +1,231 @@
+.page-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--p-card-background, #f8f8fb);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 60px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--app-border-color);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-icon {
+  width: 80px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--title-color);
+  line-height: 1.15;
+}
+
+.brand-subtitle {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.header-nav a {
+  color: var(--title-secondary-color);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 4px 0;
+  transition: color 0.18s ease;
+}
+
+.header-nav a:hover {
+  color: var(--app-primary-color);
+  // border-bottom: 2px solid var(--app-primary-color);
+}
+
+.header-nav a.active {
+  color: var(--app-primary-color);
+  // border-bottom: 2px solid var(--app-primary-color);
+
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.lang-toggle,
+.profile-button,
+.logout-button {
+  border: 0;
+  border-radius: 16px;
+  background: var(--p-card-background, #ffffff);
+  color: var(--title-color);
+  font-size: 0.93rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.lang-toggle:hover,
+.profile-button:hover,
+.logout-button:hover {
+  background: rgba(131, 60, 136, 0.08);
+}
+
+.profile-dropdown {
+  position: relative;
+}
+
+.profile-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 170px;
+  justify-content: space-between;
+}
+
+.profile-arrow {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  min-width: 190px;
+  padding: 10px 0;
+  background: #ffffff;
+  border: 1px solid var(--app-border-color);
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+  z-index: 20;
+}
+
+.profile-dropdown.open .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu li {
+  list-style: none;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px 18px;
+  background: transparent;
+  border: none;
+  color: var(--title-color);
+  text-decoration: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background: rgba(131, 60, 136, 0.06);
+}
+
+.page-content {
+  flex: 1;
+  padding: 24px 60px;
+  background: var(--p-card-background, #FBFAFC);
+}
+
+.page-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  border-top: 1px solid var(--app-border-color);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--title-secondary-color);
+  font-size: 0.95rem;
+}
+
+.footer-note {
+  opacity: 0.8;
+}
+
+@media (max-width: 960px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+    padding: 12px 60px;
+    
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .header-nav {
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .header-brand,
+  .header-actions,
+  .header-nav {
+    width: 100%;
+  }
+
+  .header-nav {
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .header-actions {
+    justify-content: space-between;
+  }
+
+  .lang-toggle,
+  .profile-button {
+    width: 100%;
+  }
+}

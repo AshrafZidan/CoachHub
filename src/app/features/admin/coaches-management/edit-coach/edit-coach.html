@@ -7,12 +7,12 @@
   </div>
 
 
-  <h1 *ngIf="isEditMode" class="page-title">Edit Coach Details</h1>
-  <h1 *ngIf="!isEditMode" class="page-title">Add New Coach</h1>
+  <h1 *ngIf="isEditMode()" class="page-title">Edit Coach Details</h1>
+  <h1 *ngIf="!isEditMode()" class="page-title">Add New Coach</h1>
 
   <!-- STEP 1 -->
   <ng-container  *ngIf="isStep1()">
-    <app-coach-basic-form [form]="basicForm"></app-coach-basic-form>
+    <app-coach-basic-form ngSkipHydration [form]="basicForm" [countriesInput]="countriesArray?.data"></app-coach-basic-form>
 
   </ng-container>
 

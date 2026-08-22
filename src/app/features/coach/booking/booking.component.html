@@ -1,0 +1,67 @@
+<div class="booking-page">
+	<p-confirmDialog></p-confirmDialog>
+	<div class="title-wrapper">
+		<h2 class="title">My Bookings</h2>
+	</div>
+
+	<div class="tabs">
+		<button
+			*ngFor="let t of tabs"
+			type="button"
+			class="tab"
+			[class.active]="activeTab() === t"
+			(click)="setTab(t)">
+			{{ t }}
+		</button>
+	</div>
+
+	<div class="grid" *ngIf="filteredBookings.length > 0">
+		<ng-container *ngFor="let b of filteredBookings">
+			<div class="card">
+				<div class="card-header">{{ b.date }} <span class="chip" [ngClass]="b.status">{{ b.status | titlecase }}</span></div>
+				<div class="card-body">
+					<img class="avatar" [src]="b.avatar" alt="avatar"/>
+					<div class="meta">
+						<div class="name">{{ b.name }}</div>
+						<div class="role">{{ b.title }}</div>
+						<div class="pricing-section">
+							<!--
+							<div class="price-item" *ngIf="b.price != null">
+								<span class="label">Price:</span>
+								<span class="value">${{ b.price }}</span>
+							</div>
+							<div class="price-item discount-item" *ngIf="b.discount != null && b.discount > 0">
+								<span class="label">Discount:</span>
+								<span class="value">-${{ b.discount }}</span>
+							</div>
+							-->
+							<div class="price-item final" *ngIf="b.finalPrice != null">
+								<!-- <span class="label">final:</span> -->
+								<span class="value">{{ b.finalPrice }} USD</span>
+							</div>
+						</div>
+					</div>
+					<div class="actions" *ngIf="b.status === 'upcoming' && b.raw?.actions?.length">
+						<button class="btn-secondary p-button-sm  btn p-button p-button-secondary app-custom" *ngIf="hasCancelAction(b)" (click)="cancel(b)">Cancel</button>
+						<button class="p-button-sm btn p-button p-button-primary app-custom" *ngIf="hasStartAction(b)" (click)="startNow(b)">Start Now</button>
+					</div>
+				</div>
+			</div>
+		</ng-container>
+	</div>
+
+	<div class="booking-empty" *ngIf="!loading && filteredBookings.length === 0">
+		<i class="pi pi-calendar-times"></i>
+		<p>{{ activeTab() === 'Upcoming' ? 'No upcoming bookings found yet.' : 'No History found yet.' }}</p>
+	</div>
+
+	<div class="booking-loading" *ngIf="loading && bookings.length === 0">
+		<i class="pi pi-spin pi-spinner"></i>
+		<p>Loading bookings...</p>
+	</div>
+
+	<div class="booking-loading-inline" *ngIf="loading && filteredBookings.length > 0">
+		<i class="pi pi-spin pi-spinner"></i>
+		<p>Loading more bookings...</p>
+	</div>
+</div>

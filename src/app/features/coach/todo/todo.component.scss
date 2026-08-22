@@ -1,0 +1,89 @@
+.btn-add {
+  min-width: 150px;
+}
+.booking-page .card-header h3{
+	    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+.booking-page .card .card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding-bottom: 10px;
+}
+
+.task-content {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+}
+
+.task-image img{
+  flex: 0 0 90px;
+  width: 90px;
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+  background: var(--app-background-color);
+}
+
+.task-info {
+  flex: 1;
+  min-width: 0;
+
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100px;
+}
+
+.task-description {
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  width: 102%;
+  margin: 0;
+
+  padding-right: 25px;
+
+  i.pi-lightbulb {
+    flex-shrink: 0;
+    color: var(--app-primary-color);
+  }
+
+  span {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .show-details {
+    position: absolute;
+    right: 0;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--app-primary-color);
+    font-size: 14px;
+
+    cursor: pointer;
+  }
+}
+
+.task-footer {
+  margin-top: auto;
+  padding-top: 10px;
+margin-left: 25px;
+  font-size: 14px;
+  color: var(--app-secondary-color);
+}

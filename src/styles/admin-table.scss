@@ -77,7 +77,14 @@
   tbody tr {
     border-bottom: 1px solid var(--app-border-color);
     transition: background 0.15s;
-
+    td{
+      span{
+              white-space: normal;
+        word-break: break-word;
+        max-width: 250px;
+        display: block;
+      }
+    }
     &:nth-child(odd) {
       background: var(--odd-row-bg);
       td {

@@ -1,0 +1,678 @@
+// ============================================
+// 404 Not Found Component Styling
+// ============================================
+
+// ============================================
+// Color Palette & Variables
+// ============================================
+
+$primary-color: #1e40af;
+$secondary-color: #64748b;
+$danger-color: #ef4444;
+$success-color: #10b981;
+$light-bg: #f8fafc;
+$dark-text: #1e293b;
+$light-text: #64748b;
+$border-color: #e2e8f0;
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+$spacing-3xl: 64px;
+
+// ============================================
+// Main Container
+// ============================================
+
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
+  padding: $spacing-lg;
+
+  @media (max-width: 768px) {
+    padding: $spacing-md;
+  }
+
+  // Opacity animation
+  opacity: 0.9;
+  transition: opacity 0.5s ease-in-out;
+
+  &.loaded {
+    opacity: 1;
+  }
+}
+
+// ============================================
+// Background Animation
+// ============================================
+
+.bg-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+
+  .bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: float 6s ease-in-out infinite;
+
+    &.bg-shape-1 {
+      width: 300px;
+      height: 300px;
+      top: -150px;
+      left: -150px;
+      background: #ffffff;
+      animation-delay: 0s;
+    }
+
+    &.bg-shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -100px;
+      right: -100px;
+      background: #ffffff;
+      animation-delay: 2s;
+    }
+
+    &.bg-shape-3 {
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      right: 10%;
+      background: #ffffff;
+      animation-delay: 4s;
+    }
+  }
+}
+
+// ============================================
+// Main Content
+// ============================================
+
+.not-found-content {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: $spacing-3xl;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.6s ease-out;
+
+  @media (max-width: 768px) {
+    padding: $spacing-xl;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 480px) {
+    padding: $spacing-lg;
+  }
+}
+
+// ============================================
+// Error Display (404)
+// ============================================
+
+.error-display {
+  display: flex;
+  justify-content: center;
+  margin-bottom: $spacing-2xl;
+
+  .error-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md;
+
+    .digit {
+      font-size: 120px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      animation: bounce 2s ease-in-out infinite;
+
+      @media (max-width: 768px) {
+        font-size: 80px;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 60px;
+      }
+
+      &.digit-middle {
+        animation-delay: 0.2s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+}
+
+// ============================================
+// Error Title & Description
+// ============================================
+
+.error-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: $dark-text;
+  text-align: center;
+  margin-bottom: $spacing-md;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 24px;
+  }
+}
+
+.error-description {
+  font-size: 16px;
+  color: $light-text;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+  line-height: 1.6;
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
+}
+
+// ============================================
+// URL Info
+// ============================================
+
+.url-info {
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: $spacing-md;
+  margin-bottom: $spacing-lg;
+  border-left: 4px solid $danger-color;
+
+  .url-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: $light-text;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: $spacing-sm;
+  }
+
+  .url-code {
+    display: block;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: $dark-text;
+    word-break: break-all;
+    background: #ffffff;
+    padding: $spacing-sm;
+    border-radius: 4px;
+    border: 1px solid $border-color;
+  }
+}
+
+// ============================================
+// Error Details
+// ============================================
+
+.error-details {
+  background: rgba(239, 68, 68, 0.05);
+  border-radius: 8px;
+  padding: $spacing-md;
+  margin-bottom: $spacing-lg;
+
+  p {
+    font-size: 14px;
+    color: $light-text;
+    margin: 0;
+    line-height: 1.6;
+  }
+}
+
+// ============================================
+// Action Buttons
+// ============================================
+
+.action-buttons {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-2xl;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .btn-icon {
+    font-size: 18px;
+  }
+
+  .btn-text {
+    display: inline;
+  }
+
+  &.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+
+    &:hover {
+      background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+    }
+  }
+
+  &.btn-secondary {
+    background: #f1f5f9;
+    color: $primary-color;
+    border: 2px solid $border-color;
+
+    &:hover {
+      background: #e2e8f0;
+      border-color: $primary-color;
+    }
+  }
+
+  &.btn-tertiary {
+    background: transparent;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+
+    &:hover {
+      background: rgba(30, 64, 175, 0.05);
+    }
+  }
+}
+
+// ============================================
+// Help Section
+// ============================================
+
+.help-section {
+  background: #f0fdf4;
+  border-radius: 8px;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  border-left: 4px solid $success-color;
+
+  .help-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: $dark-text;
+    margin-bottom: $spacing-sm;
+  }
+
+  .help-text {
+    font-size: 14px;
+    color: $light-text;
+    margin: 0;
+    line-height: 1.6;
+
+    .help-link {
+      color: $success-color;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// ============================================
+// Suggested Links
+// ============================================
+
+.suggested-links {
+  text-align: center;
+
+  .suggested-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: $dark-text;
+    margin-bottom: $spacing-md;
+  }
+
+  .links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+    justify-content: center;
+
+    li {
+      display: inline;
+    }
+  }
+
+  .suggestion-link {
+    padding: 8px 16px;
+    background: #f1f5f9;
+    color: $primary-color;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-block;
+
+    &:hover {
+      background: $primary-color;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// ============================================
+// Footer
+// ============================================
+
+.not-found-footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  margin-top: $spacing-xl;
+
+  p {
+    margin: 0;
+  }
+}
+
+// ============================================
+// Animations
+// ============================================
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+}
+
+// ============================================
+// Responsive Design
+// ============================================
+
+@media (max-width: 768px) {
+  .not-found-container {
+    padding: $spacing-md;
+  }
+
+  .not-found-content {
+    padding: $spacing-xl;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .not-found-container {
+    padding: $spacing-sm;
+  }
+
+  .not-found-content {
+    padding: $spacing-lg;
+    margin: 0 auto;
+  }
+
+  .error-code {
+    .digit {
+      font-size: 60px;
+    }
+  }
+
+  .error-title {
+    font-size: 24px;
+  }
+
+  .error-description {
+    font-size: 14px;
+  }
+
+  .help-section {
+    padding: $spacing-md;
+  }
+
+  .suggested-links {
+    .links-list {
+      gap: $spacing-sm;
+      flex-direction: column;
+
+      li {
+        display: block;
+        width: 100%;
+      }
+
+      .suggestion-link {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+}
+
+// ============================================
+// Accessibility
+// ============================================
+
+@media (prefers-reduced-motion: reduce) {
+  .not-found-container,
+  .not-found-content,
+  .error-display .digit,
+  .bg-shape,
+  .btn {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .not-found-content {
+    border: 2px solid $dark-text;
+  }
+
+  .btn {
+    border-width: 2px;
+
+    &:focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+    }
+  }
+}
+
+// ============================================
+// Dark Mode Support
+// ============================================
+
+@media (prefers-color-scheme: dark) {
+  .not-found-container {
+    background: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 100%);
+  }
+
+  .not-found-content {
+    background: #1e293b;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  }
+
+  .error-title {
+    color: #f1f5f9;
+  }
+
+  .error-description {
+    color: #94a3b8;
+  }
+
+  .url-info {
+    background: #0f172a;
+    border-left-color: #f87171;
+
+    .url-label {
+      color: #94a3b8;
+    }
+
+    .url-code {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #334155;
+    }
+  }
+
+  .error-details {
+    background: rgba(239, 68, 68, 0.1);
+
+    p {
+      color: #94a3b8;
+    }
+  }
+
+  .btn {
+    &.btn-secondary {
+      background: #334155;
+      color: #93c5fd;
+      border-color: #475569;
+
+      &:hover {
+        background: #475569;
+        border-color: #64748b;
+      }
+    }
+
+    &.btn-tertiary {
+      color: #93c5fd;
+      border-color: #93c5fd;
+
+      &:hover {
+        background: rgba(147, 197, 253, 0.1);
+      }
+    }
+  }
+
+  .help-section {
+    background: rgba(16, 185, 129, 0.1);
+    border-left-color: #6ee7b7;
+
+    .help-title {
+      color: #f1f5f9;
+    }
+
+    .help-text {
+      color: #94a3b8;
+
+      .help-link {
+        color: #6ee7b7;
+      }
+    }
+  }
+
+  .suggested-links {
+    .suggested-title {
+      color: #f1f5f9;
+    }
+
+    .suggestion-link {
+      background: #334155;
+      color: #93c5fd;
+
+      &:hover {
+        background: #93c5fd;
+        color: #1e293b;
+      }
+    }
+  }
+
+  .not-found-footer {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}

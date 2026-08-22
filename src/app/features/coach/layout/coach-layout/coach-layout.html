@@ -1,0 +1,48 @@
+<div class="page-shell">
+  <header class="page-header">
+    <div class="header-brand">
+      <a routerLink="/coach/bookings" class="brand-link">
+        <img src="/assets/images/alt-logo.png" alt="Coaching Hub logo" class="brand-icon" />
+       
+      </a>
+    </div>
+
+    <nav class="header-nav">
+      <a routerLink="/coach/bookings" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Bookings</a>
+      <a routerLink="/coach/calendar" routerLinkActive="active">Calendar</a>
+      <a routerLink="/coach/todo" routerLinkActive="active">Todo</a>
+      <a routerLink="/coach/contact-us" routerLinkActive="active">Contact Us</a>
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="lang-toggle" (click)="toggleLanguage()">
+        {{ language === 'ar' ? 'EN' : 'العربية' }}
+      </button>
+
+      <div class="profile-dropdown" [class.open]="menuOpen">
+        <button type="button" class="profile-button" (click)="toggleMenu()" aria-expanded="{{ menuOpen }}">
+          {{ username }}
+          <span class="profile-arrow" aria-hidden="true">▾</span>
+        </button>
+
+        <ul class="dropdown-menu">
+          <li>
+            <a routerLink="/coach/profile" (click)="closeMenu()">Coach Profile</a>
+          </li>
+          <li>
+            <button type="button" class="logout-button" (click)="handleLogout()">Logout</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <router-outlet />
+  </main>
+
+  <!-- <footer class="page-footer">
+    <div>© CoachHub {{ currentYear }}</div>
+    <div class="footer-note">Helping coaches manage their bookings.</div>
+  </footer> -->
+</div>

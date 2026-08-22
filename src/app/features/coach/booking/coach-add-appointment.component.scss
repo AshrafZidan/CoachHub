@@ -1,0 +1,281 @@
+// ═══════════════════════════════════════
+// Layout
+// ═══════════════════════════════════════
+.coach-appointment-container {
+  min-height: 100vh;
+}
+
+.appointment-wrapper {
+  display: grid;
+  grid-template-columns: 60% 1fr;
+  gap: 28px;
+}
+
+// ═══════════════════════════════════════
+// LEFT CARD
+// ═══════════════════════════════════════
+.coach-card {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  // 🔥 NEW FLEX LAYOUT
+  .coach-info {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    gap: 20px;
+    text-align: left;
+  }
+
+  .coach-main-info {
+    margin-top: 12px;
+    text-align: left;
+  }
+
+  // Avatar
+  .avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+    object-fit: cover;
+  }
+
+  // Name
+  .coach-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--title-color);
+    margin: 0 0 12px;
+  }
+
+  // Job with icon
+  .coach-job {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--app-primary-color);
+    background: rgba(131,60,136,.1);
+    border-radius: 6px;
+    padding: 4px 12px;
+    margin-bottom: 12px;
+
+    .pi {
+      font-size: 12px;
+    }
+  }
+
+  // Badges
+  .badges-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .badge-booking {
+    background: rgba(131,60,136,.1);
+    color: var(--app-primary-color);
+  }
+
+  .badge-exp {
+    background: rgba(255, 193, 7, 0.15);
+    color: #b48a00;
+  }
+
+  // About
+  .about-section {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .about-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .about-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  // Pricing
+  .price-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--app-primary-color);
+    border-radius: 16px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+
+  .price-item {
+    text-align: center;
+    padding:10px 14px;
+        display: flex;
+    gap: 4px;
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--app-primary-color);
+    }
+  }
+
+  .price-label {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .price-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--app-primary-color);
+  }
+}
+
+// ═══════════════════════════════════════
+// RIGHT CARD
+// ═══════════════════════════════════════
+.calendar-card {
+  display: flex;
+  flex-direction: column;
+        border: 1px solid #e5e5e5;
+        border-radius: 16px;
+           padding: 8px 16px;
+}
+.cal-body{
+    width: 90%;
+    margin: 0 auto;
+}
+
+.cal-title {
+  font-size: 16px;
+  font-weight: 600;
+      color: var(--title-color);
+      margin-bottom: 20px;
+          margin-left: 24px;
+
+}
+
+.cal-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.cal-body .p-datepicker {
+ display: inline;
+}
+.slots-section {
+  margin-left: 27px;
+}
+.slots-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.slot-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 20px;
+  border: 1px solid #e5e5e5;
+  border-radius:16px;
+  font-size: 14px;
+}
+
+.slot-remove {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 18px;
+  display: flex;
+  i{font-size: 14px;    color: var(--app-delete);}
+}
+
+.btn-add-more {
+     width: 90%;
+    margin: 20px auto 10px;
+    height: 40px;
+}
+.field {
+  position: relative;
+  margin-bottom: 18px;
+
+  label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--title-color, #26354d);
+  }
+
+  .required {
+    color: var(--app-error);
+    margin-left: 2px;
+  }
+
+  // ─────────────────────────────────────────
+  // Date / Time wrapper
+  // ─────────────────────────────────────────
+  .input-with-icon {
+    position: relative;
+    width: 100%;
+
+    ::ng-deep .p-datepicker-input, ::ng-deep .p-inputtext , ::ng-deep .p-select {
+      width: 100%;
+      padding-left: 40px !important;
+      height: 40px !important;
+          font-size: 14px;
+
+    }
+    ::ng-deep .p-select-label{
+        padding-left: 0 !important;
+            font-size: 14px;
+    display: flex;
+    align-items: center;
+
+    }
+    .field-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+
+
+      pointer-events: none;
+    }
+
+    // PrimeNG DatePicker
+    .p-datepicker {
+      width: 100%;
+    }
+
+   
+  }
+
+ 
+
+  // ─────────────────────────────────────────
+  // Error
+  // ─────────────────────────────────────────
+  .p-error {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+  }
+}

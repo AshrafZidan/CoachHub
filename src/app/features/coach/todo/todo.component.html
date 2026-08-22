@@ -1,0 +1,141 @@
+<div class="booking-page">
+<div class="title-wrapper">
+  <h2 class="title">
+    To Do
+  </h2>
+
+  <button
+    class="button btn-add p-button-primary p-button p-component"
+    type="button"
+    (click)="addNewTask()">
+
+    Add New Task
+
+  </button>
+</div>
+
+
+<!-- Tasks -->
+<div
+  class="grid"
+  *ngIf="tasks().length > 0">
+
+  <ng-container
+    *ngFor="
+      let task of tasks();
+      trackBy: trackByTaskId
+    ">
+
+    <div class="card">
+  <div class="card-header">
+    <h3>
+      {{ task.title }}
+    </h3>
+
+    <span
+      class="task-status chip"
+      [class.completed]="task.active"
+      [class.canceled]="!task.active">
+      {{ task.active ? 'Active' : 'Inactive' }}
+    </span>
+  </div>
+
+  <div class="card-body">
+
+    <div class="task-content">
+
+      <!-- Image -->
+      <div class="task-image">
+        <img
+		  src="assets/images/task-preview.jpg"
+		  alt="Task Image" />
+
+      </div>
+
+      <!-- Description + Questions -->
+      <div class="task-info">
+
+        <div class="task-description">
+          <i class="pi pi-lightbulb"></i>
+
+          <span>
+            {{ task.description }}
+          </span>
+
+          <i class="pi pi-chevron-right show-details" (click)="showTaskDetails(task)"></i>
+        </div>
+
+        <div
+          class="task-footer"
+          *ngIf="task.questions?.length">
+
+          <span>
+            {{ task.questions.length }}
+            {{
+              task.questions.length === 1
+                ? 'Question'
+                : 'Questions'
+            }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+  </ng-container>
+
+</div>
+
+
+<!-- Empty -->
+<div
+  class="booking-empty"
+  *ngIf="isEmpty()">
+
+  <i class="pi pi-calendar-times"></i>
+
+  <p>
+    No tasks found yet.
+  </p>
+
+</div>
+
+
+<!-- Initial Loading -->
+<div
+  class="booking-loading"
+  *ngIf="
+    loading() &&
+    tasks().length === 0
+  ">
+
+  <i class="pi pi-spin pi-spinner"></i>
+
+  <p>
+    Loading tasks...
+  </p>
+
+</div>
+
+
+<!-- Loading More -->
+<div
+  class="booking-loading-inline"
+  *ngIf="
+    loading() &&
+    tasks().length > 0
+  ">
+
+  <i class="pi pi-spin pi-spinner"></i>
+
+  <p>
+    Loading more tasks...
+  </p>
+
+</div>
+</div>

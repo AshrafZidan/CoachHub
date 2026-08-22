@@ -1,82 +1,147 @@
-import { ChangeDetectorRef, Component, inject, Input, OnChanges, OnInit, NgZone, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  signal,
+  effect
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChartModule } from 'primeng/chart';
 import { CardModule } from 'primeng/card';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DashboardService } from '../../dashboard.service';
+
+export interface FilterDates {
+  startDate: string;
+  endDate: string;
+}
 
 @Component({
   selector: 'app-bar-chart',
   standalone: true,
-  imports: [CommonModule, ChartModule, CardModule],
-  templateUrl: './bar-chart.html'
+  imports: [CommonModule, ChartModule, CardModule, ProgressSpinnerModule],
+  templateUrl: './bar-chart.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BarChartComponent implements OnInit, OnChanges {
-  private dashboardService = inject(DashboardService);
-  private cdr = inject(ChangeDetectorRef);
-  private ngZone = inject(NgZone);
-  @Input() filters: any;
-  chartData: any;
-  loading = false;
+export class BarChartComponent {
+  private readonly dashboardService = inject(DashboardService);
+  private readonly destroyRef = inject(DestroyRef);
+  
+  // ✅ Input signal with default
+  filters = input<FilterDates>({
+    startDate: '',
+    endDate: ''
+  });
+  
+  // ✅ State signals
+  chartData = signal<any>(null);
+  chartOptions = signal<any>(null);
+  loading = signal(false);
 
-  constructor() {}
+  private lastLoadedKey = signal<string>('');
 
-  ngOnInit() {
-    this.loadData();
+  constructor() {
+    console.log('[BarChart] Component constructed');
+    
+    // ✅ Use effect to watch filters input and trigger load
+    effect(() => {
+      const currentFilters = this.filters();
+      const filterKey = `${currentFilters.startDate}|${currentFilters.endDate}`;
+      
+      console.log('[BarChart] Effect running');
+      console.log('[BarChart] Current filters:', currentFilters);
+      console.log('[BarChart] Current key:', filterKey);
+      console.log('[BarChart] Last loaded key:', this.lastLoadedKey());
+
+      // ✅ Only load if filter values have actually changed
+      if (filterKey === this.lastLoadedKey()) {
+        console.log('[BarChart] Filters unchanged, skipping API call');
+        return;
+      }
+
+      console.log('[BarChart] Filters changed, calling API');
+      this.lastLoadedKey.set(filterKey);
+      this.loadData(currentFilters);
+    });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    // Only reload if filters changed (not on initial)
-    if (changes['filters'] && !changes['filters'].firstChange) {
-      this.loadData();
-    }
-  }
+  /**
+   * Load booking status counts
+   */
+  private loadData(filters: FilterDates): void {
+    console.log('[BarChart] loadData called with:', filters);
+    this.loading.set(true);
 
-  loadData() {
-    this.loading = true;
-
-    this.dashboardService.getBookingStatusCounts(this.filters)
+    this.dashboardService
+      .getBookingStatusCounts(filters)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (res) => {
-          this.ngZone.run(() => {
-            const statuses = res.data.statusCounts.map((x: any) => x.nameEn);
-            const counts = res.data.statusCounts.map((x: any) => x.count);
+        next: (res: any) => {
+          console.log('[BarChart] Data received:', res);
 
-            this.chartData = {
-              labels: statuses,
-              datasets: [
-                {
-                  label: 'Bookings',
-                  data: counts,
-                  backgroundColor: this.generateColors(counts.length)
-                }
-              ]
-            };
-            this.loading = false;
-            this.cdr.markForCheck();
-            this.cdr.detectChanges();
+          const statuses = res.data?.statusCounts?.map((x: any) => x.nameEn) || [];
+          const counts = res.data?.statusCounts?.map((x: any) => x.count) || [];
+
+          console.log('[BarChart] Statuses:', statuses);
+          console.log('[BarChart] Counts:', counts);
+
+          this.chartData.set({
+            labels: statuses,
+            datasets: [
+              {
+                label: 'Bookings',
+                data: counts,
+                backgroundColor: this.generateColors(counts.length),
+                borderRadius: 4,
+                borderSkipped: false
+              }
+            ]
           });
+
+          this.chartOptions.set({
+            indexAxis: 'x',
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1
+                }
+              }
+            },
+            maintainAspectRatio: false
+          });
+
+          this.loading.set(false);
+          console.log('[BarChart] Chart updated successfully');
         },
-        error: (err) => {
-          console.error('Error loading chart data:', err);
-          this.loading = false;
-          this.cdr.detectChanges();
+        error: (error: any) => {
+          console.error('[BarChart] Error loading data:', error);
+          this.loading.set(false);
         }
       });
   }
 
-    generateColors(count: number): string[] {
-  const baseColors = [
-    '#42A5F5','#66BB6A','#FFA726','#EF5350','#AB47BC',
-    '#26C6DA','#FF7043','#9CCC65','#5C6BC0','#EC407A',
-    '#FFCA28','#8D6E63','#78909C','#26A69A','#D4E157'
-  ];
+  /**
+   * Generate colors for chart data
+   */
+  private generateColors(count: number): string[] {
+    const baseColors = [
+      '#42A5F5', '#66BB6A', '#FFA726', '#EF5350', '#AB47BC',
+      '#26C6DA', '#FF7043', '#9CCC65', '#5C6BC0', '#EC407A',
+      '#FFCA28', '#8D6E63', '#78909C', '#26A69A', '#D4E157'
+    ];
 
-  if (!count || count <= 0) {
-    return ['#42A5F5'];
+    return Array.from(
+      { length: Math.max(count, 1) },
+      (_, i) => baseColors[i % baseColors.length]
+    );
   }
-
-  return Array.from({ length: count }, (_, i) =>
-    baseColors[i % baseColors.length]
-  );
-}
 }

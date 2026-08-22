@@ -20,8 +20,8 @@
         <label>Start Date</label>
         <p-date-picker
           class="no-radius"
-          [ngModel]="filters().startDate"
-          (ngModelChange)="updateFilter('startDate', $event)"
+          [ngModel]="startDate()"
+          (ngModelChange)="startDate.set($event)"
           placeholder="Select start date"
           [showClear]="true">
         </p-date-picker>
@@ -32,8 +32,8 @@
         <label>End Date</label>
         <p-date-picker
           class="no-radius"
-          [ngModel]="filters().endDate"
-          (ngModelChange)="updateFilter('endDate', $event)"
+          [ngModel]="endDate()"
+          (ngModelChange)="endDate.set($event)"
           placeholder="Select end date"
           [showClear]="true">
         </p-date-picker>
@@ -47,7 +47,7 @@
         pButton
         label="Clear"
         class="p-button-secondary no-radius"
-        (click)="clearFilters()">
+        (click)="onClear()">
       </button>
 
       <button
@@ -55,7 +55,7 @@
         label="Apply"
         class="p-button-primary no-radius"
         [disabled]="!hasActiveFilters()"
-        (click)="applyFilters()">
+        (click)="onApply()">
       </button>
     </div>
 
