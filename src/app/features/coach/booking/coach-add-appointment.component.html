@@ -20,114 +20,171 @@
     <!-- LEFT CARD — COACH PROFILE -->
     <!-- =================================================== -->
 
-    <aside class="coach-card">
+   <aside class="coach-card">
 
-      <div class="coach-info">
+  <!-- ================= LOADING ================= -->
 
-        <!-- Avatar -->
-        <div class="avatar-wrap">
+  <ng-container *ngIf="isLoading(); else coachContent">
+    <div class="coach-info">
 
-          <ng-container
-            *ngIf="coach?.profileImageUrl; else avatarFallback"
-          >
+      <div class="avatar-wrap">
+        <div class="app-skeleton coach-avatar-skeleton"></div>
+      </div>
 
-            <img
-              class="avatar-img"
-              [src]="getImageUrl(coach!.profileImageUrl)"
-              [alt]="coach!.fullNameEn"
-            />
+      <div class="coach-main-info">
 
-          </ng-container>
+        <div class="app-skeleton coach-name-skeleton"></div>
 
-          <ng-template #avatarFallback>
+        <div class="badges-row">
 
-            <div class="avatar-fallback">
-              {{ getInitial() }}
-            </div>
+          <div class="app-skeleton coach-badge-skeleton"></div>
 
-          </ng-template>
+          <div class="app-skeleton coach-badge-skeleton"></div>
 
         </div>
 
-        <!-- Coach Main Info -->
-        <div class="coach-main-info">
-
-          <h2 class="coach-name">
-            {{ coach?.fullNameEn || '—' }}
-          </h2>
-
-          <div class="badges-row">
-
-            <span class="coach-job">
-
-              <i class="pi pi-briefcase"></i>
-
-              {{ coach?.jobTitle || 'Coach' }}
-
-            </span>
-
-            <span class="coach-job">
-
-              <i class="pi pi-calendar"></i>
-
-              <b>
-                +{{ coach?.bookingCount || 0 }}
-              </b>
-
-              Booking
-
-            </span>
-
-          </div>
-
-          <span class="badge badge-exp">
-
-            <i class="pi pi-star-fill"></i>
-
-            {{ coach?.yearsOfExperience || 0 }}
-
-            Yrs Exp
-
-          </span>
-
-        </div>
+        <div class="app-skeleton coach-exp-skeleton"></div>
 
       </div>
 
-      <!-- About -->
-      <div class="about-section">
+    </div>
 
-        <p class="about-title">
-          ABOUT COACH
-        </p>
+    <div class="about-section">
 
-        <p class="about-text">
-          {{ coach?.bio || 'N/A' }}
-        </p>
+      <div class="app-skeleton about-title-skeleton"></div>
+
+      <div class="app-skeleton about-line"></div>
+      <div class="app-skeleton about-line"></div>
+      <div class="app-skeleton about-line short"></div>
+
+    </div>
+
+    <div class="price-grid">
+
+      <div
+        class="price-item"
+        *ngFor="let item of [1, 2, 3]"
+      >
+
+        <div class="app-skeleton price-label-skeleton"></div>
+
+        <div class="app-skeleton price-value-skeleton"></div>
 
       </div>
 
-      <!-- Pricing -->
-      <div class="price-grid">
+    </div>
 
-        <div
-          class="price-item"
-          *ngFor="let row of pricingRows"
+  </ng-container>
+
+
+  <!-- ================= CONTENT ================= -->
+
+  <ng-template #coachContent>
+
+    <div class="coach-info">
+
+      <div class="avatar-wrap">
+
+        <ng-container
+          *ngIf="coach?.profileImageUrl; else avatarFallback"
         >
 
-          <span class="price-label">
-            {{ row.label }}
+          <img
+            class="avatar-img"
+            [src]="getImageUrl(coach!.profileImageUrl)"
+            [alt]="coach!.fullNameEn"
+          />
+
+        </ng-container>
+
+        <ng-template #avatarFallback>
+
+          <div class="avatar-fallback">
+            {{ getInitial() }}
+          </div>
+
+        </ng-template>
+
+      </div>
+
+      <div class="coach-main-info">
+
+        <h2 class="coach-name">
+          {{ coach?.fullNameEn || '—' }}
+        </h2>
+
+        <div class="badges-row">
+
+          <span class="coach-job">
+
+            <i class="pi pi-briefcase"></i>
+
+            {{ coach?.jobTitle || 'Coach' }}
+
           </span>
 
-          <span class="price-value">
-            ${{ row.value ?? 0 }}
+          <span class="coach-job">
+
+            <i class="pi pi-calendar"></i>
+
+            <b>
+              +{{ coach?.bookingCount || 0 }}
+            </b>
+
+            Booking
+
           </span>
 
         </div>
 
+        <span class="badge badge-exp">
+
+          <i class="pi pi-star-fill"></i>
+
+          {{ coach?.yearsOfExperience || 0 }}
+
+          Yrs Exp
+
+        </span>
+
       </div>
 
-    </aside>
+    </div>
+
+    <div class="about-section">
+
+      <p class="about-title">
+        ABOUT COACH
+      </p>
+
+      <p class="about-text">
+        {{ coach?.bio || 'N/A' }}
+      </p>
+
+    </div>
+
+    <div class="price-grid">
+
+      <div
+        class="price-item"
+        *ngFor="let row of pricingRows"
+      >
+
+        <span class="price-label">
+          {{ row.label }}
+        </span>
+
+        <span class="price-value">
+          ${{ row.value ?? 0 }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </ng-template>
+
+</aside>
 
     <!-- =================================================== -->
     <!-- RIGHT CARD — CALENDAR -->

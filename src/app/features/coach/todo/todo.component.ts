@@ -19,11 +19,12 @@ import {
   TaskTemplate,
   TaskTemplateResponse
 } from '../services/todo-bookings.service';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-coach-todo',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,SkeletonModule],
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss']
 })

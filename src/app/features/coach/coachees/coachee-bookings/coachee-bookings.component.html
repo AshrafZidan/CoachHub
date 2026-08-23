@@ -1,0 +1,207 @@
+<p-dialog
+  [visible]="visible"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '750px' }"
+  [breakpoints]="{
+    '960px': '80vw',
+    '640px': '95vw'
+  }"
+  header="Coachee Bookings"
+  (onHide)="onClose.emit()"
+>
+  <div class="coachee-detail">
+
+    <!-- ========================================== -->
+    <!-- Loading -->
+    <!-- ========================================== -->
+
+    <div class="skeleton-list" *ngIf="loading">
+
+      <div
+        class="booking-skeleton"
+        *ngFor="let _ of [0, 1, 2]"
+      >
+        <p-skeleton height="160px"></p-skeleton>
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- Empty State -->
+    <!-- ========================================== -->
+
+    <div
+      class="empty-state"
+      *ngIf="!loading && bookings.length === 0"
+    >
+      <i class="pi pi-calendar empty-icon"></i>
+
+      <p class="empty-text">
+        No sessions scheduled
+      </p>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- Bookings -->
+    <!-- ========================================== -->
+
+    <div
+      class="bookings-list"
+      *ngIf="!loading && bookings.length > 0"
+    >
+
+      <div
+        class="card booking-card"
+        *ngFor="let booking of bookings"
+        (click)="openSession(booking)"
+      >
+
+        <!-- ====================================== -->
+        <!-- Header -->
+        <!-- ====================================== -->
+
+        <div class="card-header">
+          <h3>
+          <div class="booking-header">
+            
+            <!-- Date & Time -->
+            
+            <div class="booking-datetime">
+              
+              <div class="date-time">
+                
+                <span class="date">
+                  {{ booking.startTime | date:'dd MMM yyyy' }}
+                </span>
+                
+                <span class="time">
+                  {{ booking.startTime | date:'hh:mm a' }}
+                </span>
+                
+                <span class="time-separator">
+                  to
+                </span>
+                
+                <span class="time">
+                  {{ booking.endTime | date:'hh:mm a' }}
+                </span>
+                
+              </div>
+              
+            </div>
+            
+            
+            <!-- Session Status -->
+            
+            <span
+              class="chip status-chip"
+              [ngClass]="getStatusClass(booking.status)"
+            >
+              {{ booking.statusWrapper?.nameEn || booking.status }}
+            </span>
+              <span
+              class="chip"
+              [ngClass]="getStatusClass(booking.paymentStatus)"
+            >
+              {{ booking.paymentStatus }}
+            </span>
+            
+          </div>
+        </h3>
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- Body -->
+        <!-- ====================================== -->
+
+        <div class="card-body">
+
+          <!-- Period -->
+
+          <div class="booking-row">
+
+            <div class="booking-label">
+              <i class="pi pi-clock"></i>
+              <span>Period</span>
+            </div>
+
+            <div class="booking-value">
+              {{ formatDuration(booking.periodMinutes) }}
+            </div>
+
+          </div>
+
+
+          <!-- Price -->
+
+          <div class="booking-row">
+
+            <div class="booking-label">
+              <i class="pi pi-tag"></i>
+              <span>Price</span>
+            </div>
+
+            <div class="booking-value">
+              {{ booking.price }} USD
+            </div>
+
+          </div>
+
+
+          <!-- ==================================== -->
+          <!-- Discount -->
+          <!-- ==================================== -->
+
+
+            <div class="chip canceled" *ngIf="hasDiscount(booking)">
+
+                <span class="discount-label">
+                  Discount
+                </span>
+
+              <div class="discount-value">
+                -{{ booking.discount }} USD
+              </div>
+          
+
+          </div>
+
+
+          <!-- ==================================== -->
+          <!-- Total -->
+          <!-- ==================================== -->
+
+          <div class="total-row">
+
+            <div class="total-label">
+              Total Payment
+            </div>
+
+            <div class="total-price">
+              {{ booking.finalPrice }} USD
+            </div>
+
+          </div>
+
+
+
+          <!-- Arrow -->
+
+          <i class="pi pi-chevron-right show-details"></i>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</p-dialog>

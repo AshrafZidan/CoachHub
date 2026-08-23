@@ -42,9 +42,9 @@ const routes: Routes = [
       
       
       {
-        path: 'contact-us',
+        path: 'Coachees',
         loadComponent: () =>
-          import('./contact-us/coach-contact-us.component').then(m => m.CoachContactUsComponent)
+          import('./coachees/coach-coachees.component').then(m => m.CoachCoacheesComponent)
       },
       {
         path: 'profile',

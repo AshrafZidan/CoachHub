@@ -12,13 +12,13 @@ import {
 import {
   Badge,
   BadgeModule
-} from "./chunk-CHJICG42.js";
-import {
-  ConnectedOverlayScrollHandler
-} from "./chunk-42V3N2HM.js";
+} from "./chunk-ERZATFI7.js";
 import {
   Ripple
 } from "./chunk-AMQASLMS.js";
+import {
+  ConnectedOverlayScrollHandler
+} from "./chunk-42V3N2HM.js";
 import {
   BaseComponent,
   PARENT_INSTANCE
@@ -27,14 +27,14 @@ import {
   BaseStyle
 } from "./chunk-D3W2WEJO.js";
 import {
-  Bind,
-  BindModule
-} from "./chunk-CPURNMWT.js";
-import {
   OverlayService,
   PrimeTemplate,
   SharedModule
 } from "./chunk-BPDIYLAF.js";
+import {
+  Bind,
+  BindModule
+} from "./chunk-CPURNMWT.js";
 import {
   D,
   S,

@@ -107,21 +107,12 @@
 
 
 <!-- Initial Loading -->
-<div
-  class="booking-loading"
-  *ngIf="
-    loading() &&
-    tasks().length === 0
-  ">
-
-  <i class="pi pi-spin pi-spinner"></i>
-
-  <p>
-    Loading tasks...
-  </p>
-
-</div>
-
+  <!-- Loading: Initial -->
+  <div class="grid" *ngIf="loading()">
+    <div  *ngFor="let _ of [1,2,3]">
+      <p-skeleton height="160px" styleClass="skeleton-avatar"></p-skeleton>
+    </div>
+  </div>
 
 <!-- Loading More -->
 <div

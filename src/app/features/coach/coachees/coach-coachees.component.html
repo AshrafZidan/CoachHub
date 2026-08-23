@@ -1,0 +1,102 @@
+<div class="booking-page coach-coachees-page">
+ 
+
+<div class="title-wrapper">
+    <h2 class="title">Coachees
+              <p-skeleton *ngIf="loading" height="20px" class="page-subtitle"></p-skeleton>
+        <p class="page-subtitle" *ngIf="! loading"> {{ coachees.length }} coachees</p>
+    </h2>
+    
+    
+    <!-- Search -->
+    <div class="search-section">
+        <div class="search-wrapper">
+            <i class="pi pi-search search-icon"></i>
+            <input
+        type="text"
+        pInputText
+        class="search-input"
+        placeholder="Search by name..."
+        (input)="onSearchChange($event.target.value)"
+      />
+    </div>
+</div>
+  </div>
+
+  <!-- Loading: Initial -->
+  <div class="coachees-grid" *ngIf="loading">
+    <div class="coachee-skeleton"      *ngFor="let _ of [1,2,3]">
+>
+      <p-skeleton height="160px" styleClass="skeleton-avatar"></p-skeleton>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state booking-empty" *ngIf="!loading && coachees.length === 0">
+    <i class="pi pi-users"></i>
+    <h3 class="empty-title">No Coachees Found</h3>
+    <p >
+      {{ searchQuery ? 'Try a different search' : 'You have no coachees yet' }}
+    </p>
+  </div>
+
+  <!-- Coachees Grid -->
+  <div class="grid" *ngIf="!loading && coachees.length > 0">
+    <div
+      class="card"
+      *ngFor="let coachee of coachees"
+      (click)="openCoachee(coachee)">
+      <!-- Avatar -->
+      <div class="card-header">
+        <h3 class="coachee-name">{{ coachee.fullName }}</h3>
+      </div>
+
+      <!-- Info -->
+      <div class="card-body">
+
+          <img
+          *ngIf="coachee.profileImageUrl; else avatarFallback"
+          [src]="getImageUrl(coachee.profileImageUrl)"
+          [alt]="coachee.fullName"
+          (error)="onImageError($event)"
+        />
+        <ng-template #avatarFallback>
+          <div class="avatar">{{ getInitial(coachee.fullName) }}</div>
+        </ng-template>
+        <div class="meta-info">
+        <div class="meta-row">
+          <span class="meta-label">
+            <i class="pi pi-calendar"></i>
+           Total Sessions : {{ coachee.bookingCount }} 
+          </span>
+        </div>
+
+        <div class="meta-row" *ngIf="coachee.lastBookingDate">
+          <span class="meta-label">
+            <i class="pi pi-clock"></i>
+            Last Session : {{ coachee.lastBookingDate | date: 'short' }}
+          </span>
+        </div>
+      </div>
+           <!-- CTA Arrow -->
+      <div   class="coachee-arrow show-details">
+        <i class="pi pi-chevron-right"></i>
+      </div>
+      </div>
+
+ 
+    </div>
+  </div>
+
+  <!-- Loading More -->
+  <div class="booking-loading-inline" *ngIf="loadingMore">
+		<i class="pi pi-spin pi-spinner"></i>
+    <span>Loading more coachees...</span>
+  </div>
+</div>
+
+<app-coachee-bookings-modal
+  [visible]="coacheeToBookingModalVisible()"
+  [coachee]="coacheeToBooking()"
+  (onClose)="closeCoacheeBookingModal()">
+</app-coachee-bookings-modal>

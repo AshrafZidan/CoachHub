@@ -1,0 +1,168 @@
+.coach-coachees-page{
+.title-wrapper{
+    justify-content: start;
+    align-items: start;
+    gap: 50px;        
+
+}
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+// ── Search ────────────────────────────────────────────────
+.search-section {
+    margin-left: auto;
+    width: 30%;
+  @media (max-width: 640px) {
+    margin-bottom: 20px;
+  }
+}
+
+
+
+// ── Grid Layout ───────────────────────────────────────────
+.coachees-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+// ── Coachee Card ──────────────────────────────────────────
+.coachee-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  border: 1px solid #f5f5f5;
+  position: relative;
+
+  &:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 480px) {
+    padding: 14px;
+    gap: 10px;
+  }
+}
+
+// Avatar
+.coachee-avatar {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .avatar-fallback {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(131, 60, 136, 0.1), rgba(131, 60, 136, 0.05));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--app-primary-color);
+  }
+}
+
+// Info
+.coachee-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta-label {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .pi {
+    font-size: 12px;
+    color: var(--app-primary-color);
+  }
+}
+
+
+
+
+// ── Empty State ───────────────────────────────────────────
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  grid-column: 1 / -1;
+}
+
+.empty-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.empty-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--title-color);
+  margin: 0 0 8px;
+}
+
+.empty-text {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+.meta-info{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+}

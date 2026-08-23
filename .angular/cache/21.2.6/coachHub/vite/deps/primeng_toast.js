@@ -22,13 +22,13 @@ import {
   BaseStyle
 } from "./chunk-D3W2WEJO.js";
 import {
-  Bind
-} from "./chunk-CPURNMWT.js";
-import {
   MessageService,
   PrimeTemplate,
   SharedModule
 } from "./chunk-BPDIYLAF.js";
+import {
+  Bind
+} from "./chunk-CPURNMWT.js";
 import {
   _t,
   l,

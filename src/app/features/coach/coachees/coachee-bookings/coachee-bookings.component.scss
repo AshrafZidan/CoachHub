@@ -1,0 +1,205 @@
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  background: var(--p-card-background, #FBFAFC);
+}
+.coachee-detail{padding-top: 20px;}
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.booking-card {
+  overflow: hidden;
+  cursor: pointer;
+
+    h3{
+    width: 100%;
+  }
+}
+
+/* ==========================================
+   Header
+   ========================================== */
+
+
+.booking-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+
+}
+
+.booking-datetime {
+  flex: 1;
+  min-width: 0;
+}
+
+.date-time {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.date {
+  font-weight: 500;
+}
+
+.time {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.time-separator {
+  color: #999;
+  margin: 0 2px;
+}
+
+
+
+.booking-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+
+}
+
+.booking-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--app-text-color);
+  font-size: 14px;
+
+  i {
+    font-size: 14px;
+  }
+}
+
+.booking-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-inline-start: 4px;
+}
+
+
+/* ==========================================
+   DISCOUNT
+   ========================================== */
+
+.discount-row {
+  margin: 14px 0;
+
+  padding: 12px 14px;
+
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+
+  background: #f0fdf4;
+}
+
+.discount-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.discount-label {
+  display: flex;
+  align-items: center;
+ margin-bottom: 2px;
+  font-size: 14px;
+
+}
+
+.discount-value {
+
+  font-size: 14px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+
+
+/* ==========================================
+   Total
+   ========================================== */
+
+.total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.total-label {
+  color: var(--app-text-color);
+
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.total-price {
+ color: var(--text-dark);
+    font-size: 18px;
+    font-weight: 700;
+    margin-inline-start: 4px;
+}
+
+
+
+
+/* ==========================================
+   Loading
+   ========================================== */
+
+.skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.booking-skeleton {
+  width: 100%;
+}
+
+
+/* ==========================================
+   Empty State
+   ========================================== */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 60px 20px;
+
+  text-align: center;
+}
+
+.empty-icon {
+  margin-bottom: 15px;
+
+  font-size: 38px;
+  color: #bbb;
+}
+
+.empty-text {
+  margin: 0;
+
+  color: #888;
+  font-size: 16px;
+}
