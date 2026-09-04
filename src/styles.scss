@@ -8,7 +8,7 @@
   --title-secondary-color: #515B6F;
   --app-primary-color: #833C88;
   --app-primary-color-dark: #75347a;
-
+  --p-card-background : #f4f4f4;
   --p-button-primary-background: #833C88 !important;
   --p-button-primary-border-color: #833C88 !important;
   --p-button-primary-hover-background: #833C88 !important;
@@ -27,8 +27,8 @@
   --p-select-option-selected-focus-background: #833C88 !important;
   --p-select-option-selected-focus-color: #fff !important;
   --p-select-focus-border-color: #833C88 !important;
---p-stepper-separator-active-background: #833C88 !important;
---p-datepicker-date-selected-background: #833C88 !important;
+  --p-stepper-separator-active-background: #833C88 !important;
+  --p-datepicker-date-selected-background: #833C88 !important;
 
   --p-multiselect-option-selected-background: #f1e9f2 !important;
   --p-multiselect-option-selected-color: #833C88 !important;
@@ -326,48 +326,48 @@ input.p-inputtext::placeholder,
 
   &.pending {
     background-color: rgba(131, 60, 136, 0.12);
-    color: var(--app-primary-color);
+    color: var(--app-primary-color) !important;
   }
 
   &.paid {
     background-color: rgba(22, 158, 63, 0.12);
-    color: var(--app-success);
+    color: var(--app-success) !important;
   }
 
   &.failed {
     background-color: rgba(220, 53, 69, 0.12);
-    color: #dc3545; // 🔥 red
+    color: #dc3545 !important; // 🔥 red
   }
 
   &.refunded {
     background-color: rgba(108, 117, 125, 0.14);
-    color: #6c757d; // gray
+    color: #6c757d !important; // gray
   }
 
   &.cancelled , &.canceled {
     background-color: rgba(240, 101, 101, 0.14);
-    color: var(--app-delete);
+    color: var(--app-delete) !important;
   }
 
   // Booking Status
-  &.running {
+  &.running, &.active {
     background-color: rgba(23, 162, 184, 0.14);
-    color: #17a2b8; // blue
+    color: #17a2b8 !important; // blue
   }
 
   &.completed {
     background-color: rgba(22, 158, 63, 0.14);
-    color: var(--app-success);
+    color: var(--app-success) !important;
   }
 
   &.upcoming {
     background-color: rgba(99, 165, 236, 0.14);
-    color: #63a5ec;
+    color: #63a5ec !important;
   }
 
   &.past {
     background-color: rgba(108, 117, 125, 0.14);
-    color: #6c757d;
+    color: #6c757d !important;
   }
 }
 
@@ -472,7 +472,7 @@ input.p-inputtext::placeholder,
 }
 .signup-stepper .p-steplist{
     position: relative;
-    border: 1px solid #D6DDEB;
+    border: 1px solid var(--app-border-color);
     border-radius: 8px;
     padding: 10px 0;
     padding-bottom: 25px;
@@ -573,6 +573,7 @@ input.p-inputtext::placeholder,
 
 	.card {
 		background: #fff;
+		border: 1px solid var(--app-border-color);
 		border-radius: 12px;
 		box-shadow: 0 4px 14px rgba(0,0,0,0.04);
 		overflow: hidden;
@@ -690,10 +691,10 @@ input.p-inputtext::placeholder,
 .search-input {
   width: 100%;
   padding: 11px 14px 11px 40px !important;
-  border: 1px solid #e8e8e8 !important;
+  border: 1px solid var(--app-border-color) !important;
   border-radius: 10px !important;
   font-size: 14px;
-  background: #ffffff !important;
+  background: #ffffff ;
   color: var(--text-dark) !important;
   transition: border-color 0.2s, box-shadow 0.2s;
 
@@ -707,3 +708,40 @@ input.p-inputtext::placeholder,
     outline: none !important;
   }
 }
+    .role-toggle {
+        display: flex;
+        gap: 8px;
+        padding: 4px;
+        margin-bottom: 18px;
+        border-radius: 12px;
+        justify-content: center;
+
+  .role-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: transparent;
+    color: var(--title-secondary-color);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .role-btn.active {
+       background: #EEB945 !important;
+    box-shadow: 0 4px 10px rgb(114 103 31);
+
+    }
+
+    }
+.step-actions{flex-direction: column-reverse;}
+.p-multiselect-display-chip .p-multiselect-label{flex-wrap: wrap;}
+.page-subtitle{
+      margin: 0;
+    font-size: 12px;
+    margin-top: 10px;
+    color: var(--title-secondary-color);
+}
+
+/* Dark mode overrides are loaded last so they can override base styles. */
+@import './styles.dark';

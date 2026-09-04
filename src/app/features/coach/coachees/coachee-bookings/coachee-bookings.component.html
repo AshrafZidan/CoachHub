@@ -15,170 +15,185 @@
 >
   <div class="coachee-detail">
 
-    <!-- ========================================== -->
-    <!-- Loading -->
-    <!-- ========================================== -->
+    <!-- ============================================================
+         VIEW 1: BOOKINGS LIST
+         ============================================================ -->
+    <ng-container *ngIf="currentView === 'bookings'">
 
-    <div class="skeleton-list" *ngIf="loading">
-
+      <!-- Header -->
       <div
-        class="booking-skeleton"
-        *ngFor="let _ of [0, 1, 2]"
+        class="detail-header"
+        *ngIf="coachee"
       >
-        <p-skeleton height="160px"></p-skeleton>
+        <h2 class="coachee-name">
+          {{ coachee.fullName }}
+        </h2>
+
+        <p class="booking-count">
+          {{ bookings.length }} Sessions
+        </p>
       </div>
 
-    </div>
 
-
-    <!-- ========================================== -->
-    <!-- Empty State -->
-    <!-- ========================================== -->
-
-    <div
-      class="empty-state"
-      *ngIf="!loading && bookings.length === 0"
-    >
-      <i class="pi pi-calendar empty-icon"></i>
-
-      <p class="empty-text">
-        No sessions scheduled
-      </p>
-    </div>
-
-
-    <!-- ========================================== -->
-    <!-- Bookings -->
-    <!-- ========================================== -->
-
-    <div
-      class="bookings-list"
-      *ngIf="!loading && bookings.length > 0"
-    >
-
+      <!-- Loading Skeleton -->
       <div
-        class="card booking-card"
-        *ngFor="let booking of bookings"
-        (click)="openSession(booking)"
+        class="skeleton-list"
+        *ngIf="bookingsLoading"
       >
+        <div
+          class="card booking-skeleton"
+          *ngFor="let _ of [0, 1, 2]"
+        >
+          <p-skeleton
+            height="140px"
+          ></p-skeleton>
+        </div>
+      </div>
 
-        <!-- ====================================== -->
-        <!-- Header -->
-        <!-- ====================================== -->
 
-        <div class="card-header">
-          <h3>
-          <div class="booking-header">
-            
-            <!-- Date & Time -->
-            
-            <div class="booking-datetime">
-              
-              <div class="date-time">
-                
-                <span class="date">
-                  {{ booking.startTime | date:'dd MMM yyyy' }}
-                </span>
-                
-                <span class="time">
-                  {{ booking.startTime | date:'hh:mm a' }}
-                </span>
-                
-                <span class="time-separator">
-                  to
-                </span>
-                
-                <span class="time">
-                  {{ booking.endTime | date:'hh:mm a' }}
-                </span>
-                
-              </div>
-              
-            </div>
-            
-            
-            <!-- Session Status -->
-            
-            <span
-              class="chip status-chip"
-              [ngClass]="getStatusClass(booking.status)"
-            >
-              {{ booking.statusWrapper?.nameEn || booking.status }}
-            </span>
-              <span
-              class="chip"
-              [ngClass]="getStatusClass(booking.paymentStatus)"
-            >
-              {{ booking.paymentStatus }}
-            </span>
-            
-          </div>
-        </h3>
-
+      <!-- Empty State -->
+      <div
+        class="empty-state"
+        *ngIf="
+          !bookingsLoading &&
+          bookings.length === 0
+        "
+      >
+        <div class="empty-icon">
+          📅
         </div>
 
-
-        <!-- ====================================== -->
-        <!-- Body -->
-        <!-- ====================================== -->
-
-        <div class="card-body">
-
-          <!-- Period -->
-
-          <div class="booking-row">
-
-            <div class="booking-label">
-              <i class="pi pi-clock"></i>
-              <span>Period</span>
-            </div>
-
-            <div class="booking-value">
-              {{ formatDuration(booking.periodMinutes) }}
-            </div>
-
-          </div>
+        <p class="empty-text">
+          No sessions scheduled
+        </p>
+      </div>
 
 
-          <!-- Price -->
+      <!-- Bookings List -->
+      <div
+        class="bookings-list"
+        *ngIf="
+          !bookingsLoading &&
+          bookings.length > 0
+        "
+      >
 
-          <div class="booking-row">
+        <div
+          class="booking-card card"
+          *ngFor="let booking of bookings"
+          (click)="openSession(booking)"
+        >
 
-            <div class="booking-label">
-              <i class="pi pi-tag"></i>
-              <span>Price</span>
-            </div>
+          <!-- Date & Time -->
+          <div class="booking-header">
 
-            <div class="booking-value">
-              {{ booking.price }} USD
-            </div>
+            <div class="booking-datetime">
 
-          </div>
+              <div class="date-time">
 
-
-          <!-- ==================================== -->
-          <!-- Discount -->
-          <!-- ==================================== -->
-
-
-            <div class="chip canceled" *ngIf="hasDiscount(booking)">
-
-                <span class="discount-label">
-                  Discount
+                <span class="date">
+                  {{ formatDate(booking.startTime) }}
                 </span>
 
-              <div class="discount-value">
-                -{{ booking.discount }} USD
+                <span class="time-separator">
+                  •
+                </span>
+
+                <span class="time">
+                  {{ formatTime(booking.startTime) }}
+                  -
+                  {{ formatTime(booking.endTime) }}
+                </span>
+
               </div>
-          
+
+            </div>
+
+
+            <!-- Booking Status -->
+            <div class="booking-row">
+
+              <span
+                [ngClass]="
+                  'chip ' +
+                  getStatusClass(booking.status)
+                "
+              >
+                {{ booking.status }}
+              </span>
+
+            </div>
+
+
+            <!-- Payment Status -->
+            <div class="booking-row">
+
+              <span
+                [ngClass]="
+                  'chip ' +
+                  getStatusClass(booking.paymentStatus)
+                "
+              >
+                {{ booking.paymentStatus }}
+              </span>
+
+            </div>
+
+
+            <i
+              class="pi pi-chevron-right"
+            ></i>
 
           </div>
 
 
-          <!-- ==================================== -->
-          <!-- Total -->
-          <!-- ==================================== -->
+          <!-- Period & Price -->
+          <div class="booking-row">
 
+            <div class="booking-label">
+
+              <i class="pi pi-hourglass"></i>
+
+              Period
+              {{ formatDuration(booking.periodMinutes) }}
+
+            </div>
+
+            <div class="booking-value">
+              {{ booking.price }} $
+            </div>
+
+          </div>
+
+
+          <!-- Discount -->
+          <div
+            class="discount-row"
+            *ngIf="hasDiscount(booking)"
+          >
+
+            <div class="discount-content">
+
+              <div class="discount-label">
+
+                <i class="pi pi-tag"></i>
+
+                Discount
+
+              </div>
+
+              <div class="discount-value">
+
+                -{{ booking.discount }} $
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- Total -->
           <div class="total-row">
 
             <div class="total-label">
@@ -186,22 +201,426 @@
             </div>
 
             <div class="total-price">
-              {{ booking.finalPrice }} USD
+              {{ booking.finalPrice }} $
             </div>
 
           </div>
-
-
-
-          <!-- Arrow -->
-
-          <i class="pi pi-chevron-right show-details"></i>
 
         </div>
 
       </div>
 
-    </div>
+    </ng-container>
+
+
+    <!-- ============================================================
+         VIEW 2: SESSION DETAIL & TASKS
+         ============================================================ -->
+    <ng-container
+      *ngIf="currentView === 'session-detail'"
+    >
+
+      <!-- Back Button -->
+      <div class="view-header">
+
+        <button
+          type="button"
+          pButton
+          icon="pi pi-arrow-left"
+          class="back-btn"
+          (click)="goBackToBookings()"
+        >
+          Back to Bookings
+        </button>
+
+      </div>
+
+
+      <!-- Loading Skeleton -->
+      <div
+        class="skeleton-list"
+        *ngIf="tasksLoading"
+      >
+
+        <div
+          class="task-skeleton"
+          *ngFor="let _ of [0, 1, 2]"
+        >
+
+          <p-skeleton
+            height="100px"
+          ></p-skeleton>
+
+        </div>
+
+      </div>
+
+
+      <!-- Empty -->
+      <div
+        class="empty-state"
+        *ngIf="
+          !tasksLoading &&
+          sessionTasks.length === 0
+        "
+      >
+
+        <i
+          class="pi pi-inbox empty-icon"
+        ></i>
+
+        <p class="empty-text">
+          No tasks assigned to this session
+        </p>
+
+      </div>
+
+
+      <!-- Tasks -->
+      <div
+        class="tasks-list"
+        *ngIf="
+          !tasksLoading &&
+          sessionTasks.length > 0
+        "
+      >
+
+        <h3 class="tasks-title">
+          Assigned Tasks
+          ({{ sessionTasks.length }})
+        </h3>
+
+
+        <div
+          class="task-item card"
+          *ngFor="
+            let task of sessionTasks;
+            let i = index
+          "
+          (click)="openTaskAnswers(task)"
+        >
+
+          <!-- Number -->
+          <div class="task-number">
+            {{ i + 1 }}
+          </div>
+
+
+          <!-- Content -->
+          <div class="task-content">
+
+            <h4 class="task-title">
+              {{ task.title }}
+            </h4>
+
+
+            <p
+              class="task-description"
+              *ngIf="task.description"
+            >
+              {{ task.description }}
+            </p>
+
+
+            <div class="task-meta">
+
+              <span
+                class="submitted-date"
+                *ngIf="task.dueDate"
+              >
+
+                <i class="pi pi-calendar"></i>
+
+                Due
+                {{ task.dueDate }}
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- Status -->
+          <span
+            class="status-badge"
+            [ngClass]="
+              'chip ' +
+              getStatusClass(task.status)
+            "
+          >
+            {{ task.status }}
+          </span>
+
+
+          <!-- Arrow -->
+          <i
+            class="pi pi-chevron-right task-arrow"
+          ></i>
+
+        </div>
+
+      </div>
+
+    </ng-container>
+
+
+    <!-- ============================================================
+         VIEW 3: TASK ANSWERS
+         ============================================================ -->
+    <ng-container
+      *ngIf="currentView === 'task-answers'"
+    >
+
+      <!-- Back Button -->
+      <div class="view-header">
+
+        <button
+          type="button"
+          pButton
+          icon="pi pi-arrow-left"
+          class="back-btn"
+          (click)="goBackToTasks()"
+        >
+          Back to Tasks
+        </button>
+
+      </div>
+
+
+      <!-- Task Info -->
+      <div
+        class="task-info-summary card"
+        *ngIf="taskAssignmentDetails"
+      >
+
+        <div class="task-info-header">
+
+          <h3 class="task-info-title">
+            {{ taskAssignmentDetails.title }}
+          </h3>
+
+          <span
+            class="chip"
+            [ngClass]="
+              getStatusClass(
+                taskAssignmentDetails.status
+              )
+            "
+          >
+            {{ taskAssignmentDetails.status }}
+          </span>
+
+        </div>
+
+
+        <p
+          class="task-description"
+          *ngIf="taskAssignmentDetails.description"
+        >
+          {{ taskAssignmentDetails.description }}
+        </p>
+
+
+        <div class="task-meta-info">
+
+          <span class="meta-item">
+
+            <i class="pi pi-calendar"></i>
+
+            Due:
+            {{ formatDate(taskAssignmentDetails.dueDate) }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Loading Skeleton -->
+      <div
+        class="skeleton-list"
+        *ngIf="answersLoading"
+      >
+
+        <div
+          class="task-skeleton"
+          *ngFor="let _ of [0, 1, 2]"
+        >
+
+          <p-skeleton
+            height="100px"
+          ></p-skeleton>
+
+        </div>
+
+      </div>
+
+
+      <!-- Empty Questions -->
+      <div
+        class="empty-state"
+        *ngIf="
+          !answersLoading &&
+          (
+            !taskAssignmentDetails ||
+            !taskAssignmentDetails.questions ||
+            taskAssignmentDetails.questions.length === 0
+          )
+        "
+      >
+
+        <div class="empty-icon">
+          📋
+        </div>
+
+        <p class="empty-text">
+          No questions in this task
+        </p>
+
+      </div>
+
+
+      <!-- Questions & Answers -->
+      <div
+        class="questions-list"
+        *ngIf="
+          !answersLoading &&
+          taskAssignmentDetails &&
+          taskAssignmentDetails.questions &&
+          taskAssignmentDetails.questions.length > 0
+        "
+      >
+
+        <h3 class="questions-title">
+          Questions
+          ({{ taskAssignmentDetails.questions.length }})
+        </h3>
+
+
+        <div
+          class="question-item card"
+          *ngFor="
+            let question of taskAssignmentDetails.questions;
+            let i = index
+          "
+        >
+
+          <!-- Question Header -->
+          <div class="question-header">
+
+            <span class="question-number">
+              Q{{ i + 1 }}
+            </span>
+
+            <h4 class="question-text">
+              {{ question.questionText }}
+            </h4>
+
+
+            <!-- Required -->
+            <div class="question-type-row">
+
+              <span
+                class="chip canceled"
+                style="font-weight: bold;"
+                *ngIf="question.required"
+              >
+                Required
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- Client Answer -->
+          <div class="answer-section">
+
+
+            <!-- TEXT ANSWER -->
+            <div
+              class="answer-content text-answer"
+              *ngIf="isTextQuestion(question)"
+            >
+
+              <p class="answer-text">
+
+                {{
+                  getQuestionAnswer(question.id)?.answerText
+                  || '[No answer provided]'
+                }}
+
+              </p>
+
+            </div>
+
+
+            <!-- MULTIPLE CHOICE ANSWER -->
+            <div
+              class="answer-content multiple-answer"
+              *ngIf="isMultipleChoice(question)"
+            >
+
+              <ng-container
+                *ngIf="
+                  getQuestionAnswer(question.id)
+                  as answer
+                "
+              >
+
+                <div class="options-list">
+
+                  <div
+                    class="option-item"
+                    *ngFor="
+                      let option of question.options
+                    "
+                    [class.selected]="
+                      answer.selectedOptionId === option.id
+                    "
+                  >
+
+                    <i
+                      class="pi"
+                      [ngClass]="
+                        answer.selectedOptionId === option.id
+                          ? 'pi-check-circle'
+                          : 'pi-circle'
+                      "
+                    ></i>
+
+                    <span>
+                      {{ option.optionText }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </ng-container>
+
+
+              <!-- No Answer -->
+              <div
+                class="no-answer"
+                *ngIf="
+                  !getQuestionAnswer(question.id)
+                "
+              >
+                [No answer selected]
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </ng-container>
 
   </div>
 </p-dialog>

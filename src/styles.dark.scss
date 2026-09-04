@@ -1,0 +1,487 @@
+/* =========================================================
+   DARK THEME
+   Loaded AFTER the global/base stylesheet.
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+
+  :root {
+    /* Application colors */
+    --title-color: #c3c6cc !important;
+    --title-secondary-color: #c9d1df !important;
+    --app-primary-color: #b778c9 !important;
+    --app-primary-color-dark: #9b5ba5 !important;
+    --app-border-color: #2b3747 !important;
+    --app-text-color: #c9d1df !important;
+    --text-dark: #edf2ff !important;
+    --text-muted: #dfe7f5 !important;
+    --app-error: #ff9f9f !important;
+    --app-delete: #ff7b7b !important;
+    --app-success: #5ad48a !important;
+    --app-page-bg: #0f172a !important;
+    --app-card-bg: #111827 !important;
+    --app-card-muted: #18212c !important;
+    --app-surface-1: #111827 !important;
+    --app-surface-2: #111827 !important;
+    --app-surface-elevated: #111827 !important;
+    --odd-row-bg: #182438;
+
+    /* PrimeNG */
+    --p-card-background: #111827 !important;
+
+    --p-button-primary-background: #b778c9 !important;
+    --p-button-primary-border-color: #b778c9 !important;
+    --p-button-primary-hover-background: #9b5ba5 !important;
+    --p-button-primary-hover-border-color: #9b5ba5 !important;
+    --p-button-primary-focus-ring-color: rgba(183, 120, 201, 0.25) !important;
+    --p-button-primary-active-background: #9b5ba5 !important;
+    --p-button-primary-active-border-color: #9b5ba5 !important;
+
+    --p-inputtext-focus-border-color: #b778c9 !important;
+
+    --p-tabs-tab-active-border-color: #b778c9 !important;
+    --p-tabs-tab-active-color: #b778c9 !important;
+    --p-tabs-active-bar-background: #b778c9 !important;
+
+    --p-select-option-selected-background: #b778c9 !important;
+    --p-select-option-selected-color: #fff !important;
+    --p-select-option-selected-focus-background: #9b5ba5 !important;
+    --p-select-option-selected-focus-color: #fff !important;
+    --p-select-focus-border-color: #b778c9 !important;
+
+    --p-stepper-separator-active-background: #b778c9 !important;
+
+    --p-datepicker-date-selected-background: #b778c9 !important;
+
+    --p-multiselect-option-selected-background: rgba(183, 120, 201, 0.18) !important;
+    --p-multiselect-option-selected-color: #e7c8ed !important;
+    --p-multiselect-option-selected-focus-background: #b778c9 !important;
+    --p-multiselect-option-selected-focus-color: #fff !important;
+
+    --p-checkbox-checked-border-color: #b778c9 !important;
+    --p-checkbox-checked-background: #b778c9 !important;
+    --p-checkbox-checked-hover-background: #9b5ba5 !important;
+    --p-checkbox-checked-hover-border-color: #9b5ba5 !important;
+
+    --p-chip-background: #18212c !important;
+    --p-chip-color: #e7c8ed !important;
+    --p-chip-remove-icon-color: #b778c9 !important;
+  }
+
+  html,
+  body {
+    background: var(--app-page-bg) !important;
+    color: var(--title-color) !important;
+  }
+
+  body {
+    color-scheme: dark;
+  }
+
+  /* ---------------------------------------------------------
+     Surfaces / cards
+     --------------------------------------------------------- */
+
+  .p-card,
+  .card,
+  .profile-card,
+  .auth-card,
+  .filter-container,
+  .booking-empty,
+  .booking-loading,
+  .page-header,
+  .dropdown-menu,
+  .notification-menu,
+  .notification-header,
+  .notification-item,
+  .notification-empty,
+  .notification-skeleton,
+  .p-dialog,
+  .p-dialog-content,
+  .p-dialog-header,
+  .p-dialog-footer,
+  .profile-stepper,
+  .signup-stepper,
+  .page-shell,
+  .page-content {
+    background: var(--app-card-bg) !important;
+    border-color: var(--app-border-color) !important;
+    color: var(--title-color) !important;
+  }
+
+  .filter-header {
+    background: var(--app-surface-1) !important;
+    color: var(--title-color) !important;
+    border-color: var(--app-border-color) !important;
+  }
+
+  .filter-header:hover {
+    background: var(--app-surface-2) !important;
+  }
+
+  .filter-body {
+    background: var(--app-card-bg) !important;
+    color: var(--app-text-color) !important;
+    border-color: var(--app-border-color) !important;
+  }
+
+  .filter-container {
+    border-color: var(--app-border-color) !important;
+  }
+  .sidebar,.admin-content ,.admin-table,.admin-table thead tr ,.table-footer,
+
+  .table-card .skeleton-wrapper{
+    background: var(--app-card-bg) !important;
+    color: var(--title-color) !important;
+    .nav-item.active , .nav-item:hover{
+    background: var(--app-border-color) !important;
+  }
+}
+
+  /* ---------------------------------------------------------
+     Inputs / controls
+     --------------------------------------------------------- */
+
+  .app-input,
+  .p-inputtext,
+  .p-password-input,
+  .p-dropdown,
+  .p-select,
+  .p-datepicker,
+  .p-inputwrapper,
+  input,
+  textarea,
+  select,
+  .search-input,
+  .p-multiselect,
+  .p-menu {
+    background: var(--app-card-bg) !important;
+    color: var(--text-dark) !important;
+    border-color: var(--app-border-color) !important;
+  }
+
+  .search-input {
+    background: var(--app-card-bg) !important;
+    color: var(--text-dark) !important;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus,
+  .app-input:focus,
+  .search-input:focus {
+    background: var(--app-card-bg) !important;
+    color: var(--text-dark) !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder,
+  .p-inputtext::placeholder,
+  .p-password input::placeholder,
+  .search-input::placeholder {
+    color: #9aa7b7 !important;
+    opacity: 1 !important;
+  }
+
+  /* PrimeNG overlay panels */
+  .p-select-overlay,
+  .p-dropdown-panel,
+  .p-multiselect-overlay,
+  .p-datepicker-panel,
+  .p-menu,
+  .p-tieredmenu,
+  .p-autocomplete-panel {
+    background: var(--app-card-bg) !important;
+    border-color: var(--app-border-color) !important;
+    color: var(--title-color) !important;
+  }
+
+  .p-select-option,
+  .p-dropdown-item,
+  .p-multiselect-option,
+  .p-menuitem-link {
+    color: var(--title-color) !important;
+  }
+
+  .p-select-option:hover,
+  .p-dropdown-item:hover,
+  .p-multiselect-option:hover,
+  .p-menuitem-link:hover {
+    background: var(--app-card-muted) !important;
+  }
+
+  /* ---------------------------------------------------------
+     Buttons
+     --------------------------------------------------------- */
+
+  .notification-button,
+  .notif-btn,
+  .lang-toggle,
+  .profile-button,
+  .logout-button,
+  .role-btn {
+    background: var(--app-card-bg) !important;
+    color: var(--title-color) !important;
+    border-color: var(--app-border-color) !important;
+  }
+
+//   .p-button-primary,
+//   .p-button-primary.p-button {
+//     background: var(--app-primary-color) !important;
+//     border-color: var(--app-primary-color) !important;
+//     color: #fff !important;
+//   }
+
+//   .p-button-primary:hover,
+//   .p-button-primary.p-button:hover {
+//     background: var(--app-primary-color-dark) !important;
+//     border-color: var(--app-primary-color-dark) !important;
+//   }
+
+//   .p-button-secondary.app-custom,
+//   .p-button-secondary.p-button {
+//     background: transparent !important;
+//     border: 1px solid var(--app-primary-color) !important;
+//     color: var(--app-primary-color) !important;
+//   }
+
+//   .p-button-secondary.app-custom:hover,
+//   .p-button-secondary.p-button:hover {
+//     background: rgba(183, 120, 201, 0.12) !important;
+//   }
+
+  .role-btn {
+    border: 1px solid var(--app-border-color) !important;
+  }
+
+  .role-btn.active {
+    background: #eeb945 !important;
+    color: #fff !important;
+  }
+
+  /* ---------------------------------------------------------
+     Stepper
+     --------------------------------------------------------- */
+
+  .p-step button {
+    background: #1f2937 !important;
+    border-color: var(--app-border-color) !important;
+    color: var(--title-color) !important;
+  }
+
+  .p-step button i,
+  .p-step-active button i {
+    color: var(--title-color) !important;
+  }
+
+  .p-step-active button {
+    background: var(--app-primary-color) !important;
+    color: #fff !important;
+  }
+
+  .p-step-active button i {
+    color: #fff !important;
+  }
+
+  .signup-stepper .p-steplist {
+    border-color: var(--app-border-color) !important;
+  }
+
+  /* ---------------------------------------------------------
+     Icons
+     --------------------------------------------------------- */
+
+  .pi,
+  .notification-button .pi,
+  .notification-icon .pi,
+  .bell-icon,
+  .chevron-icon,
+  .search-icon,
+  .filter-icon,
+  .profile-arrow {
+    color: var(--title-color) !important;
+    stroke: currentColor !important;
+  }
+
+  .search-icon {
+    color: var(--text-muted) !important;
+  }
+
+  /* ---------------------------------------------------------
+     Text
+     --------------------------------------------------------- */
+
+  .auth-title,
+  .form-group label,
+  .title,
+  .step-name,
+  .step-counter,
+  .notification-title,
+  .notification-header h3,
+  .brand-name,
+  .header-nav a,
+  .profile-button,
+  .lang-toggle,
+  .logout-button,
+  .page-footer,
+  .welcome-label,
+  .tabs .tab:not(.active) {
+    color: var(--title-color) !important;
+  }
+
+  .notification-body,
+  .notification-time,
+  .notification-empty,
+  .brand-subtitle,
+  .footer-note,
+  .auth-subtitle,
+  .forgot-link,
+  .step-name,
+  .page-subtitle {
+    color: var(--text-muted) !important;
+  }
+
+  .header-nav a.active {
+    color: var(--app-primary-color) !important;
+  }
+
+  .form-container label {
+    color: var(--title-secondary-color) !important;
+  }
+
+  /* ---------------------------------------------------------
+     Chips / statuses
+     --------------------------------------------------------- */
+
+  .chip {
+    color: var(--title-color) !important;
+    border: 1px solid var(--app-border-color) !important;
+  }
+
+  .chip.pending {
+    background: rgba(183, 120, 201, 0.16) !important;
+    color: #f2d7ff !important;
+  }
+
+  .chip.paid,
+  .chip.completed {
+    background: rgba(90, 212, 138, 0.12) !important;
+    color: #b8f0cf !important;
+  }
+
+  .chip.failed,
+  .chip.cancelled,
+  .chip.canceled {
+    background: rgba(255, 123, 123, 0.12) !important;
+    color: #ffc2c2 !important;
+  }
+
+  .chip.upcoming,
+  .chip.running,
+  .chip.active {
+    background: rgba(99, 165, 236, 0.12) !important;
+    color: #cae4ff !important;
+  }
+
+  .chip.refunded,
+  .chip.past {
+    background: rgba(148, 163, 184, 0.12) !important;
+    color: #cbd5e1 !important;
+  }
+
+  /* ---------------------------------------------------------
+     Booking / cards
+     --------------------------------------------------------- */
+
+  .booking-empty,
+  .booking-loading {
+    background: var(--app-card-bg) !important;
+    color: var(--title-color) !important;
+    border-color: var(--app-border-color) !important;
+  }
+
+  .booking-empty p,
+  .booking-loading p,
+  .booking-loading-inline {
+    color: var(--title-secondary-color) !important;
+  }
+
+  .card {
+    background: var(--app-card-bg) !important;
+    border-color: var(--app-border-color) !important;
+  }
+
+  .card .card-header {
+    color: var(--app-text-color) !important;
+    border-color: var(--app-border-color) !important;
+  }
+
+  .card .meta .name,
+  .price-item .value {
+    color: var(--title-color) !important;
+  }
+
+  .card .meta .role,
+  .card .meta .price,
+  .price-item .label {
+    color: var(--text-muted) !important;
+  }
+
+  /* ---------------------------------------------------------
+     Notifications
+     --------------------------------------------------------- */
+
+  .notification-badge,
+  .notif-dot,
+  .notification-unread-dot {
+    background: var(--app-delete) !important;
+    border-color: var(--app-card-bg) !important;
+  }
+
+  /* ---------------------------------------------------------
+     Miscellaneous
+     --------------------------------------------------------- */
+
+  .p-error {
+    color: var(--app-error) !important;
+  }
+
+  .required {
+    color: var(--app-error) !important;
+  }
+
+  .p-dialog .p-dialog-header,
+  .p-dialog .p-dialog-content,
+  .p-dialog .p-dialog-footer {
+    background: var(--app-card-bg) !important;
+    color: var(--title-color) !important;
+    border-color: var(--app-border-color) !important;
+  }
+
+  .p-dialog .p-dialog-header .p-dialog-close-button {
+    color: var(--title-color) !important;
+  }
+
+  .bg-transparent {
+    background: transparent !important;
+  }
+
+  .border-0 {
+    border-color: transparent !important;
+  }
+  .admin-table{
+      tbody tr{
+    .action-btns button.edit-btn,.action-btns button.delete-btn ,
+    .action-btns button.reset,.action-btns button.deactivate-btn ,
+    .action-btns button.restore-btn 
+    {background: var(--app-card-bg) !important;}
+      &:nth-child(odd) {
+      background: var(--odd-row-bg) !important;
+  }}
+}
+.skeleton-wrapper {
+    .skeleton-cell{
+            background: linear-gradient(90deg, #18212c 25%, #2b3747 50%, #18212c 75%);
+    }
+}
+}

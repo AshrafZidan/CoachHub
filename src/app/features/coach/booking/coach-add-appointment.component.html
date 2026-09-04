@@ -24,26 +24,22 @@
 
   <!-- ================= LOADING ================= -->
 
-  <ng-container *ngIf="isLoading(); else coachContent">
+  <ng-container *ngIf="loading; else coachContent">
     <div class="coach-info">
 
       <div class="avatar-wrap">
-        <div class="app-skeleton coach-avatar-skeleton"></div>
-      </div>
+        <p-skeleton height="90px" class="coach-avatar-skeleton"></p-skeleton>
+         </div>
 
       <div class="coach-main-info">
-
-        <div class="app-skeleton coach-name-skeleton"></div>
+        <p-skeleton height="20px" width="200px" class="coach-name-skeleton"></p-skeleton>
 
         <div class="badges-row">
-
-          <div class="app-skeleton coach-badge-skeleton"></div>
-
-          <div class="app-skeleton coach-badge-skeleton"></div>
+        <p-skeleton height="20px" width="90px" class="coach-name-skeleton"></p-skeleton>
+        <p-skeleton height="20px" width="90px" class="coach-name-skeleton"></p-skeleton>
 
         </div>
-
-        <div class="app-skeleton coach-exp-skeleton"></div>
+        <p-skeleton height="20px" width="90px" class="coach-exp-skeleton"></p-skeleton>
 
       </div>
 
@@ -51,27 +47,15 @@
 
     <div class="about-section">
 
-      <div class="app-skeleton about-title-skeleton"></div>
+        <p-skeleton height="20px" width="100%" class="coach-name-skeleton"></p-skeleton>
+        <p-skeleton height="20px" width="100%" class="coach-name-skeleton"></p-skeleton>
+        <p-skeleton height="20px" width="100%" class="coach-name-skeleton"></p-skeleton>
 
-      <div class="app-skeleton about-line"></div>
-      <div class="app-skeleton about-line"></div>
-      <div class="app-skeleton about-line short"></div>
 
     </div>
 
-    <div class="price-grid">
-
-      <div
-        class="price-item"
-        *ngFor="let item of [1, 2, 3]"
-      >
-
-        <div class="app-skeleton price-label-skeleton"></div>
-
-        <div class="app-skeleton price-value-skeleton"></div>
-
-      </div>
-
+    <div  class="about-section">
+        <p-skeleton height="40px" width="80%" class="coach-name-skeleton"></p-skeleton>
     </div>
 
   </ng-container>
@@ -154,7 +138,7 @@
     <div class="about-section">
 
       <p class="about-title">
-        ABOUT COACH
+        About Coach
       </p>
 
       <p class="about-text">
@@ -214,25 +198,30 @@
 
         <ng-container *ngIf="isBrowser">
 
-          <p-date-picker
+           <p-date-picker
             [(ngModel)]="selectedDate"
-
             (onSelect)="onDateSelect($event)"
-
             (onMonthChange)="onCalendarViewChange($event)"
-
             (onYearChange)="onCalendarViewChange($event)"
-
             [inline]="true"
-
             dateFormat="yy-mm-dd"
-
             [showOtherMonths]="true"
-
             styleClass="coach-inline-cal"
+            >
+            <ng-template pTemplate="date" let-date>
+                <span
+                class="calendar-day"
+                [class.has-slots]="hasSlots(date)"
+                >
+                {{ date.day }}
 
-          >
-          </p-date-picker>
+                <span
+                    class="slot-dot"
+                    *ngIf="hasSlots(date)"
+                ></span>
+                </span>
+            </ng-template>
+            </p-date-picker>
 
         </ng-container>
 
@@ -334,7 +323,7 @@
         pButton
         type="button"
         label="Add More Appointment"
-        class="btn-add-more"
+        class="btn-add-more p-button-primary w-full p-button p-component"
         (click)="openAddDialog()"
       >
       </button>

@@ -18,9 +18,25 @@
 	<div class="grid" *ngIf="filteredBookings.length > 0">
 		<ng-container *ngFor="let b of filteredBookings">
 			<div class="card">
-				<div class="card-header">{{ b.date }} <span class="chip" [ngClass]="b.status">{{ b.status | titlecase }}</span></div>
+				<div class="card-header">
+					<h3 style="font-size: 12px;">
+						{{ b.date }}
+					</h3>
+					<span class="chip" [ngClass]="b.status">{{ b.status | titlecase }}</span>
+				</div>
 				<div class="card-body">
-					<img class="avatar" [src]="b.avatar" alt="avatar"/>
+					<div class="avatar">
+					<img
+						*ngIf="b.avatar"
+						[src]="b.avatar"
+						alt="avatar"
+					/>
+
+					<i
+						*ngIf="!b.avatar"
+						class="pi pi-user">
+					</i>
+				</div>
 					<div class="meta">
 						<div class="name">{{ b.name }}</div>
 						<div class="role">{{ b.title }}</div>
@@ -41,9 +57,37 @@
 							</div>
 						</div>
 					</div>
-					<div class="actions" *ngIf="b.status === 'upcoming' && b.raw?.actions?.length">
-						<button class="btn-secondary p-button-sm  btn p-button p-button-secondary app-custom" *ngIf="hasCancelAction(b)" (click)="cancel(b)">Cancel</button>
-						<button class="p-button-sm btn p-button p-button-primary app-custom" *ngIf="hasStartAction(b)" (click)="startNow(b)">Start Now</button>
+					 <div
+						class="actions"
+						*ngIf="
+							b.raw?.actions?.length
+						">
+
+						<!-- CANCEL -->
+						<button
+							class="btn-secondary p-button-sm btn p-button p-button-secondary app-custom"
+							*ngIf="hasCancelAction(b)"
+							(click)="cancel(b)"
+							[disabled]="isStarting(b)"
+						>
+							Cancel
+						</button>
+
+						<!-- START SESSION -->
+						<button
+							class="p-button-sm btn p-button p-button-primary app-custom"
+							*ngIf="hasStartAction(b) || hasJoinAction(b)"
+							(click)="startNow(b)"
+							[disabled]="isStarting(b)"
+						>
+							<i
+								*ngIf="isStarting(b)"
+								class="pi pi-spin pi-spinner">
+							</i>
+
+							{{ isStarting(b) ? 'Starting...' : 'Start Now' }}
+						</button>
+
 					</div>
 				</div>
 			</div>
@@ -55,10 +99,20 @@
 		<p>{{ activeTab() === 'Upcoming' ? 'No upcoming bookings found yet.' : 'No History found yet.' }}</p>
 	</div>
 
-	<div class="booking-loading" *ngIf="loading && bookings.length === 0">
-		<i class="pi pi-spin pi-spinner"></i>
-		<p>Loading bookings...</p>
-	</div>
+	<ng-container *ngIf="loading && bookings.length === 0;">
+  <div class="grid">
+    <div
+      class="coachee-skeleton"
+      *ngFor="let _ of [1, 2, 3]"
+    >
+      <p-skeleton
+        height="160px"
+        styleClass="skeleton-avatar"
+      ></p-skeleton>
+    </div>
+  </div>
+</ng-container>
+
 
 	<div class="booking-loading-inline" *ngIf="loading && filteredBookings.length > 0">
 		<i class="pi pi-spin pi-spinner"></i>

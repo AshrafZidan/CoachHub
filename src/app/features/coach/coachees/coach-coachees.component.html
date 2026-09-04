@@ -3,7 +3,7 @@
 
 <div class="title-wrapper">
     <h2 class="title">Coachees
-              <p-skeleton *ngIf="loading" height="20px" class="page-subtitle"></p-skeleton>
+        <p-skeleton *ngIf="loading" height="20px" class="page-subtitle"></p-skeleton>
         <p class="page-subtitle" *ngIf="! loading"> {{ coachees.length }} coachees</p>
     </h2>
     
@@ -24,23 +24,47 @@
   </div>
 
   <!-- Loading: Initial -->
-  <div class="coachees-grid" *ngIf="loading">
-    <div class="coachee-skeleton"      *ngFor="let _ of [1,2,3]">
->
-      <p-skeleton height="160px" styleClass="skeleton-avatar"></p-skeleton>
+ <!-- Loading State -->
+<ng-container *ngIf="loading; else loadedState">
+  <div class="coachees-grid">
+    <div
+      class="coachee-skeleton"
+      *ngFor="let _ of [1, 2, 3]"
+    >
+      <p-skeleton
+        height="160px"
+        styleClass="skeleton-avatar"
+      ></p-skeleton>
     </div>
   </div>
+</ng-container>
 
-  <!-- Empty State -->
-  <div class="empty-state booking-empty" *ngIf="!loading && coachees.length === 0">
-    <i class="pi pi-users"></i>
-    <h3 class="empty-title">No Coachees Found</h3>
-    <p >
-      {{ searchQuery ? 'Try a different search' : 'You have no coachees yet' }}
-    </p>
-  </div>
+<!-- Loaded State -->
+            <ng-template #loadedState>
 
-  <!-- Coachees Grid -->
+            <!-- Empty -->
+            <div
+                class="empty-state booking-empty"
+                *ngIf="coachees.length === 0"
+            >
+                <i class="pi pi-users"></i>
+
+                <h3 class="empty-title">
+                No Coachees Found
+                </h3>
+
+                <p>
+                {{ searchQuery ? 'Try a different search' : 'You have no coachees yet' }}
+                </p>
+            </div>
+
+            <!-- Data -->
+            <div
+                class="coachees-grid"
+                *ngIf="coachees.length > 0"
+            >
+              
+                <!-- Coachees Grid -->
   <div class="grid" *ngIf="!loading && coachees.length > 0">
     <div
       class="card"
@@ -88,6 +112,12 @@
     </div>
   </div>
 
+            </div>
+
+            </ng-template>
+
+
+
   <!-- Loading More -->
   <div class="booking-loading-inline" *ngIf="loadingMore">
 		<i class="pi pi-spin pi-spinner"></i>
@@ -96,6 +126,7 @@
 </div>
 
 <app-coachee-bookings-modal
+    *ngIf="coacheeToBookingModalVisible()"
   [visible]="coacheeToBookingModalVisible()"
   [coachee]="coacheeToBooking()"
   (onClose)="closeCoacheeBookingModal()">

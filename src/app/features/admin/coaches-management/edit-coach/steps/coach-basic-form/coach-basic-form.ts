@@ -36,7 +36,6 @@ import { log } from 'console';
 export class CoachBasicForm implements OnInit {
 
   @Input() form!: FormGroup;
-  @Input() showPrices: boolean = true;
   @Input() countriesInput: any[] | null = null;
 
   private service = inject(LookupsService);

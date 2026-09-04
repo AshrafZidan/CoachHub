@@ -5,7 +5,7 @@ const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./layout/coach-layout/coach-layout').then(m => m.CoachLayout),
+      import('./layout/coach-layout/coach-layout').then(m => m.CoachLayoutComponent),
     children: [
       {
         path: '',
@@ -50,7 +50,14 @@ const routes: Routes = [
         path: 'profile',
         loadComponent: () =>
           import('./profile/coach-profile.component').then(m => m.CoachProfileComponent)
-      }
+      },
+      
+        {
+      path: 'session/:bookingId',
+      loadComponent: () =>
+        import('./../../shared/session/session.component')
+          .then(m => m.SessionComponent)
+    }
     ]
   }
 ];

@@ -1,0 +1,211 @@
+<div class="booking-page">
+
+	<div class="title-wrapper">
+				<h2 class="title">Coaching Session
+
+                    				<p class="page-subtitle">
+					Session #{{ bookingId }}
+                                    </p>
+                </h2>
+
+
+    </div>
+
+
+	<div class="session-content">
+
+		<div class="meeting-container">
+
+			<iframe
+				*ngIf="safeSessionUrl"
+				[src]="safeSessionUrl"
+				class="meeting-frame"
+				allow="
+					camera;
+					microphone;
+					autoplay;
+					display-capture;
+					fullscreen
+				"
+				allowfullscreen>
+			</iframe>
+
+            <aside class="session-sidebar">
+
+	<div class="header">
+
+		<h3>Tasks</h3>
+
+		<button
+			class="button p-button-sm btn-add p-button-primary p-button p-component"
+			type="button"
+			(click)="assignTask()">
+			Assign Task
+		</button>
+
+	</div>
+
+
+	<!-- Loading -->
+
+	<div
+		class="empty-tasks"
+		*ngIf="loadingTasks">
+
+		Loading tasks...
+
+	</div>
+
+
+	<!-- Empty -->
+
+	<div
+		class="empty-tasks"
+		*ngIf="
+			!loadingTasks &&
+			assignedTasks.length === 0
+		">
+        <i class="pi pi-inbox empty-icon"></i>
+		   <p> No tasks assigned to this session yet.</p>
+
+	</div>
+
+
+	<!-- Tasks -->
+
+	<div
+		class="task-list"
+		*ngIf="
+			!loadingTasks &&
+			assignedTasks.length > 0
+		">
+
+		<div
+			class="task-card"
+			*ngFor="
+				let task of assignedTasks
+			">
+
+			<div class="task-title">
+				{{ task.title }}
+			</div>
+
+			<div
+				class="task-description"
+				*ngIf="task.description">
+
+				{{ task.description }}
+
+			</div>
+
+			<div class="task-due">
+
+				Due:
+				<strong>
+					{{ task.dueDate | date:'mediumDate' }}
+				</strong>
+
+			</div>
+
+			<div
+				class="chip pending"
+				*ngIf="task.status">
+
+				{{ task.status }}
+
+			</div>
+
+		</div>
+
+	</div>
+
+</aside>
+		</div>
+
+
+
+	</div>
+
+</div>
+
+
+<p-dialog
+	header="Assign Task"
+	[visible]="showAssignTaskDialog"
+      (onHide)="showAssignTaskDialog = false"
+
+	[modal]="true"
+	[style]="{ width: '45%' }"
+	[closable]="!assigningTask">
+
+	<div class="assign-task-form">
+
+		<div class="form-field">
+
+			<label>
+				Task
+			</label>
+
+			<p-select
+				[options]="taskTemplates"
+                [showClear]="true"
+                [(ngModel)]="selectedTask"
+                filter="true"
+                appendTo="body"
+				optionLabel="title"
+				placeholder="Select a task"
+				[loading]="loadingTaskTemplates"
+				[disabled]="assigningTask"
+				[style]="{ width: '100%' }">
+			</p-select>
+
+		</div>
+
+
+		<div class="form-field">
+
+			<label>
+				Due Date
+			</label>
+
+			<p-datepicker
+                [(ngModel)]="dueDate"
+				dateFormat="yy-mm-dd"
+				[minDate]="today"
+                appendTo="body"
+				[disabled]="assigningTask"
+				[style]="{ width: '100%' }">
+			</p-datepicker>
+
+		</div>
+
+	</div>
+
+
+	<ng-template pTemplate="footer">
+
+		<button
+			pButton
+			type="button"
+			label="Cancel"
+			class="p-button-secondary button p-button-sm  p-button p-component"
+			[disabled]="assigningTask"
+			(click)="showAssignTaskDialog = false">
+		</button>
+
+		<button
+			pButton
+			type="button"
+			label="Assign"
+            class="button p-button-sm btn-add p-button-primary p-button p-component"
+			[disabled]="
+				!selectedTask ||
+				!dueDate ||
+				assigningTask
+			"
+			(click)="assignSelectedTask()">
+		</button>
+
+	</ng-template>
+
+</p-dialog>

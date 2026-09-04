@@ -1,331 +1,738 @@
-<div class="auth-wrapper">
+  <div class="auth-wrapper">
 
-  <!-- Left: Background Image -->
-  <div class="auth-image-side">
-    <img src="assets/images/auth-bg.jpg" alt="CoachHub background" />
-    <div class="image-overlay"></div>
-  </div>
+    <!-- Left: Background Image -->
+    <div class="auth-image-side">
+      <img
+        src="assets/images/auth-bg.jpg"
+        alt="CoachHub background"
+      />
 
-  <!-- Right: Signup Form -->
-  <div class="auth-form-side">
-    <div class="auth-card fade-in">
+      <div class="image-overlay"></div>
+    </div>
 
-      <!-- Logo -->
-      <div class="auth-logo">
-        <div class="logo-placeholder">
-          <img src="assets/images/alt-logo.png" alt="CoachHub logo" />
-        </div>
-      </div>
+    <!-- Right: Signup Form -->
+    <div class="auth-form-side">
 
-      <h1 class="auth-title">
-        Your future journey made possible By Coaching
-      </h1>
+      <div class="auth-card fade-in">
 
-      <!-- Error Message -->
-      <p-message
-        *ngIf="errorMessage"
-        severity="error"
-        [text]="errorMessage"
-        styleClass="mb-3 w-full">
-      </p-message>
-
-      <!-- Success Message -->
-      <p-message
-        *ngIf="successMessage"
-        severity="success"
-        [text]="successMessage"
-        styleClass="mb-3 w-full">
-      </p-message>
-
-      <!-- Signup Form -->
-      <!-- Coachee Form -->
-      <form [formGroup]="coacheeSignupForm" *ngIf="role === 'COACHEE'" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
-
-        <!-- Full Name -->
-        <div class="form-group">
-          <label for="fullName">Full Name</label>
-
-          <span class="p-input-icon-left w-full">
-            <input
-              pInputText
-              id="fullName"
-              type="text"
-              formControlName="fullName"
-              placeholder="Enter your full name"
-              class="w-full"
-              [ngClass]="{'ng-invalid ng-dirty': fullName.invalid && fullName.touched}"
+        <!-- Logo -->
+        <div class="auth-logo">
+          <div class="logo-placeholder">
+            <img
+              src="assets/images/alt-logo.png"
+              alt="CoachHub logo"
             />
-          </span>
-
-          <small class="p-error" *ngIf="fullName.invalid && fullName.touched">
-            Full name is required.
-          </small>
+          </div>
         </div>
 
-        <!-- Birth Date -->
-        <div class="form-group">
-          <label for="birthDate">Birth Date</label>
+        @if(role === 'COACHEE'){
 
-           <p-datePicker ngSkipHydration
-      formControlName="birthDate"
-      placeholder="Select Birth Date"
-      class="w-full"
-      [showIcon]="true"
-      iconDisplay="input"
-      [showOnFocus]="false"
-      [readonlyInput]="true"
-      appendTo="body">
-    </p-datePicker>
+          <h1  class="auth-title">
+            Your future journey made possible By Coaching
+          </h1>
+        }
 
-     
+        <!-- Error Message -->
+        <p-message
+          *ngIf="errorMessage"
+          severity="error"
+          [text]="errorMessage"
+          styleClass="mb-3 w-full">
+        </p-message>
 
-          <small class="p-error" *ngIf="birthDate.invalid && birthDate.touched">
-            Birth date is required.
-          </small>
-        </div>
+        <!-- Success Message -->
+        <p-message
+          *ngIf="successMessage"
+          severity="success"
+          [text]="successMessage"
+          styleClass="mb-3 w-full">
+        </p-message>
 
-        <!-- Email -->
-        <div class="form-group">
-          <label for="email">Email Address</label>
 
-          <span class="p-input-icon-left w-full">
-            <input
-              pInputText
-              id="email"
-              type="email"
-              formControlName="email"
-              placeholder="Enter your email"
+        <!-- ========================================= -->
+        <!-- COACHEE FORM -->
+        <!-- ========================================= -->
+
+        <form
+          [formGroup]="coacheeSignupForm"
+          *ngIf="role === 'COACHEE'"
+          (ngSubmit)="onSubmit()"
+          class="auth-form"
+          novalidate
+        >
+
+          <!-- Full Name -->
+          <div class="form-group">
+
+            <label for="fullName">
+              Full Name
+            </label>
+
+            <span class="p-input-icon-left w-full">
+
+              <input
+                pInputText
+                id="fullName"
+                type="text"
+                formControlName="fullName"
+                placeholder="Enter your full name"
+                class="w-full"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    fullName.invalid &&
+                    fullName.touched
+                }"
+              />
+
+            </span>
+
+            <small
+              class="p-error"
+              *ngIf="fullName.invalid && fullName.touched"
+            >
+              Full name is required.
+            </small>
+
+          </div>
+
+
+          <!-- Birth Date -->
+          <div class="form-group">
+
+            <label for="birthDate">
+              Birth Date
+            </label>
+
+            <p-datePicker
+              ngSkipHydration
+              formControlName="birthDate"
+              placeholder="Select Birth Date"
               class="w-full"
-              [ngClass]="{'ng-invalid ng-dirty': email.invalid && email.touched}"
-            />
-          </span>
+              [showIcon]="true"
+              iconDisplay="input"
+              [showOnFocus]="false"
+              [readonlyInput]="true"
+              appendTo="body"
+            >
+            </p-datePicker>
 
-          <small class="p-error" *ngIf="email.invalid && email.touched">
-            <ng-container *ngIf="email.errors?.['required']">Email is required.</ng-container>
-            <ng-container *ngIf="email.errors?.['email']">Please enter a valid email.</ng-container>
-          </small>
-        </div>
+            <small
+              class="p-error"
+              *ngIf="birthDate.invalid && birthDate.touched"
+            >
+              Birth date is required.
+            </small>
 
-        <!-- Phone Number -->
-        <div class="form-group">
-          <label for="phoneNumber">Phone Number</label>
+          </div>
 
-          <span class="p-input-icon-left w-full">
-            <input
-              pInputText
-              id="phoneNumber"
-              type="text"
-              formControlName="phoneNumber"
-              placeholder="Enter your phone number"
-              class="w-full"
-              [ngClass]="{'ng-invalid ng-dirty': phoneNumber.invalid && phoneNumber.touched}"
-            />
-          </span>
 
-          <small class="p-error" *ngIf="phoneNumber.invalid && phoneNumber.touched">
-            <ng-container *ngIf="phoneNumber.errors?.['required']">Phone number is required.</ng-container>
-            <ng-container *ngIf="phoneNumber.errors?.['pattern']">Phone number must contain only digits and optional +.</ng-container>
-          </small>
-        </div>
+          <!-- Email -->
+          <div class="form-group">
 
-        <!-- Password -->
-        <div class="form-group">
-          <label for="password">Password</label>
+            <label for="email">
+              Email Address
+            </label>
 
-          <p-password
-            formControlName="password"
-            [feedback]="true"
-            [toggleMask]="true"
-            placeholder="Enter your password"
-            inputStyleClass="w-full pass"
-            styleClass="w-full"
-            [ngClass]="{'ng-invalid ng-dirty': password.invalid && password.touched}">
-          </p-password>
+            <span class="p-input-icon-left w-full">
 
-          <small class="p-error" *ngIf="password.invalid && password.touched">
-            <ng-container *ngIf="password.errors?.['required']">Password is required.</ng-container>
-            <ng-container *ngIf="password.errors?.['minlength']">Password must be at least 8 characters.</ng-container>
-          </small>
-        </div>
+              <input
+                pInputText
+                id="email"
+                type="email"
+                formControlName="email"
+                placeholder="Enter your email"
+                class="w-full"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    email.invalid &&
+                    email.touched
+                }"
+              />
 
-        <!-- Confirm Password -->
-<div class="form-group">
-  <label for="confirmPassword">Confirm Password</label>
+            </span>
 
-  <p-password
-    formControlName="confirmPassword"
-    [feedback]="false"
-    [toggleMask]="true"
-    placeholder="Confirm your password"
-    inputStyleClass="w-full pass"
-    styleClass="w-full"
-    [ngClass]="{'ng-invalid ng-dirty': confirmPassword.invalid && confirmPassword.touched}">
-  </p-password>
+            <small
+              class="p-error"
+              *ngIf="email.invalid && email.touched"
+            >
 
-  <small class="p-error" *ngIf="confirmPassword.invalid && confirmPassword.touched">
-    <ng-container *ngIf="confirmPassword.errors?.['required']">
-      Confirm password is required.
-    </ng-container>
-    <ng-container *ngIf="confirmPassword.errors?.['mismatch']">
-      Passwords do not match.
-    </ng-container>
-  </small>
-</div>
+              <ng-container
+                *ngIf="email.errors?.['required']"
+              >
+                Email is required.
+              </ng-container>
 
-        <!-- Submit Button -->
-        <button
-          pButton
-          type="submit"
-          label="{{ isLoading ? 'Creating account...' : 'Sign Up' }}"
-          class="w-full mt-3"
-          [loading]="isLoading"
-          [disabled]="isLoading">
-        </button>
+              <ng-container
+                *ngIf="email.errors?.['email']"
+              >
+                Please enter a valid email.
+              </ng-container>
 
-      </form>
+            </small>
 
-      <!-- Coach Form (reusing admin multi-step components) -->
-      <div *ngIf="role === 'COACH'" class="auth-form">
-        <!-- PrimeNG Stepper (icon-only) -->
-        <p-stepper [(value)]="activeStep" class="signup-stepper mb-4">
-          <p-step-list>
-            <p-step [value]="1" class="flex flex-row flex-auto gap-2">
-              <ng-template #content let-activateCallback="activateCallback" let-value="value">
-                <button class="bg-transparent border-0 inline-flex flex-col gap-2" (click)="onStepIconClick(1, activateCallback)">
-                  <span
-                    class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
-                    [ngClass]="{
-                      'bg-primary text-primary-contrast border-primary': value <= activeStep,
-                      'border-surface': value > activeStep
-                    }"
+          </div>
+
+
+          <!-- Phone Number -->
+          <div class="form-group">
+
+            <label for="phoneNumber">
+              Phone Number
+            </label>
+
+            <span class="p-input-icon-left w-full">
+
+              <input
+                pInputText
+                id="phoneNumber"
+                type="text"
+                formControlName="phoneNumber"
+                placeholder="Enter your phone number"
+                class="w-full"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    phoneNumber.invalid &&
+                    phoneNumber.touched
+                }"
+              />
+
+            </span>
+
+            <small
+              class="p-error"
+              *ngIf="phoneNumber.invalid && phoneNumber.touched"
+            >
+
+              <ng-container
+                *ngIf="phoneNumber.errors?.['required']"
+              >
+                Phone number is required.
+              </ng-container>
+
+              <ng-container
+                *ngIf="phoneNumber.errors?.['pattern']"
+              >
+                Phone number must contain only digits and optional +.
+              </ng-container>
+
+            </small>
+
+          </div>
+
+
+          <!-- Password -->
+          <div class="form-group">
+
+            <label for="password">
+              Password
+            </label>
+
+            <p-password
+              formControlName="password"
+              [feedback]="true"
+              [toggleMask]="true"
+              placeholder="Enter your password"
+              inputStyleClass="w-full pass"
+              styleClass="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  password.invalid &&
+                  password.touched
+              }"
+            >
+            </p-password>
+
+            <small
+              class="p-error"
+              *ngIf="password.invalid && password.touched"
+            >
+
+              <ng-container
+                *ngIf="password.errors?.['required']"
+              >
+                Password is required.
+              </ng-container>
+
+              <ng-container
+                *ngIf="password.errors?.['minlength']"
+              >
+                Password must be at least 8 characters.
+              </ng-container>
+
+            </small>
+
+          </div>
+
+
+          <!-- Confirm Password -->
+          <div class="form-group">
+
+            <label for="confirmPassword">
+              Confirm Password
+            </label>
+
+            <p-password
+              formControlName="confirmPassword"
+              [feedback]="false"
+              [toggleMask]="true"
+              placeholder="Confirm your password"
+              inputStyleClass="w-full pass"
+              styleClass="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  confirmPassword.invalid &&
+                  confirmPassword.touched
+              }"
+            >
+            </p-password>
+
+            <small
+              class="p-error"
+              *ngIf="
+                confirmPassword.invalid &&
+                confirmPassword.touched
+              "
+            >
+
+              <ng-container
+                *ngIf="confirmPassword.errors?.['required']"
+              >
+                Confirm password is required.
+              </ng-container>
+
+              <ng-container
+                *ngIf="confirmPassword.errors?.['mismatch']"
+              >
+                Passwords do not match.
+              </ng-container>
+
+            </small>
+
+          </div>
+
+
+          <!-- Submit -->
+          <button
+            pButton
+            type="submit"
+            [label]="
+              isLoading
+                ? 'Creating account...'
+                : 'Sign Up'
+            "
+            class="w-full mt-3"
+            [loading]="isLoading"
+            [disabled]="isLoading"
+          >
+          </button>
+
+        </form>
+
+
+        <!-- ========================================= -->
+        <!-- COACH FORM -->
+        <!-- ========================================= -->
+
+        <div
+          *ngIf="role === 'COACH'"
+          class="auth-form"
+        >
+
+          <p-stepper
+            [(value)]="activeStep"
+            class="signup-stepper mb-4"
+          >
+
+            <p-step-list>
+
+              <!-- STEP 1 -->
+              <p-step
+                [value]="1"
+                class="flex flex-row flex-auto gap-2"
+              >
+
+                <ng-template
+                  #content
+                  let-activateCallback="activateCallback"
+                  let-value="value"
+                >
+
+                  <button
+                    type="button"
+                    class="bg-transparent border-0 inline-flex flex-col gap-2"
+                    (click)="
+                      onStepIconClick(
+                        1,
+                        activateCallback
+                      )
+                    "
                   >
-                    <i class="pi pi-file"></i>
-                  </span>
-                </button>
-                <!-- dynamic step info shown under the first icon -->
-                
-                <div class="step-info-first" style="position: absolute;
-                  top: 53px;
-                  display: flex;
-                  gap: 8px;
-                  align-items: center;">
-                  <div class="step-counter" style="color: var(--app-primary-color);">{{ step() }}/{{ totalSteps }}</div>
-                 <div style="color: var(--app-border-color);">|</div>
-                  <div class="step-name" style="color:var(--title-secondary-color);font-size:0.85rem;font-weight: 600;">{{ stepLabels[step() - 1] }}</div>
-                </div>
-              </ng-template>
-            </p-step>
 
-            <p-step [value]="2" class="flex flex-row flex-auto gap-2">
-              <ng-template #content let-activateCallback="activateCallback" let-value="value">
-                <button class="bg-transparent border-0 inline-flex flex-col gap-2" (click)="onStepIconClick(2, activateCallback)">
-                  <span
-                    class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
-                    [ngClass]="{
-                      'bg-primary text-primary-contrast border-primary': value <= activeStep,
-                      'border-surface': value > activeStep
-                    }"
+                    <span
+                      class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+                      [ngClass]="{
+                        'bg-primary text-primary-contrast border-primary':
+                          value <= activeStep,
+
+                        'border-surface':
+                          value > activeStep
+                      }"
+                    >
+
+                      <i class="pi pi-file"></i>
+
+                    </span>
+
+                  </button>
+
+                  <div
+                    class="step-info-first"
+                    style="
+                      position: absolute;
+                      top: 53px;
+                      display: flex;
+                      gap: 8px;
+                      align-items: center;
+                    "
                   >
-                    <i class="pi pi-user"></i>
-                  </span>
-                </button>
-              </ng-template>
-            </p-step>
 
-            <p-step [value]="3" class="flex flex-row flex-auto gap-2">
-              <ng-template #content let-activateCallback="activateCallback" let-value="value">
-                <button class="bg-transparent border-0 inline-flex flex-col gap-2" (click)="onStepIconClick(3, activateCallback)">
-                  <span
-                    class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
-                    [ngClass]="{
-                      'bg-primary text-primary-contrast border-primary': value <= activeStep,
-                      'border-surface': value > activeStep
-                    }"
-                  >
-                    <i class="pi pi-id-card"></i>
-                  </span>
-             </button>
-              </ng-template>
-            </p-step>
-          </p-step-list>
+                    <div
+                      class="step-counter"
+                      style="color: var(--app-primary-color);"
+                    >
+                      {{ step() }}/{{ totalSteps }}
+                    </div>
 
+                    <div
+                      style="color: var(--app-border-color);"
+                    >
+                      |
+                    </div>
 
+                    <div
+                      class="step-name"
+                      style="
+                        color: var(--title-secondary-color);
+                        font-size: 0.85rem;
+                        font-weight: 600;
+                      "
+                    >
+                      {{ stepLabels[step() - 1] }}
+                    </div>
 
-          <p-step-panels>
-            <p-step-panel [value]="1">
-              <ng-template #content let-activateCallback="activateCallback">
-                <app-coach-basic-form ngSkipHydration [form]="basicForm" [showPrices]="true"></app-coach-basic-form>
-              </ng-template>
-            </p-step-panel>
-
-            <p-step-panel [value]="2">
-              <ng-template #content let-activateCallback="activateCallback">
-                <app-coach-professional-form [form]="professionalForm"></app-coach-professional-form>
-              </ng-template>
-            </p-step-panel>
-
-            <p-step-panel [value]="3">
-              <ng-template #content let-activateCallback="activateCallback">
-                <app-coach-media-form [form]="mediaForm"></app-coach-media-form>
-
-                <div [formGroup]="coachSignupForm" class="coach-password-section mt-4">
-                  <div class="form-group">
-                    <label for="coachPassword">Password</label>
-
-                    <p-password
-                      id="coachPassword"
-                      formControlName="password"
-                      [feedback]="true"
-                      [toggleMask]="true"
-                      placeholder="Enter your password"
-                      inputStyleClass="w-full pass"
-                      styleClass="w-full"
-                      [ngClass]="{'ng-invalid ng-dirty': coachPassword.invalid && coachPassword.touched}">
-                    </p-password>
-
-                    <small class="p-error" *ngIf="coachPassword.invalid && coachPassword.touched">
-                      <ng-container *ngIf="coachPassword.errors?.['required']">Password is required.</ng-container>
-                      <ng-container *ngIf="coachPassword.errors?.['minlength']">Password must be at least 8 characters.</ng-container>
-                    </small>
                   </div>
 
-                  <div class="form-group">
-                    <label for="coachConfirmPassword">Confirm Password</label>
+                </ng-template>
 
-                    <p-password
-                      id="coachConfirmPassword"
-                      formControlName="confirmPassword"
-                      [feedback]="false"
-                      [toggleMask]="true"
-                      placeholder="Confirm your password"
-                      inputStyleClass="w-full pass"
-                      styleClass="w-full"
-                      [ngClass]="{'ng-invalid ng-dirty': coachConfirmPassword.invalid && coachConfirmPassword.touched}">
-                    </p-password>
+              </p-step>
 
-                    <small class="p-error" *ngIf="coachConfirmPassword.invalid && coachConfirmPassword.touched">
-                      <ng-container *ngIf="coachConfirmPassword.errors?.['required']">Confirm password is required.</ng-container>
-                      <ng-container *ngIf="coachConfirmPassword.errors?.['mismatch']">Passwords do not match.</ng-container>
-                    </small>
+
+              <!-- STEP 2 -->
+              <p-step
+                [value]="2"
+                class="flex flex-row flex-auto gap-2"
+              >
+
+                <ng-template
+                  #content
+                  let-activateCallback="activateCallback"
+                  let-value="value"
+                >
+
+                  <button
+                    type="button"
+                    class="bg-transparent border-0 inline-flex flex-col gap-2"
+                    (click)="
+                      onStepIconClick(
+                        2,
+                        activateCallback
+                      )
+                    "
+                  >
+
+                    <span
+                      class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+                      [ngClass]="{
+                        'bg-primary text-primary-contrast border-primary':
+                          value <= activeStep,
+
+                        'border-surface':
+                          value > activeStep
+                      }"
+                    >
+
+                      <i class="pi pi-user"></i>
+
+                    </span>
+
+                  </button>
+
+                </ng-template>
+
+              </p-step>
+
+
+              <!-- STEP 3 -->
+              <p-step
+                [value]="3"
+                class="flex flex-row flex-auto gap-2"
+              >
+
+                <ng-template
+                  #content
+                  let-activateCallback="activateCallback"
+                  let-value="value"
+                >
+
+                  <button
+                    type="button"
+                    class="bg-transparent border-0 inline-flex flex-col gap-2"
+                    (click)="
+                      onStepIconClick(
+                        3,
+                        activateCallback
+                      )
+                    "
+                  >
+
+                    <span
+                      class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+                      [ngClass]="{
+                        'bg-primary text-primary-contrast border-primary':
+                          value <= activeStep,
+
+                        'border-surface':
+                          value > activeStep
+                      }"
+                    >
+
+                      <i class="pi pi-id-card"></i>
+
+                    </span>
+
+                  </button>
+
+                </ng-template>
+
+              </p-step>
+
+            </p-step-list>
+
+
+            <p-step-panels>
+
+              <!-- STEP 1 -->
+              <p-step-panel [value]="1">
+
+                <ng-template #content>
+
+                  <app-coach-basic-form
+                    ngSkipHydration
+                    [form]="basicForm"
+                  >
+                  </app-coach-basic-form>
+
+                </ng-template>
+
+              </p-step-panel>
+
+
+              <!-- STEP 2 -->
+              <p-step-panel [value]="2">
+
+                <ng-template #content>
+
+                  <app-coach-professional-form
+                    [form]="professionalForm"
+                  >
+                  </app-coach-professional-form>
+
+                </ng-template>
+
+              </p-step-panel>
+
+
+              <!-- STEP 3 -->
+              <p-step-panel [value]="3">
+
+                <ng-template #content>
+                    <div class="app-coach-media-form">
+
+                      <app-coach-media-form
+                    [form]="mediaForm"
+                  >
+                  </app-coach-media-form>
+                </div> 
+
+
+                  <!-- PASSWORD SECTION -->
+                  <div
+                    [formGroup]="coachSignupForm"
+                    class="coach-password-section mt-4"
+                  >
+
+                    <!-- Password -->
+                    <div class="form-group">
+
+                      <label for="coachPassword">
+                        Password
+                      </label>
+
+                      <p-password
+                        id="coachPassword"
+                        formControlName="password"
+                        [feedback]="true"
+                        [toggleMask]="true"
+                        placeholder="Enter your password"
+                        inputStyleClass="w-full pass"
+                        styleClass="w-full"
+                        [ngClass]="{
+                          'ng-invalid ng-dirty':
+                            coachPassword.invalid &&
+                            coachPassword.touched
+                        }"
+                      >
+                      </p-password>
+
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          coachPassword.invalid &&
+                          coachPassword.touched
+                        "
+                      >
+
+                        <ng-container
+                          *ngIf="
+                            coachPassword.errors?.['required']
+                          "
+                        >
+                          Password is required.
+                        </ng-container>
+
+                        <ng-container
+                          *ngIf="
+                            coachPassword.errors?.['minlength']
+                          "
+                        >
+                          Password must be at least 8 characters.
+                        </ng-container>
+
+                      </small>
+
+                    </div>
+
+
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+
+                      <label for="coachConfirmPassword">
+                        Confirm Password
+                      </label>
+
+                      <p-password
+                        id="coachConfirmPassword"
+                        formControlName="confirmPassword"
+                        [feedback]="false"
+                        [toggleMask]="true"
+                        placeholder="Confirm your password"
+                        inputStyleClass="w-full pass"
+                        styleClass="w-full"
+                        [ngClass]="{
+                          'ng-invalid ng-dirty':
+                            coachConfirmPassword.invalid &&
+                            coachConfirmPassword.touched
+                        }"
+                      >
+                      </p-password>
+
+                      <small
+                        class="p-error"
+                        *ngIf="
+                          coachConfirmPassword.invalid &&
+                          coachConfirmPassword.touched
+                        "
+                      >
+
+                        <ng-container
+                          *ngIf="
+                            coachConfirmPassword.errors?.['required']
+                          "
+                        >
+                          Confirm password is required.
+                        </ng-container>
+
+                        <ng-container
+                          *ngIf="
+                            coachConfirmPassword.errors?.['mismatch']
+                          "
+                        >
+                          Passwords do not match.
+                        </ng-container>
+
+                      </small>
+
+                    </div>
+
                   </div>
-                </div>  
-              </ng-template>
-            </p-step-panel>
-          </p-step-panels>
-        </p-stepper>
 
-        <div class="step-actions d-flex gap-8 mt-4">
-          <button pButton type="button" class="p-button p-button-secondary app-custom p-component" (click)="back()" *ngIf="step() > 1">Back</button>
-          <button pButton type="button" (click)="onSubmit()" class="p-button-primary" [loading]="isLoading" [disabled]="isLoading">{{ step() < 3 ? 'Save & Continue' : 'Create account' }}</button>
+                </ng-template>
+
+              </p-step-panel>
+
+            </p-step-panels>
+
+          </p-stepper>
+
+
+          <!-- STEP ACTIONS -->
+          <div
+            class="step-actions d-flex gap-8 mt-4"
+          >
+
+            <button
+              pButton
+              type="button"
+              class="p-button p-button-secondary app-custom p-component"
+              (click)="back()"
+              *ngIf="step() > 1"
+            >
+              Back
+            </button>
+
+            <button
+              pButton
+              type="button"
+              (click)="onSubmit()"
+              class="p-button-primary"
+              [loading]="isLoading"
+              [disabled]="isLoading"
+            >
+              {{
+                step() < 3
+                  ? 'Save & Continue'
+                  : 'Create account'
+              }}
+            </button>
+
+          </div>
+
         </div>
-      </div>
 
-      <!-- Back to Login Link -->
-      <p class="back-to-login auth-footer">
-        Already have an account? <a routerLink="/auth/login"> Sign in </a>
-      </p>
+
+        <!-- Back to Login -->
+        <p class="back-to-login auth-footer">
+
+          Already have an account?
+
+          <a routerLink="/auth/login">
+            Sign in
+          </a>
+
+        </p>
+
+      </div>
 
     </div>
-  </div>
 
-</div>
+  </div>

@@ -43,7 +43,7 @@ export class TodoComponent implements OnInit, OnDestroy {
   private readonly _pageIndex = signal(0);
   private readonly _pageCount = signal(0);
 
-  readonly pageSize = 10;
+  readonly pageSize = 50;
 
   // -----------------------------
   // State
@@ -95,12 +95,20 @@ export class TodoComponent implements OnInit, OnDestroy {
     this.loadPage();
   }
 
-  showTaskDetails(task: TaskTemplate): void {
-	this.router.navigate([
-	  '/coach/task-details',
-	  task.id
-	]);
+
+    showTaskDetails(task: TaskTemplate): void {
+
+    this.router.navigate(
+      ['/coach/task-details', task.id],
+      {
+        state: {
+          task
+        }
+      }
+    );
+
   }
+
   /**
    * Load next page.
    */

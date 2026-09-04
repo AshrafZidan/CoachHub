@@ -96,7 +96,6 @@ $search-radius: 10px;
   line-height: 1.2;
   transition: color 0.15s;
 
-  // ─── Truncate on small screens ───────────────────────
   @media (max-width: 480px) {
     font-size: 13px;
     max-width: 100px;
@@ -120,7 +119,6 @@ $search-radius: 10px;
   display: flex;
   justify-content: space-around;
 
-  // ─── Hide on mobile (show search icon instead) ───────
   @media (max-width: 768px) { display: none; }
 }
 
@@ -128,25 +126,28 @@ $search-radius: 10px;
   position: relative;
   width: 100%;
   max-width: 520px;
-      display: flex;
-    gap: 12px;
-    & > div{
-      width: 30%;
+  display: flex;
+  gap: 12px;
+
+  & > div { width: 30%; }
+
+  p-select {
+    border-radius: 0 !important;
+    direction: rtl;
+    align-items: center;
+    text-align: end;
+
+    .p-select-label {
+      padding: .5rem .25rem !important;
     }
-    p-select{
-      border-radius: 0 !important;
-      direction: rtl;
-      align-items: center;
-      text-align: end;
-      .p-select-label{
-        padding: .5rem .25rem !important;
-      }
-    }
-  .align-items-center{
-        display: flex;
+  }
+
+  .align-items-center {
+    display: flex;
     align-items: center;
     gap: 5px;
   }
+
   .search-icon {
     position: absolute;
     left: 14px;
@@ -157,8 +158,6 @@ $search-radius: 10px;
     color: var(--text-muted);
     pointer-events: none;
   }
-
- 
 }
 
 // ─── Mobile search icon button ────────────────────────────
@@ -275,5 +274,51 @@ $search-radius: 10px;
   .p-separator {
     margin: 4px 6px;
     border-color: var(--app-border-color);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .topbar {
+    background: #111827;
+    border-color: #2b3747;
+  }
+
+  .welcome-label,
+  .user-name,
+  .chevron-icon,
+  .notif-btn,
+  .p-menuitem-link,
+  .p-menuitem-icon,
+  .bell-icon,
+  .search-icon,
+  .filter-icon,
+  .hamburger,
+  .user-name-row {
+    color: #edf2ff !important;
+    stroke: currentColor !important;
+    fill: currentColor !important;
+  }
+
+  .notif-btn {
+    background: #111827;
+    border: 1px solid #2b3747;
+  }
+
+  .notif-dot {
+    border-color: #111827;
+    background: #ff7b7b;
+  }
+
+  :host ::ng-deep .p-menu {
+    background: #111827 !important;
+    border-color: #2b3747 !important;
+  }
+
+  :host ::ng-deep .p-menuitem-link {
+    color: #edf2ff !important;
+  }
+
+  :host ::ng-deep .p-menuitem-link:hover {
+    background: rgba(183, 120, 201, 0.12) !important;
   }
 }

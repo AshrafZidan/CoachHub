@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { adminGuard, authGuard, coachGuard, guestGuard } from './core/guards/auth-guard';
 import { NotFoundComponent } from './core/components/not-found/not-found.comppment';
+import path from 'path';
+import { ForbiddenComponent } from './core/components/forbidden/forbidden.component';
 
 /**
  * Main Application Routes
@@ -37,7 +39,7 @@ export const routes: Routes = [
   // ============================================
   {
     path:'coach',
-    canActivate: [authGuard,coachGuard], // Must be authenticated AND have coach role
+    canActivate: [authGuard,coachGuard],
     loadChildren: () =>
       import('./features/coach/coach.routes').then(m => m.COACH_ROUTES),
     
@@ -48,7 +50,12 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/user/user.routes').then(m => m.USER_ROUTES),
   },
+{
 
+  path:'forbidden',
+  component:ForbiddenComponent
+},
+  
   // ============================================
   // Root Redirect
   // ============================================

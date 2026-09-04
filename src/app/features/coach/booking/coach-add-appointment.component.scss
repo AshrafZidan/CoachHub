@@ -19,18 +19,17 @@
   flex-direction: column;
   align-items: start;
 
-  // 🔥 NEW FLEX LAYOUT
   .coach-info {
     display: flex;
     align-items: flex-start;
     width: 100%;
-    gap: 20px;
-    text-align: left;
+    gap: 50px;
+    text-align: start;
   }
 
   .coach-main-info {
     margin-top: 12px;
-    text-align: left;
+    text-align: start;
   }
 
   // Avatar
@@ -328,4 +327,26 @@
 .price-value-skeleton {
   width: 55px;
   height: 18px;
+}
+.avatar-wrap{width: 90px;height: 90px;}
+.calendar-day {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+}
+
+.slot-dot {
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+  background: var(--app-delete);
 }

@@ -1,574 +1,748 @@
-    
-    <div class="booking-page">
-        <div class="title-wrapper">
-            <h2 class="title">Profile Details</h2>
-        </div>
+<div class="booking-page">
 
-        <p-stepper [(value)]="activeStep" class="profile-stepper signup-stepper mb-4">
-            <p-step-list>
-                <p-step [value]="1" class="flex flex-row flex-auto gap-2">
-                <ng-template #content let-activateCallback="activateCallback" let-value="value">
-                    <button class="bg-transparent border-0 inline-flex flex-col gap-2" (click)="onStepIconClick(1, activateCallback)">
-                    <span
-                        class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
-                        [ngClass]="{
-                        'bg-primary text-primary-contrast border-primary': value <= activeStep,
-                        'border-surface': value > activeStep
-                        }"
-                    >
-                        <i class="pi pi-file"></i>
-                    </span>
-                    </button>
-                    
-                    <div class="step-info-first" style="position: absolute;
-                    top: 53px;
-                    display: flex;
-                    gap: 8px;
-                    align-items: center;">
-                    <div class="step-counter" style="color: var(--app-primary-color);">Step {{ step() }}/{{ 3 }}</div>
-                    <div style="color: var(--app-border-color);">|</div>
-                    <div class="step-name" style="color:var(--title-secondary-color);font-size:0.85rem;font-weight: 600;">{{ stepLabels[step() - 1] }}</div>
-                    </div>
-                </ng-template>
-                </p-step>
+  <!-- ===================================================== -->
+  <!-- TITLE -->
+  <!-- ===================================================== -->
 
-                <p-step [disabled]="isLoading"  [value]="2" class="flex flex-row flex-auto gap-2">
-                <ng-template #content let-activateCallback="activateCallback" let-value="value">
-                    <button class="bg-transparent border-0 inline-flex flex-col gap-2" (click)="onStepIconClick(2, activateCallback)">
-                    <span
-                        class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
-                        [ngClass]="{
-                        'bg-primary text-primary-contrast border-primary': value <= activeStep,
-                        'border-surface': value > activeStep
-                        }"
-                    >
-                        <i class="pi pi-user"></i>
-                    </span>
-                    </button>
-                </ng-template>
-                </p-step>
+  <div class="title-wrapper">
+    <h2 class="title">
+      Profile Details
+    </h2>
+  </div>
 
-                <p-step  [disabled]="isLoading" [value]="3" class="flex flex-row flex-auto gap-2">
-                <ng-template #content let-activateCallback="activateCallback" let-value="value">
-                    <button class="bg-transparent border-0 inline-flex flex-col gap-2" (click)="onStepIconClick(3, activateCallback)">
-                    <span
-                        class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
-                        [ngClass]="{
-                        'bg-primary text-primary-contrast border-primary': value <= activeStep,
-                        'border-surface': value > activeStep
-                        }"
-                    >
-                        <i class="pi pi-image"></i>
-                    </span>
-                </button>
-                </ng-template>
-                </p-step>
-            </p-step-list>
+  <!-- ===================================================== -->
+  <!-- STEPPER -->
+  <!-- ===================================================== -->
+
+  <p-stepper
+    [(value)]="activeStep"
+    class="profile-stepper signup-stepper mb-4"
+  >
+
+    <!-- =================================================== -->
+    <!-- STEP LIST -->
+    <!-- =================================================== -->
+
+    <p-step-list class="card">
+
+      <!-- ================= STEP 1 ================= -->
+
+      <p-step
+        [value]="1"
+        class="flex flex-row flex-auto gap-2"
+      >
+
+        <ng-template
+          #content
+          let-activateCallback="activateCallback"
+          let-value="value"
+        >
+
+          <button
+            type="button"
+            class="bg-transparent border-0 inline-flex flex-col gap-2"
+            [disabled]="isLoading()"
+            (click)="onStepIconClick(1, activateCallback)"
+          >
+
+            <span
+              class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+              [ngClass]="{
+                'bg-primary text-primary-contrast border-primary':
+                  value <= activeStep,
+
+                'border-surface':
+                  value > activeStep
+              }"
+            >
+
+              <i class="pi pi-file"></i>
+
+            </span>
+
+          </button>
+
+          <div
+            class="step-info-first"
+            style="
+              position: absolute;
+              top: 53px;
+              display: flex;
+              gap: 8px;
+              align-items: center;
+            "
+          >
+
+            <div
+              class="step-counter"
+              style="color: var(--app-primary-color);"
+            >
+              Step {{ step() }}/{{ totalSteps }}
+            </div>
+
+            <div
+              style="color: var(--app-border-color);"
+            >
+              |
+            </div>
+
+            <div
+              class="step-name"
+              style="
+                color: var(--title-secondary-color);
+                font-size: 0.85rem;
+                font-weight: 600;
+              "
+            >
+              {{ stepLabels[step() - 1] }}
+            </div>
+
+          </div>
+
+        </ng-template>
+
+      </p-step>
 
 
+      <!-- ================= STEP 2 ================= -->
 
-            <p-step-panels>
-                
-                <p-step-panel [value]="1">
-                
+      <p-step
+        [value]="2"
+        [disabled]="isLoading() || !profile()"
+        class="flex flex-row flex-auto gap-2"
+      >
 
-                <ng-template #content let-activateCallback="activateCallback">
-                        
-                        <div class="step-content">
-            <ng-container *ngIf="isLoading">
+        <ng-template
+          #content
+          let-activateCallback="activateCallback"
+          let-value="value"
+        >
 
-            <div class="profile-card">
-              <div class="profile-grid">
+          <button
+            type="button"
+            class="bg-transparent border-0 inline-flex flex-col gap-2"
+            [disabled]="isLoading() || !profile()"
+            (click)="onStepIconClick(2, activateCallback)"
+          >
 
-                <div class="profile-field">
-                  <div class="app-skeleton app-skeleton-label"></div>
-                  <div class="app-skeleton app-skeleton-value"></div>
-                </div>
+            <span
+              class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+              [ngClass]="{
+                'bg-primary text-primary-contrast border-primary':
+                  value <= activeStep,
 
-                <div class="profile-field">
-                  <div class="app-skeleton app-skeleton-label"></div>
-                  <div class="app-skeleton app-skeleton-value"></div>
-                </div>
+                'border-surface':
+                  value > activeStep
+              }"
+            >
 
-                <div class="profile-field">
-                  <div class="app-skeleton app-skeleton-label"></div>
-                  <div class="app-skeleton app-skeleton-value"></div>
-                </div>
+              <i class="pi pi-user"></i>
 
-                <div class="profile-field">
-                  <div class="app-skeleton app-skeleton-label"></div>
-                  <div class="app-skeleton app-skeleton-value"></div>
-                </div>
+            </span>
 
-                <div class="profile-field">
-                  <div class="app-skeleton app-skeleton-label"></div>
-                  <div class="app-skeleton app-skeleton-value"></div>
-                </div>
+          </button>
 
-                <div class="profile-field">
-                  <div class="app-skeleton app-skeleton-label"></div>
-                  <div class="app-skeleton app-skeleton-value"></div>
-                </div>
+        </ng-template>
 
-                <div class="profile-field full-width">
-                  <div class="app-skeleton app-skeleton-label"></div>
-                  <div class="app-skeleton app-skeleton-value"></div>
+      </p-step>
+
+
+      <!-- ================= STEP 3 ================= -->
+
+      <p-step
+        [value]="3"
+        [disabled]="isLoading() || !profile()"
+        class="flex flex-row flex-auto gap-2"
+      >
+
+        <ng-template
+          #content
+          let-activateCallback="activateCallback"
+          let-value="value"
+        >
+
+          <button
+            type="button"
+            class="bg-transparent border-0 inline-flex flex-col gap-2"
+            [disabled]="isLoading() || !profile()"
+            (click)="onStepIconClick(3, activateCallback)"
+          >
+
+            <span
+              class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+              [ngClass]="{
+                'bg-primary text-primary-contrast border-primary':
+                  value <= activeStep,
+
+                'border-surface':
+                  value > activeStep
+              }"
+            >
+
+              <i class="pi pi-image"></i>
+
+            </span>
+
+          </button>
+
+        </ng-template>
+
+      </p-step>
+
+    </p-step-list>
+
+
+    <!-- =================================================== -->
+    <!-- STEP PANELS -->
+    <!-- =================================================== -->
+
+    <p-step-panels>
+
+      <!-- ================================================= -->
+      <!-- STEP 1 - INFORMATION -->
+      <!-- ================================================= -->
+
+      <p-step-panel [value]="1">
+
+        <ng-template #content>
+
+          <div class="card step-content">
+
+            <!-- =========================================== -->
+            <!-- LOADING -->
+            <!-- =========================================== -->
+
+            <ng-container *ngIf="isLoading()">
+
+              <div class="profile-card">
+
+                <div class="profile-grid">
+
+                  <div class="profile-field">
+                    <p-skeleton width="60%"></p-skeleton>
+                    <p-skeleton
+                      width="100%"
+                      style="margin-top: 10px;"
+                    ></p-skeleton>
+                  </div>
+
+                  <div class="profile-field">
+                    <p-skeleton width="60%"></p-skeleton>
+                    <p-skeleton
+                      width="100%"
+                      style="margin-top: 10px;"
+                    ></p-skeleton>
+                  </div>
+
+                  <div class="profile-field">
+                    <p-skeleton width="60%"></p-skeleton>
+                    <p-skeleton
+                      width="100%"
+                      style="margin-top: 10px;"
+                    ></p-skeleton>
+                  </div>
+
+                  <div class="profile-field">
+                    <p-skeleton width="60%"></p-skeleton>
+                    <p-skeleton
+                      width="100%"
+                      style="margin-top: 10px;"
+                    ></p-skeleton>
+                  </div>
+
+                  <div class="profile-field">
+                    <p-skeleton width="60%"></p-skeleton>
+                    <p-skeleton
+                      width="100%"
+                      style="margin-top: 10px;"
+                    ></p-skeleton>
+                  </div>
+
+                  <div class="profile-field">
+                    <p-skeleton width="60%"></p-skeleton>
+                    <p-skeleton
+                      width="100%"
+                      style="margin-top: 10px;"
+                    ></p-skeleton>
+                  </div>
+
+                  <div class="profile-field full-width">
+                    <p-skeleton width="60%"></p-skeleton>
+                    <p-skeleton
+                      width="100%"
+                      style="margin-top: 10px;"
+                    ></p-skeleton>
+                  </div>
+
                 </div>
 
               </div>
 
-            </div>
-
-          </ng-container>
-    
-                            <ng-container
-                *ngIf="
-                !isLoading &&
-                profile
-                ">
-
-                <div class="profile-card">
-
-                <div class="profile-grid">
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Full name
-                    </div>
-
-                    <div class="field-value">
-                        {{ profile.fullNameEn || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Gender
-                    </div>
-
-                    <div class="field-value">
-                        {{ formatGender(profile.gender) }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Birthdate
-                    </div>
-
-                    <div class="field-value">
-                        {{ formatDate(profile.birthDate) }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Location
-                    </div>
-
-                    <div class="field-value">
-                        {{ countryText }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        City
-                    </div>
-
-                    <div class="field-value">
-                        Not provided
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Email Address
-                    </div>
-
-                    <div class="field-value email">
-                        {{ profile.email || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field full-width">
-
-                    <div class="field-label">
-                        Whatsapp Number
-                    </div>
-
-                    <div class="field-value">
-                        {{ profile.whatsAppNumber || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-                </div>
-
-                </div>
-
-            </ng-container>  <ng-container
-                *ngIf="
-                !isLoading &&
-                profile
-                ">
-
-                <div class="profile-card">
-
-                <div class="profile-grid">
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Full name
-                    </div>
-
-                    <div class="field-value">
-                        {{ profile.fullNameEn || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Gender
-                    </div>
-
-                    <div class="field-value">
-                        {{ formatGender(profile.gender) }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Birthdate
-                    </div>
-
-                    <div class="field-value">
-                        {{ formatDate(profile.birthDate) }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Location
-                    </div>
-
-                    <div class="field-value">
-                        {{ countryText }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        City
-                    </div>
-
-                    <div class="field-value">
-                        Not provided
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Email Address
-                    </div>
-
-                    <div class="field-value email">
-                        {{ profile.email || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field full-width">
-
-                    <div class="field-label">
-                        Whatsapp Number
-                    </div>
-
-                    <div class="field-value">
-                        {{ profile.whatsAppNumber || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-                </div>
-
-                </div>
-
             </ng-container>
 
-                        </div>
 
-                </ng-template>
-                </p-step-panel>
+            <!-- =========================================== -->
+            <!-- DATA -->
+            <!-- =========================================== -->
 
-                <p-step-panel [value]="2">
-                <ng-template #content let-activateCallback="activateCallback">
-                    <div class="step-content">
-                                <ng-container
-                *ngIf="
-                !isLoading &&
-                profile
-                ">
-
-                <div class="profile-card">
-
-                <div class="profile-grid">
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Industry
-                    </div>
-
-                    <div class="field-value">
-                        {{ industriesText }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Years of Experience
-                    </div>
-
-                    <div class="field-value">
-                        {{ profile.yearsOfExperience }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Languages
-                    </div>
-
-                    <div class="field-value">
-                        {{ languagesText }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field">
-
-                    <div class="field-label">
-                        Job Title
-                    </div>
-
-                    <div class="field-value">
-                        {{ profile.jobTitle || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field full-width">
-
-                    <div class="field-label">
-                        Available for at least 2:3 hours weekly?
-                    </div>
-
-                    <div class="field-value">
-                        {{
-                        formatAvailability(
-                            profile.availableEveryWeek
-                        )
-                        }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field full-width">
-
-                    <div class="field-label">
-                        Bio
-                    </div>
-
-                    <div class="field-value multiline">
-                        {{ profile.bio || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field full-width">
-
-                    <div class="field-label">
-                        Education
-                    </div>
-
-                    <div class="field-value multiline">
-                        {{ profile.education || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-
-                    <div class="profile-field full-width">
-
-                    <div class="field-label">
-                        Experience
-                    </div>
-
-                    <div class="field-value multiline">
-                        {{ profile.experience || 'Not provided' }}
-                    </div>
-
-                    </div>
-
-                </div>
-
-                </div>
-
-            </ng-container>
-
-                        </div>
-                </ng-template>
-                </p-step-panel>
-
-                <p-step-panel [value]="3">
-                <ng-template #content let-activateCallback="activateCallback">
-    <div class="step-content">
             <ng-container
-                *ngIf="
-                !isLoading &&
-                profile
-                ">
+              *ngIf="!isLoading() && profile()"
+            >
 
-                <div class="profile-card picture-card">
+              <div class="profile-card">
 
-                <!-- Profile Picture -->
-                <div class="field-label">
-                    Profile Picture
+                <div class="profile-grid">
+
+
+                  <!-- FULL NAME -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      Full name
+                    </div>
+
+                    <div class="field-value">
+                      {{ profile()?.fullNameEn || 'Not provided' }}
+                    </div>
+
                   </div>
 
+
+                  <!-- GENDER -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      Gender
+                    </div>
+
+                    <div class="field-value">
+                      {{ formatGender(profile()?.gender) }}
+                    </div>
+
+                  </div>
+
+
+                  <!-- BIRTHDATE -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      Birthdate
+                    </div>
+
+                    <div class="field-value">
+                      {{ formatDate(profile()?.birthDate) }}
+                    </div>
+
+                  </div>
+
+
+                  <!-- LOCATION -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      Location
+                    </div>
+
+                    <div class="field-value">
+                      {{ countryText }}
+                    </div>
+
+                  </div>
+
+
+                  <!-- CITY -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      City
+                    </div>
+
+                    <div class="field-value">
+                      Not provided
+                    </div>
+
+                  </div>
+
+
+                  <!-- EMAIL -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      Email Address
+                    </div>
+
+                    <div class="field-value email">
+                      {{ profile()?.email || 'Not provided' }}
+                    </div>
+
+                  </div>
+
+
+                  <!-- WHATSAPP -->
+
+                  <div class="profile-field full-width">
+
+                    <div class="field-label">
+                      Whatsapp Number
+                    </div>
+
+                    <div class="field-value">
+                      {{
+                        profile()?.whatsAppNumber ||
+                        'Not provided'
+                      }}
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </ng-container>
+
+
+            <!-- =========================================== -->
+            <!-- NO DATA -->
+            <!-- =========================================== -->
+
+            <ng-container
+              *ngIf="!isLoading() && !profile()"
+            >
+
+              <div class="profile-card">
+
+                <div class="empty-state">
+
+                  <i class="pi pi-info-circle"></i>
+
+                  <span>
+                    No profile data found
+                  </span>
+
+                </div>
+
+              </div>
+
+            </ng-container>
+
+          </div>
+
+        </ng-template>
+
+      </p-step-panel>
+
+
+      <!-- ================================================= -->
+      <!-- STEP 2 - PROFILE -->
+      <!-- ================================================= -->
+
+      <p-step-panel [value]="2">
+
+        <ng-template #content>
+
+          <div class="card step-content">
+
+            <ng-container
+              *ngIf="!isLoading() && profile()"
+            >
+
+              <div class="profile-card">
+
+                <div class="profile-grid">
+
+
+                  <!-- INDUSTRY -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      Industry
+                    </div>
+
+                    <div class="field-value">
+                      {{ industriesText }}
+                    </div>
+
+                  </div>
+
+
+                  <!-- YEARS -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      Years of Experience
+                    </div>
+
+                    <div class="field-value">
+                      {{
+                        profile()?.yearsOfExperience ??
+                        'Not provided'
+                      }}
+                    </div>
+
+                  </div>
+
+
+                  <!-- LANGUAGES -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      Languages
+                    </div>
+
+                    <div class="field-value">
+                      {{ languagesText }}
+                    </div>
+
+                  </div>
+
+
+                  <!-- JOB TITLE -->
+
+                  <div class="profile-field">
+
+                    <div class="field-label">
+                      Job Title
+                    </div>
+
+                    <div class="field-value">
+                      {{
+                        profile()?.jobTitle ||
+                        'Not provided'
+                      }}
+                    </div>
+
+                  </div>
+
+
+                  <!-- AVAILABILITY -->
+
+                  <div class="profile-field full-width">
+
+                    <div class="field-label">
+                      Available for at least 2:3 hours weekly?
+                    </div>
+
+                    <div class="field-value">
+
+                      {{
+                        formatAvailability(
+                          profile()?.availableEveryWeek
+                        )
+                      }}
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- BIO -->
+
+                  <div class="profile-field full-width">
+
+                    <div class="field-label">
+                      Bio
+                    </div>
+
+                    <div class="field-value multiline">
+
+                      {{
+                        profile()?.bio ||
+                        'Not provided'
+                      }}
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- EDUCATION -->
+
+                  <div class="profile-field full-width">
+
+                    <div class="field-label">
+                      Education
+                    </div>
+
+                    <div class="field-value multiline">
+
+                      {{
+                        profile()?.education ||
+                        'Not provided'
+                      }}
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- EXPERIENCE -->
+
+                  <div class="profile-field full-width">
+
+                    <div class="field-label">
+                      Experience
+                    </div>
+
+                    <div class="field-value multiline">
+
+                      {{
+                        profile()?.experience ||
+                        'Not provided'
+                      }}
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </ng-container>
+
+          </div>
+
+        </ng-template>
+
+      </p-step-panel>
+
+
+      <!-- ================================================= -->
+      <!-- STEP 3 - PICTURE -->
+      <!-- ================================================= -->
+
+      <p-step-panel [value]="3">
+
+        <ng-template #content>
+
+          <div class="card step-content">
+
+            <ng-container
+              *ngIf="!isLoading() && profile()"
+            >
+
+              <div
+                class="profile-card picture-card"
+              >
+
+                <!-- ======================================= -->
+                <!-- PROFILE PICTURE -->
+                <!-- ======================================= -->
+
+                <div class="field-label">
+                  Profile Picture
+                </div>
 
                 <div class="picture-section">
 
-                    <div class="profile-image-wrapper">
+                  <div class="profile-image-wrapper">
 
+                    <img
+                      *ngIf="
+                        profile()?.profileImageUrl;
+                        else emptyProfileAvatar
+                      "
+                      [src]="
+                        getImageUrl(
+                          profile()?.profileImageUrl ?? null
+                        )
+                      "
+                      class="profile-image"
+                      alt="Profile photo"
+                      (error)="onImageError($event)"
+                    />
 
-                          <img *ngIf="profile.profileImageUrl; else emptyProfileAvatar" [src]="getImageUrl(profile.profileImageUrl)"
-               class="profile-image"  alt="Profile photo" (error)="onImageError($event)" />
-          <ng-template #emptyProfileAvatar>
-               <div
-                    *ngIf="!profile.profileImageUrl"
-                    class="profile-image-placeholder">
+                    <ng-template
+                      #emptyProfileAvatar
+                    >
 
-                    <i class="pi pi-user"></i>
+                      <div
+                        class="profile-image-placeholder"
+                      >
+
+                        <i class="pi pi-user"></i>
+
+                      </div>
+
+                    </ng-template>
 
                   </div>
-          </ng-template>
-          
-
-
-
-
-                   
-                    </div>
-
-                    <div>
-
-                 
-
-                    </div>
 
                 </div>
 
 
-                <!-- Certificates -->
+                <!-- ======================================= -->
+                <!-- CERTIFICATES -->
+                <!-- ======================================= -->
 
                 <div class="certificates-section">
 
-                    <div class="field-label">
+                  <div class="field-label">
                     Certificates
-                    </div>
+                  </div>
 
-                    <div class="certificate-empty">
+                  <div class="certificate-empty">
 
                     <i class="pi pi-file"></i>
 
                     <span>
-                        No certificates available
+                      No certificates available
                     </span>
 
-                    </div>
+                  </div>
 
                 </div>
 
-                </div>
+              </div>
 
             </ng-container>
-                        </div>
-                </ng-template>
-                </p-step-panel>
-            </p-step-panels>
 
-                       <div class="actions">
+          </div>
+
+        </ng-template>
+
+      </p-step-panel>
+
+    </p-step-panels>
+
+
+    <!-- =================================================== -->
+    <!-- ACTIONS -->
+    <!-- =================================================== -->
+
+    <div class="actions">
+
       <button
-        type="submit"
-        class="w-full mt-3 p-button p-button-secondary app-custom  p-component"
+        type="button"
+        class="w-full mt-3 p-button p-button-secondary app-custom p-component"
+        [disabled]="activeStep === 1 || isLoading()"
         (click)="back()"
-        [disabled]="activeStep == 1 || isLoading">
-
-       
-
-        Back  
-
+      >
+        Back
       </button>
+
 
       <button
         type="button"
         class="w-full mt-3 p-button p-button-primary"
-        [disabled]="activeStep == 3 || isLoading"
-        (click)="next()">
-
+        [disabled]="activeStep === 3 || isLoading()"
+        (click)="next()"
+      >
         Next
-
       </button>
 
     </div>
-            </p-stepper>
 
-  
-    </div>
+  </p-stepper>
+
+</div>

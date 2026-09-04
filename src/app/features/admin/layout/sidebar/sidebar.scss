@@ -31,15 +31,14 @@ $transition:        0.25s ease;
 
   // ─── Mobile: hidden by default, slide in when open ───
   @media (max-width: 768px) {
-    width: $sidebar-width !important; // always full width on mobile
-    transform: translateX(-100%);     // hidden by default
+    width: $sidebar-width !important;
+    transform: translateX(-100%);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
 
     &:not(.collapsed) {
-      transform: translateX(0);       // visible when NOT collapsed
+      transform: translateX(0);
     }
 
-    // On mobile, never show icons-only mode
     &.collapsed {
       .logo-icon,
       .nav-label,
@@ -169,7 +168,7 @@ li {
     color: var(--app-primary-color);
     font-weight: 700;
 
-    .nav-icon { color: var(--app-primary-color); }
+    .nav-icon { color: var(--app-primary-color) !important;  }
   }
 }
 

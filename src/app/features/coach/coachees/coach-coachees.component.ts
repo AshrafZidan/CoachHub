@@ -37,14 +37,16 @@ export class CoachCoacheesComponent implements OnInit, OnDestroy {
   // ── data ─────────────────────────────────────────────────
   coachees:    Coachee[] = [];
   searchQuery: string    = '';
-  loading:     boolean   = false;
+  loading:     boolean   = true;
   loadingMore: boolean   = false;
 
   // ── pagination ────────────────────────────────────────────
   private pageIndex  = 0;
-  private pageSize   = 12;
+  private pageSize   = 50;
   private pageCount  = 1;
   private exhausted  = false;
+
+
 
   // ── lifecycle ─────────────────────────────────────────────
   ngOnInit(): void {

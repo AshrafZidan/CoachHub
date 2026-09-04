@@ -8,19 +8,19 @@
 
     <div class="title-content">
 
-
       <div>
+
         <h2 class="title">
           Task Details
         </h2>
 
         <p
           class="subtitle"
-          *ngIf="task">
-
-          Assignment #{{ task.assignmentId }}
-
+          *ngIf="task"
+        >
+          Task Template #{{ task.id }}
         </p>
+
       </div>
 
     </div>
@@ -34,7 +34,7 @@
 
   <ng-container *ngIf="isLoading">
 
-    <section class="form-card loading-card">
+    <section class="card form-card loading-card">
 
       <div class="skeleton skeleton-title"></div>
 
@@ -44,7 +44,7 @@
 
     </section>
 
-    <section class="form-card loading-card">
+    <section class="card form-card loading-card">
 
       <div class="skeleton skeleton-question"></div>
 
@@ -63,10 +63,13 @@
 
   <section
     *ngIf="!isLoading && hasError"
-    class="form-card state-card">
+    class="form-card state-card"
+  >
 
     <div class="state-icon error-icon">
+
       <i class="pi pi-exclamation-triangle"></i>
+
     </div>
 
     <h3>
@@ -74,11 +77,18 @@
     </h3>
 
     <p>
-      We couldn't load the task details.
-      Please try again later.
+      We couldn't find the task details.
+      Please return to the task list and select a task again.
     </p>
 
-    
+    <button
+      type="button"
+      class="btn-secondary p-button-sm btn p-button p-button-secondary app-custom"
+      (click)="goBack()"
+    >
+      <i class="pi pi-arrow-left"></i>
+      Back
+    </button>
 
   </section>
 
@@ -87,13 +97,15 @@
   <!-- Task Details -->
   <!-- ========================= -->
 
-  <ng-container *ngIf="!isLoading && !hasError && task">
+  <ng-container
+    *ngIf="!isLoading && !hasError && task"
+  >
 
     <!-- ========================= -->
     <!-- Task Header -->
     <!-- ========================= -->
 
-    <section class="form-card task-summary-card">
+    <section class="card form-card task-summary-card">
 
       <div class="task-summary-header">
 
@@ -104,41 +116,30 @@
           </h2>
 
           <p>
-            Task Template #{{ task.templateId }}
+            Task Template #{{ task.id }}
           </p>
 
         </div>
 
         <span
           class="chip"
-          [ngClass]="getStatusClass(task.status)">
-
-          {{ formatStatus(task.status) }}
-
+          [ngClass]="
+            task.active
+              ? 'active'
+              : 'inactive'
+          "
+        >
+          {{ task.active ? 'Active' : 'Inactive' }}
         </span>
 
       </div>
 
 
+      <!-- ========================= -->
+      <!-- Task Meta -->
+      <!-- ========================= -->
+
       <div class="task-meta">
-
-        <div class="meta-item">
-
-          <i class="pi pi-calendar"></i>
-
-          <div>
-
-            <span class="meta-label">
-              Due Date
-            </span>
-
-            <span class="meta-value">
-              {{ task.dueDate || 'No due date' }}
-            </span>
-
-          </div>
-
-        </div>
 
         <div class="meta-item">
 
@@ -158,6 +159,25 @@
 
         </div>
 
+
+        <div class="meta-item">
+
+          <i class="pi pi-check-circle"></i>
+
+          <div>
+
+            <span class="meta-label">
+              Status
+            </span>
+
+            <span class="meta-value">
+              {{ task.active ? 'Active' : 'Inactive' }}
+            </span>
+
+          </div>
+
+        </div>
+
       </div>
 
     </section>
@@ -167,12 +187,14 @@
     <!-- Description -->
     <!-- ========================= -->
 
-    <section class="form-card">
+    <section class="card form-card">
 
       <div class="section-title">
 
         <div class="section-icon">
+
           <i class="pi pi-file-edit"></i>
+
         </div>
 
         <div>
@@ -189,7 +211,8 @@
 
       </div>
 
-      <div class="description-box">
+
+      <div class="card description-box">
 
         {{ task.description || 'No description provided.' }}
 
@@ -205,13 +228,16 @@
     <div class="questions-container">
 
       <section
-        class="form-card question-card"
+        class="card form-card question-card"
         *ngFor="
           let question of task.questions;
           let questionIndex = index
-        ">
+        "
+      >
 
+        <!-- ========================= -->
         <!-- Question Header -->
+        <!-- ========================= -->
 
         <div class="question-header">
 
@@ -221,8 +247,7 @@
               Question {{ questionIndex + 1 }}
             </h2>
 
-            <span
-              class="chip pending">
+            <span class="chip pending">
 
               {{
                 isMultipleChoice(question.type)
@@ -234,18 +259,20 @@
 
           </div>
 
+
           <span
             *ngIf="question.required"
-            class="chip failed">
-
+            class="chip failed"
+          >
             Required
-
           </span>
 
         </div>
 
 
+        <!-- ========================= -->
         <!-- Question -->
+        <!-- ========================= -->
 
         <div class="form-group">
 
@@ -253,7 +280,7 @@
             Question
           </label>
 
-          <div class="question-text-box">
+          <div class="card question-text-box">
 
             {{ question.questionText }}
 
@@ -263,36 +290,23 @@
 
 
         <!-- ========================= -->
-        <!-- Free Text Answer -->
+        <!-- Free Text -->
         <!-- ========================= -->
 
         <div
           *ngIf="!isMultipleChoice(question.type)"
-          class="form-group">
+          class="form-group"
+        >
 
           <label>
-            Answer
+            Answer Type
           </label>
 
-          <div class="answer-box">
+          <div class="card answer-box">
 
-            <ng-container
-              *ngIf="
-                question.answerText;
-                else noTextAnswer
-              ">
-
-              {{ question.answerText }}
-
-            </ng-container>
-
-            <ng-template #noTextAnswer>
-
-              <span class="empty-answer">
-                No answer provided
-              </span>
-
-            </ng-template>
+            <span>
+              Free Text
+            </span>
 
           </div>
 
@@ -305,36 +319,26 @@
 
         <div
           *ngIf="isMultipleChoice(question.type)"
-          class="form-group">
+          class="form-group"
+        >
 
           <label>
             Answer Options
           </label>
 
+
           <div class="options-list">
 
             <div
-              class="option-row"
+              class="card option-row"
               *ngFor="
                 let option of question.options
               "
-              [class.selected]="
-                isSelectedOption(
-                  question,
-                  option.id
-                )
-              ">
+            >
 
               <div class="option-indicator">
 
-                <i
-                  *ngIf="
-                    isSelectedOption(
-                      question,
-                      option.id
-                    )
-                  "
-                  class="pi pi-check"></i>
+                <i class="pi pi-circle"></i>
 
               </div>
 
@@ -346,11 +350,16 @@
 
           </div>
 
-          <div
-            *ngIf="question.selectedOptionId == null"
-            class="empty-answer">
 
-            No option selected
+          <div
+            *ngIf="
+              !question.options ||
+              question.options.length === 0
+            "
+            class="empty-answer"
+          >
+
+            No options available
 
           </div>
 

@@ -47,19 +47,24 @@ export class CoachToDoService {
   private http = inject(HttpClient);
   private BASE = environment.apiUrl + '/mobile/api/task-template/';
 
-getTaskTemplatesForCoach(
-  pageIndex: number = 0,
-  pageSize: number = 20
+ getTaskTemplatesForCoach(
+  pageIndex: number | null = 0,
+  pageSize: number | null = 50
 ): Observable<TaskTemplateResponse> {
+
+  const params: Record<string, string> = {};
+
+  if (pageIndex !== null) {
+    params['pageIndex'] = pageIndex.toString();
+  }
+
+  if (pageSize !== null) {
+    params['pageSize'] = pageSize.toString();
+  }
+
   return this.http.get<TaskTemplateResponse>(
     this.BASE + 'get-for-coach',
-    {
-      params: {
-        pageIndex,
-        pageSize
-      }
-    }
+    { params }
   );
 }
-
 }

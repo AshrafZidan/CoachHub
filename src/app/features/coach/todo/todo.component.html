@@ -26,7 +26,7 @@
       trackBy: trackByTaskId
     ">
 
-    <div class="card">
+    <div class="card" (click)="showTaskDetails(task)">
   <div class="card-header">
     <h3>
       {{ task.title }}
@@ -62,7 +62,7 @@
             {{ task.description }}
           </span>
 
-          <i class="pi pi-chevron-right show-details" (click)="showTaskDetails(task)"></i>
+          <i class="pi pi-chevron-right show-details"></i>
         </div>
 
         <div

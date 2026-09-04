@@ -2,7 +2,18 @@
   "routes": {
     "/": {},
     "/auth": {},
+    "/auth/forgot-password": {},
     "/auth/login": {},
-    "/auth/login-admin": {}
+    "/auth/login-admin": {},
+    "/auth/register": {},
+    "/coach": {},
+    "/coach/Coachees": {},
+    "/coach/bookings": {},
+    "/coach/calendar": {},
+    "/coach/profile": {},
+    "/coach/todo": {},
+    "/coach/todo/add": {},
+    "/user": {},
+    "/user/dashboard": {}
   }
 }

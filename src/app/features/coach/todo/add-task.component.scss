@@ -21,12 +21,6 @@
 
   margin-bottom: 24px;
 
-  background: var(--app-card-background-color);
-
-  border: 1px solid var(--app-border-color);
-  border-radius: 16px;
-
-  box-shadow: var(--app-card-shadow, none);
 }
 
 
@@ -161,7 +155,7 @@
     transition: 0.2s ease;
 
     &.active {
-      background:#fafafa;
+      background:var(--app-card-bg);
       color: var(--app-primary-color);
 
       box-shadow: var(

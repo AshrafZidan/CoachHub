@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
-import { ApiResponse } from '../../admin/bookings-management/bookings.model';
 
 export interface MobileBooking {
   id: number;
@@ -18,7 +17,44 @@ export interface MobileBooking {
   status?: string;
   statusWrapper?: { nameEn?: string; nameAr?: string };
 }
+export interface ApiError {
+	messageEn: string;
+	messageAr: string;
+}
+export interface StartSessionResponse {
+  bookingId: number;
+  sessionUrl: string;
+  coachAttended: boolean;
+  coacheeAttended: boolean;
+  coachAttendedAt: string | null;
+  coacheeAttendedAt: string | null;
+}
+export interface ApiResponse<T> {
+	httpStatus: string;
+	code: string;
+	timeStamp: string;
+	messageEn: string;
+	messageAr: string;
+	data: T;
+	count?: number;
+	pageIndex?: number;
+	pageCount?: number;
+	pageSize?: number;
+	errors?: ApiError[];
+}
+export interface StartSessionData {
+	bookingId: number;
+	sessionUrl: string;
+	coachAttended: boolean;
+	coacheeAttended: boolean;
+	coachAttendedAt: string | null;
+	coacheeAttendedAt: string | null;
+}
 
+export interface BookingAction {
+	value: string;
+	label?: string;
+}
 @Injectable({ providedIn: 'root' })
 export class CoachBookingsService {
   private http = inject(HttpClient);
@@ -37,4 +73,9 @@ export class CoachBookingsService {
   cancelBooking(id: number): Observable<ApiResponse<void>> {
     return this.http.put<ApiResponse<void>>(`${this.BASE}/${id}/cancel-by-coach`, {});
   }
+
+   startSession(bookingId: number): Observable<ApiResponse<StartSessionResponse>> {
+    return this.http.post<ApiResponse<StartSessionResponse>>(`${this.BASE}/${bookingId}/start-session`, {});
+  }
+
 }

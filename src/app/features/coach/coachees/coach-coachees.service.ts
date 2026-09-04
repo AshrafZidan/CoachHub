@@ -13,8 +13,15 @@ export interface ApiResponse<T> {
   pageIndex?: number;
   pageCount?: number;
   pageSize?: number;
-  errors?: Array<{ messageEn?: string; messageAr?: string }>;
+  errors?: Array<{
+    messageEn?: string;
+    messageAr?: string;
+  }>;
 }
+
+// =========================================================
+// Coachee
+// =========================================================
 
 export interface Coachee {
   id: number;
@@ -25,63 +32,151 @@ export interface Coachee {
   lastBookingDate?: string;
 }
 
+// =========================================================
+// Booking / Session
+// =========================================================
+
 export interface BookingSession {
   id: number;
-
+  title?: string;
   startTime: string;
   endTime: string;
-
-  periodMinutes: number;
-
-  paymentStatus: string;
-
+  discount: number;
   price: number;
-
-  discount: number | null;
-
   finalPrice: number;
+  periodMinutes: number;
+  paymentStatus: string;
+  status: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+}
 
-  status: string;
+// =========================================================
+// Task Assignment
+// Response from:
+// GET /mobile/api/task-template/get-by-booking/{bookingId}
+// =========================================================
 
-  statusWrapper?: {
-    nameEn: string;
-    nameAr: string;
+export interface TaskAssignment {
+  assignmentId: number;
+  templateId: number;
+  title: string;
+  description?: string;
+  status: 'PENDING' | 'COMPLETED';
+  dueDate?: string;
+
+  coach?: {
+    profileImageUrl?: string;
+    fullNameEn?: string;
+    fullNameAr?: string;
   };
 }
 
-export interface TaskAssignment {
-  id: number;
-  taskId: number;
-  taskTitle: string;
-  status: 'PENDING' | 'COMPLETED';
-  submittedDate?: string;
+// =========================================================
+// Task Assignment Details
+// Response from:
+// GET /task-template/get-task-assignment-details/{assignmentId}
+// =========================================================
+
+export interface TaskAssignmentDetails {
+  assignmentId: number;
+  templateId: number;
+  title: string;
+  description?: string;
+  status: string;
+  dueDate?: string;
+
+  coach?: {
+    profileImageUrl?: string;
+    fullNameEn?: string;
+    fullNameAr?: string;
+  };
+
+  questions?: TaskQuestion[];
+
+  answers?: TaskAnswer[];
 }
 
+// =========================================================
+// Task Question
+// =========================================================
+
+export interface TaskQuestion {
+  id: number;
+  questionText: string;
+  type: string;
+  required: boolean;
+
+  options?: TaskQuestionOption[];
+}
+
+// =========================================================
+// Task Question Option
+// =========================================================
+
+export interface TaskQuestionOption {
+  id: number;
+  optionText: string;
+}
+
+// =========================================================
+// Task Answer
+// =========================================================
+
+export interface TaskAnswer {
+  questionId: number;
+  answerText?: string | string[];
+  selectedOptionId?: number | null;
+}
+
+// =========================================================
+// Session Detail
+// =========================================================
+
 export interface SessionDetail extends BookingSession {
-  coacheeId: number;
-  coacheeName: string;
+  coacheeId?: number;
+  coacheeName?: string;
   notes?: string;
 }
 
-@Injectable({ providedIn: 'root' })
+export interface AssignTaskRequest {
+	taskTemplateId: number;
+	bookingId: number;
+	dueDate: string;
+}
+// =========================================================
+// Service
+// =========================================================
+
+@Injectable({
+  providedIn: 'root'
+})
 export class CoacheeService {
-  private http    = inject(HttpClient);
+
+  private http = inject(HttpClient);
+
   private baseUrl = environment.apiUrl;
+
+  // =========================================================
+  // Coachees
+  // =========================================================
 
   /**
    * GET /mobile/api/coachees/get-for-coach
-   * Fetch coach's coachees with optional search
+   *
+   * Fetch coach's coachees with optional search.
    */
   getCoachees(
     pageIndex = 0,
-    pageSize  = 12,
+    pageSize = 12,
     name?: string
   ): Observable<ApiResponse<Coachee[]>> {
+
     let params = new HttpParams()
       .set('pageIndex', pageIndex)
       .set('pageSize', pageSize);
 
-    if (name) params = params.set('name', name);
+    if (name) {
+      params = params.set('name', name);
+    }
 
     return this.http.get<ApiResponse<Coachee[]>>(
       `${this.baseUrl}/mobile/api/coachees/get-for-coach`,
@@ -89,23 +184,66 @@ export class CoacheeService {
     );
   }
 
+  // =========================================================
+  // Bookings
+  // =========================================================
+
   /**
-   * GET /mobile/api/coachees/{coacheeId}/bookings
-   * Fetch all bookings for a specific coachee
+   * GET /mobile/api/booking/all-coachee-booking-with-coach/{coacheeId}
+   *
+   * Fetch all bookings for a specific coachee.
    */
-  getCoacheeBookings(coacheeId: number): Observable<ApiResponse<BookingSession[]>> {
+  getCoacheeBookings(
+    coacheeId: number
+  ): Observable<ApiResponse<BookingSession[]>> {
+
     return this.http.get<ApiResponse<BookingSession[]>>(
       `${this.baseUrl}/mobile/api/booking/all-coachee-booking-with-coach/${coacheeId}`
     );
   }
 
+  // =========================================================
+  // Session Tasks
+  // =========================================================
+
   /**
-   * GET /mobile/api/bookings/{bookingId}
-   * Fetch detailed booking info with assigned tasks
+   * GET /mobile/api/task-template/get-by-booking/{bookingId}
+   *
+   * Fetch tasks assigned to a specific booking/session.
+   *
+   * IMPORTANT:
+   * The API returns an ARRAY of TaskAssignment.
    */
-  getBookingDetail(bookingId: number): Observable<ApiResponse<SessionDetail>> {
-    return this.http.get<ApiResponse<SessionDetail>>(
-      `${this.baseUrl}/mobile/api/bookings/${bookingId}`
+  getBookingDetail(
+    bookingId: number
+  ): Observable<ApiResponse<TaskAssignment[]>> {
+
+    return this.http.get<ApiResponse<TaskAssignment[]>>(
+      `${this.baseUrl}/mobile/api/task-template/get-by-booking/${bookingId}`
     );
   }
+
+  // =========================================================
+  // Task Assignment Details
+  // =========================================================
+
+  /**
+   * GET /task-template/get-task-assignment-details/{assignmentId}
+   *
+   * Fetch task details and client's answers.
+   */
+  getTaskAssignmentDetails(
+    assignmentId: number
+  ): Observable<ApiResponse<TaskAssignmentDetails>> {
+
+    return this.http.get<ApiResponse<TaskAssignmentDetails>>(
+      `${this.baseUrl}/mobile/api/task-template/get-task-assignment-details/${assignmentId}`
+    );
+  }
+    assignTaskToBooking(request: AssignTaskRequest): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.baseUrl}/mobile/api/task-template/assign-to-booking`, 
+      request
+    );
+  }
+  
 }

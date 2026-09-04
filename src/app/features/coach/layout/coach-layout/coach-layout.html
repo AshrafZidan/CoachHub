@@ -1,48 +1,494 @@
+<p-toast></p-toast>
+
 <div class="page-shell">
+
+  <!-- ===================================================== -->
+
+  <!-- HEADER -->
+
+  <!-- ===================================================== -->
+
   <header class="page-header">
-    <div class="header-brand">
-      <a routerLink="/coach/bookings" class="brand-link">
-        <img src="/assets/images/alt-logo.png" alt="Coaching Hub logo" class="brand-icon" />
-       
-      </a>
-    </div>
 
-    <nav class="header-nav">
-      <a routerLink="/coach/bookings" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Bookings</a>
-      <a routerLink="/coach/calendar" routerLinkActive="active">Calendar</a>
-      <a routerLink="/coach/todo" routerLinkActive="active">Todo</a>
-      <a routerLink="/coach/Coachees" routerLinkActive="active">Coachees</a>
-    </nav>
+<!-- =================================================== -->
+<!-- LOGO -->
+<!-- =================================================== -->
 
-    <div class="header-actions">
-      <button type="button" class="lang-toggle" (click)="toggleLanguage()">
-        {{ language === 'ar' ? 'EN' : 'العربية' }}
-      </button>
+<div class="header-brand">
 
-      <div class="profile-dropdown" [class.open]="menuOpen">
-        <button type="button" class="profile-button" (click)="toggleMenu()" aria-expanded="{{ menuOpen }}">
-          {{ username }}
-          <span class="profile-arrow" aria-hidden="true">▾</span>
+  <a
+    routerLink="/coach/bookings"
+    class="brand-link"
+  >
+
+    <img
+      src="/assets/images/alt-logo.png"
+      alt="Coaching Hub logo"
+      class="brand-icon"
+    />
+
+  </a>
+
+</div>
+
+
+<!-- =================================================== -->
+<!-- NAVIGATION -->
+<!-- =================================================== -->
+
+<nav class="header-nav">
+
+  <a
+    routerLink="/coach/bookings"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{
+      exact: true
+    }"
+  >
+    Bookings
+  </a>
+
+
+  <a
+    routerLink="/coach/calendar"
+    routerLinkActive="active"
+  >
+    Calendar
+  </a>
+
+
+  <a
+    routerLink="/coach/todo"
+    routerLinkActive="active"
+  >
+    Todo
+  </a>
+
+
+  <a
+    routerLink="/coach/Coachees"
+    routerLinkActive="active"
+  >
+    Coachees
+  </a>
+
+</nav>
+
+
+<!-- =================================================== -->
+<!-- HEADER ACTIONS -->
+<!-- =================================================== -->
+
+<div class="header-actions">
+
+
+  <!-- =============================================== -->
+  <!-- LANGUAGE -->
+  <!-- =============================================== -->
+
+  <button
+    type="button"
+    class="lang-toggle"
+    (click)="toggleLanguage()"
+  >
+
+    {{
+      language === 'ar'
+        ? 'EN'
+        : 'العربية'
+    }}
+
+  </button>
+
+
+  <!-- =============================================== -->
+  <!-- NOTIFICATION -->
+  <!-- =============================================== -->
+
+  <div
+    class="notification-wrapper"
+    [class.open]="notificationMenuOpen"
+  >
+
+    <!-- ============================================= -->
+    <!-- NOTIFICATION BUTTON -->
+    <!-- ============================================= -->
+
+    <button
+      type="button"
+      class="notification-button"
+      (click)="toggleNotifications()"
+      [attr.aria-expanded]="notificationMenuOpen"
+      aria-label="Notifications"
+    >
+
+      <i class="pi pi-bell"></i>
+
+
+      <!-- =========================================== -->
+      <!-- UNREAD BADGE -->
+      <!-- =========================================== -->
+
+      <span
+        class="notification-badge"
+        *ngIf="unreadCount > 0"
+      >
+
+        {{
+          unreadCount > 99
+            ? '99+'
+            : unreadCount
+        }}
+
+      </span>
+
+    </button>
+
+
+    <!-- ============================================= -->
+    <!-- NOTIFICATION MENU -->
+    <!-- ============================================= -->
+
+    <div
+      class="notification-menu"
+      *ngIf="notificationMenuOpen"
+    >
+
+
+      <!-- =========================================== -->
+      <!-- NOTIFICATION HEADER -->
+      <!-- =========================================== -->
+
+      <div
+        class="notification-header"
+      >
+
+        <div
+          class="notification-header-title"
+        >
+
+          <h3>
+            Notifications
+          </h3>
+
+          <span
+            *ngIf="unreadCount > 0"
+            class="notification-unread-count"
+          >
+
+            {{ unreadCount }} unread
+
+          </span>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- MARK ALL -->
+        <!-- ========================================= -->
+
+        <button
+          *ngIf="unreadCount > 0"
+          type="button"
+          class="mark-all-button"
+          (click)="markAllAsRead()"
+        >
+
+          Mark all as read
+
         </button>
 
-        <ul class="dropdown-menu">
-          <li>
-            <a routerLink="/coach/profile" (click)="closeMenu()">Coach Profile</a>
-          </li>
-          <li>
-            <button type="button" class="logout-button" (click)="handleLogout()">Logout</button>
-          </li>
-        </ul>
       </div>
+
+
+      <!-- =========================================== -->
+      <!-- LOADING -->
+      <!-- =========================================== -->
+
+      <div
+        class="notification-loading"
+        *ngIf="notificationsLoading"
+      >
+
+        <div
+          class="notification-skeleton"
+          *ngFor="
+            let item of [1, 2, 3]
+          "
+        >
+
+          <!-- ICON -->
+
+          <p-skeleton
+            shape="circle"
+            width="40px"
+            height="40px"
+            styleClass="notification-skeleton-icon"
+          ></p-skeleton>
+
+
+          <!-- CONTENT -->
+
+          <div
+            class="content-wrapper"
+          >
+
+            <p-skeleton
+              width="70%"
+              height="14px"
+              styleClass="notification-skeleton-title"
+            ></p-skeleton>
+
+
+            <p-skeleton
+              width="90%"
+              height="12px"
+              styleClass="notification-skeleton-body"
+            ></p-skeleton>
+
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================================== -->
+      <!-- NOTIFICATIONS LIST -->
+      <!-- =========================================== -->
+
+      <div
+        class="notifications-list"
+        *ngIf="
+          !notificationsLoading &&
+          notifications.length > 0
+        "
+      >
+
+        <!-- ========================================= -->
+        <!-- NOTIFICATION ITEM -->
+        <!-- ========================================= -->
+
+        <button
+          type="button"
+          class="notification-item"
+          *ngFor="
+            let notification of notifications
+          "
+          [class.unread]="
+            !notification.read
+          "
+          (click)="
+            onNotificationClick(
+              notification
+            )
+          "
+        >
+
+
+          <!-- ======================================= -->
+          <!-- ICON -->
+          <!-- ======================================= -->
+
+          <div
+            class="notification-icon"
+          >
+
+            <i
+              class="pi pi-calendar"
+            ></i>
+
+          </div>
+
+
+          <!-- ======================================= -->
+          <!-- CONTENT -->
+          <!-- ======================================= -->
+
+          <div
+            class="notification-content"
+          >
+
+            <!-- TITLE -->
+
+            <div
+              class="notification-title"
+            >
+
+              {{
+                getNotificationTitle(
+                  notification
+                )
+              }}
+
+            </div>
+
+
+            <!-- BODY -->
+
+            <div
+              class="notification-body"
+            >
+
+              {{
+                getNotificationBody(
+                  notification
+                )
+              }}
+
+            </div>
+
+          </div>
+
+
+          <!-- ======================================= -->
+          <!-- TIME -->
+          <!-- ======================================= -->
+
+          <div
+            class="notification-time"
+          >
+
+            {{
+              getNotificationTime(
+                notification.createdDate
+              )
+            }}
+
+          </div>
+
+
+          <!-- ======================================= -->
+          <!-- UNREAD DOT -->
+          <!-- ======================================= -->
+
+          <span
+            class="notification-unread-dot"
+            *ngIf="!notification.read"
+          ></span>
+
+        </button>
+
+      </div>
+
+
+      <!-- =========================================== -->
+      <!-- EMPTY -->
+      <!-- =========================================== -->
+
+      <div
+        class="notification-empty"
+        *ngIf="
+          !notificationsLoading &&
+          notifications.length === 0
+        "
+      >
+
+        <i
+          class="pi pi-bell-slash"
+        ></i>
+
+        <span>
+          No notifications
+        </span>
+
+      </div>
+
     </div>
+
+  </div>
+
+
+  <!-- =============================================== -->
+  <!-- PROFILE -->
+  <!-- =============================================== -->
+
+  <div
+    class="profile-dropdown"
+    [class.open]="menuOpen"
+  >
+
+
+    <!-- PROFILE BUTTON -->
+
+    <button
+      type="button"
+      class="profile-button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen"
+    >
+
+      {{ username }}
+
+
+      <span
+        class="profile-arrow"
+        aria-hidden="true"
+      >
+        ▾
+      </span>
+
+    </button>
+
+
+    <!-- PROFILE MENU -->
+
+    <ul
+      class="dropdown-menu"
+    >
+
+      <!-- PROFILE -->
+
+      <li>
+
+        <a
+          routerLink="/coach/profile"
+          (click)="closeMenu()"
+        >
+
+          Coach Profile
+
+        </a>
+
+      </li>
+
+
+      <!-- LOGOUT -->
+
+      <li>
+
+        <button
+          type="button"
+          class="logout-button"
+          (click)="handleLogout()"
+        >
+
+          Logout
+
+        </button>
+
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>
+
   </header>
 
+  <!-- ===================================================== -->
+
+  <!-- PAGE CONTENT -->
+
+  <!-- ===================================================== -->
+
   <main class="page-content">
-    <router-outlet />
+
+<router-outlet></router-outlet>
+
   </main>
 
-  <!-- <footer class="page-footer">
-    <div>© CoachHub {{ currentYear }}</div>
-    <div class="footer-note">Helping coaches manage their bookings.</div>
-  </footer> -->
 </div>

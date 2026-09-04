@@ -68,8 +68,11 @@
         <!-- Booking Status -->
         <div class="filter-item">
           <label>Booking Status</label>
-          <p-select [options]="bookingStatusOptions" placeholder="Select Status" [ngModel]="filters().bookingStatus"
-            (ngModelChange)="updateFilter('bookingStatus', $event)" [showClear]="true"></p-select>
+          <p-select [options]="bookingStatusOptions" 
+          placeholder="Select Status" 
+          [ngModel]="filters().bookingStatus"
+          (ngModelChange)="updateFilter('bookingStatus', $event)" 
+            [showClear]="true"></p-select>
         </div>
 
         <!-- Payment Status -->

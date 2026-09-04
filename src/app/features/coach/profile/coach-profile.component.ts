@@ -9,28 +9,35 @@ import {
 
 import { CommonModule } from '@angular/common';
 import { StepperModule } from 'primeng/stepper';
+import { SkeletonModule } from 'primeng/skeleton';
+import { finalize } from 'rxjs';
+
 import { CoachDetail } from '../../admin/coaches-management/Coaches.model';
 import { CoachProfileService } from '../services/coach-profile.service';
-import { finalize } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-
-
 
 @Component({
   selector: 'app-coach-profile',
   standalone: true,
   imports: [
     CommonModule,
-    StepperModule
+    StepperModule,
+    SkeletonModule
   ],
   templateUrl: './coach-profile.component.html',
   styleUrls: ['./coach-profile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoachProfileComponent implements OnInit {
 
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly profileService = inject(CoachProfileService);
+
   readonly baseUrl = environment.apiUrl;
+
+  // =========================================================
+  // STEPPER
+  // =========================================================
 
   step = signal(1);
 
@@ -42,76 +49,98 @@ export class CoachProfileComponent implements OnInit {
     'Picture'
   ];
 
-  isLoading = true;
+  // =========================================================
+  // LOADING / PROFILE
+  // =========================================================
 
-  profile: CoachDetail | null = null;
+  readonly isLoading = signal(true);
+
+  readonly profile = signal<CoachDetail | null>(null);
+
+  // =========================================================
+  // INIT
+  // =========================================================
 
   ngOnInit(): void {
     this.loadProfile();
   }
 
- 
- private loadProfile(): void {
-  this.isLoading = true;
-  this.profile = null;
+  // =========================================================
+  // LOAD PROFILE
+  // =========================================================
 
-  this.cdr.detectChanges();
+  private loadProfile(): void {
 
-  this.profileService.getProfileDetails()
-    .pipe(
-      finalize(() => {
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      })
-    )
-    .subscribe({
-      next: response => {
-        this.profile = response?.data ?? null;
-        this.cdr.detectChanges();
-      },
-      error: error => {
-        console.error('Failed to load profile', error);
-        this.profile = null;
-        this.cdr.detectChanges();
-      }
-    });
-}
+    // Always start with skeleton state
+    this.isLoading.set(true);
+    this.profile.set(null);
+
+    this.profileService
+      .getProfileDetails()
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false);
+
+          // Important for OnPush
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: response => {
+          this.profile.set(
+            response?.data ?? null
+          );
+
+          this.cdr.markForCheck();
+        },
+
+        error: error => {
+
+          console.error(
+            'Failed to load profile',
+            error
+          );
+
+          this.profile.set(null);
+
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  // =========================================================
+  // STEPPER
+  // =========================================================
 
   onStepIconClick(
     value: number,
     activateCallback?: (...args: any[]) => void
   ): void {
 
-    const current = this.step();
-
-    /*
-     * Allow moving backward and
-     * moving to current step.
-     */
-    if (value <= current) {
-
-      this.step.set(value);
-
-      if (activateCallback) {
-        activateCallback();
-      }
-
-      this.cdr.markForCheck();
-
+    if (this.isLoading()) {
       return;
     }
 
-    
+    if (!this.profile()) {
+      return;
+    }
+
     this.step.set(value);
 
-    if (activateCallback) {
-      activateCallback();
-    }
+    activateCallback?.();
 
     this.cdr.markForCheck();
   }
 
   next(): void {
+
+    if (this.isLoading()) {
+      return;
+    }
+
+    if (!this.profile()) {
+      return;
+    }
 
     if (this.step() >= this.totalSteps) {
       return;
@@ -126,6 +155,10 @@ export class CoachProfileComponent implements OnInit {
 
   back(): void {
 
+    if (this.isLoading()) {
+      return;
+    }
+
     if (this.step() <= 1) {
       return;
     }
@@ -134,7 +167,7 @@ export class CoachProfileComponent implements OnInit {
       current => current - 1
     );
 
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
   }
 
   get activeStep(): number {
@@ -142,38 +175,56 @@ export class CoachProfileComponent implements OnInit {
   }
 
   set activeStep(value: number) {
+
+    if (this.isLoading()) {
+      return;
+    }
+
     this.step.set(value);
+
+    this.cdr.markForCheck();
   }
+
+  // =========================================================
+  // PROFILE HELPERS
+  // =========================================================
 
   get industriesText(): string {
 
-    if (!this.profile?.coachingIndustries?.length) {
+    const profile = this.profile();
+
+    if (!profile?.coachingIndustries?.length) {
       return 'Not provided';
     }
 
-    return this.profile.coachingIndustries
+    return profile.coachingIndustries
       .map(industry => industry.nameEn)
       .join(', ');
   }
 
-
   get languagesText(): string {
 
-    if (!this.profile?.languages?.length) {
+    const profile = this.profile();
+
+    if (!profile?.languages?.length) {
       return 'Not provided';
     }
 
-    return this.profile.languages
+    return profile.languages
       .map(language => language.nameEn)
       .join(', ');
   }
 
   get countryText(): string {
-    return this.profile?.country?.nameEn || 'Not provided';
+
+    return this.profile()?.country?.nameEn
+      || 'Not provided';
   }
 
   get nationalityText(): string {
-    return this.profile?.nationality?.nameEn || 'Not provided';
+
+    return this.profile()?.nationality?.nameEn
+      || 'Not provided';
   }
 
   formatGender(
@@ -201,7 +252,9 @@ export class CoachProfileComponent implements OnInit {
       return 'Not provided';
     }
 
-    return available ? 'Yes' : 'No';
+    return available
+      ? 'Yes'
+      : 'No';
   }
 
   formatDate(
@@ -214,7 +267,11 @@ export class CoachProfileComponent implements OnInit {
 
     const parsedDate = new Date(date);
 
-    if (Number.isNaN(parsedDate.getTime())) {
+    if (
+      Number.isNaN(
+        parsedDate.getTime()
+      )
+    ) {
       return date;
     }
 
@@ -223,16 +280,30 @@ export class CoachProfileComponent implements OnInit {
     );
   }
 
-    getImageUrl(path: string | null): string {
-    if (!path) return 'assets/default-avatar.png';
+  // =========================================================
+  // IMAGE
+  // =========================================================
 
-    return path.startsWith('http') || path.startsWith('data:')
+  getImageUrl(
+    path: string | null
+  ): string {
+
+    if (!path) {
+      return 'assets/default-avatar.png';
+    }
+
+    return path.startsWith('http') ||
+      path.startsWith('data:')
       ? path
       : `${this.baseUrl}${path}`;
-
   }
 
-  onImageError(event: Event) {
-    (event.target as HTMLImageElement).src = 'assets/default-avatar.png';
+  onImageError(
+    event: Event
+  ): void {
+
+    (
+      event.target as HTMLImageElement
+    ).src = 'assets/default-avatar.png';
   }
 }

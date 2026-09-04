@@ -1,11 +1,22 @@
-import { Component, signal, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, NgZone, inject } from '@angular/core';
+import {
+	Component,
+	signal,
+	OnInit,
+	OnDestroy,
+	ChangeDetectorRef,
+	inject
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { Subscription } from 'rxjs';
-import { CoachBookingsService, MobileBooking } from '../services/coach-bookings.service';
+import {
+	CoachBookingsService,
+	MobileBooking
+} from '../services/coach-bookings.service';
+import { SkeletonModule } from 'primeng/skeleton';
+import { Router } from '@angular/router';
 
 interface ViewBooking {
 	id: number;
@@ -14,8 +25,8 @@ interface ViewBooking {
 	price?: number;
 	discount?: number | null;
 	finalPrice?: number;
-	date: string; // formatted string
-	status: 'upcoming' | 'past' | 'completed' | string;
+	date: string;
+	status: 'running'|'upcoming' | 'past' | 'completed' | string;
 	avatar?: string;
 	raw?: MobileBooking;
 }
@@ -23,153 +34,378 @@ interface ViewBooking {
 @Component({
 	selector: 'app-coach-booking',
 	standalone: true,
-	imports: [CommonModule, ConfirmDialogModule],
+	imports: [
+		CommonModule,
+		ConfirmDialogModule,
+		SkeletonModule
+	],
 	providers: [ConfirmationService],
 	templateUrl: './booking.component.html',
 	styleUrls: ['./booking.component.scss']
 })
 export class BookingComponent implements OnInit, OnDestroy {
 	private service = inject(CoachBookingsService);
-	private auth = inject(AuthService);
 	private toastService = inject(ToastService);
 	private confirmationService = inject(ConfirmationService);
 	private cdr = inject(ChangeDetectorRef);
-	private ngZone = inject(NgZone);
+    private router = inject(Router);
 	private subs: Subscription[] = [];
 
 	tabs = ['Upcoming', 'History'];
 	activeTab = signal<string>('Upcoming');
 
-	// pagination
+	// Pagination
 	pageIndex = 0;
-	pageSize = 10;
+	pageSize = 50;
 	hasMore = true;
 	loading = false;
+
+	// Booking currently starting
+	startingBookingId: number | null = null;
 
 	bookings: ViewBooking[] = [];
 
 	ngOnInit(): void {
-		window.addEventListener('scroll', this.onWindowScroll, { passive: true });
+		window.addEventListener(
+			'scroll',
+			this.onWindowScroll,
+			{ passive: true }
+		);
+
 		this.resetAndLoad();
 	}
 
 	ngOnDestroy(): void {
-		window.removeEventListener('scroll', this.onWindowScroll as any);
-		this.subs.forEach(s => s.unsubscribe());
+		window.removeEventListener(
+			'scroll',
+			this.onWindowScroll as any
+		);
+
+		this.subs.forEach(sub => sub.unsubscribe());
 	}
 
-	setTab(tab: string) {
-		if (this.activeTab() === tab) return;
+	setTab(tab: string): void {
+		if (this.activeTab() === tab) {
+			return;
+		}
+
 		this.activeTab.set(tab);
 		this.resetAndLoad();
 	}
 
-	private resetAndLoad() {
+	private resetAndLoad(): void {
 		this.pageIndex = 0;
 		this.bookings = [];
 		this.hasMore = true;
+
 		this.loadPage();
 	}
 
 	private onWindowScroll = (): void => {
-		if (this.loading || !this.hasMore) return;
-		const scrollTop = window.scrollY || document.documentElement.scrollTop;
-		const viewport = window.innerHeight || document.documentElement.clientHeight;
-		const fullHeight = document.documentElement.scrollHeight;
-		// when scrolled within 300px from bottom, load next
+		if (this.loading || !this.hasMore) {
+			return;
+		}
+
+		const scrollTop =
+			window.scrollY ||
+			document.documentElement.scrollTop;
+
+		const viewport =
+			window.innerHeight ||
+			document.documentElement.clientHeight;
+
+		const fullHeight =
+			document.documentElement.scrollHeight;
+
 		if (scrollTop + viewport >= fullHeight - 300) {
 			this.loadPage();
 		}
 	};
 
-	private loadPage() {
+	private loadPage(): void {
 		this.loading = true;
+
 		const tab = this.activeTab();
 
-		const svcCall = tab === 'Upcoming'
-			? this.service.upcomingBookings(this.pageIndex, this.pageSize)
-			: this.service.pastBookings(this.pageIndex, this.pageSize);
+		const request$ =
+			tab === 'Upcoming'
+				? this.service.upcomingBookings(
+						this.pageIndex,
+						this.pageSize
+				  )
+				: this.service.pastBookings(
+						this.pageIndex,
+						this.pageSize
+				  );
 
-		const s = svcCall.subscribe({
-			next: (res) => {
-				const items = (res.data || []) as MobileBooking[];
-				const mapped = items.map(m => this.mapToView(m));
-				this.bookings = [...this.bookings, ...mapped];
-				const totalPages = res.pageCount ?? Math.ceil((res.count ?? 0) / (res.pageSize ?? this.pageSize));
-				this.hasMore = (this.pageIndex < (res.pageCount || totalPages));
-				this.pageIndex += 1;
+		const sub = request$.subscribe({
+			next: res => {
+				const items =
+					(res.data || []) as MobileBooking[];
+
+				const mapped =
+					items.map(item =>
+						this.mapToView(item)
+					);
+
+				this.bookings = [
+					...this.bookings,
+					...mapped
+				];
+
+				const totalPages =
+					res.pageCount ??
+					Math.ceil(
+						(res.count ?? 0) /
+							(res.pageSize ?? this.pageSize)
+					);
+
+				this.hasMore =
+					this.pageIndex <
+					(res.pageCount || totalPages);
+
+				this.pageIndex++;
 				this.loading = false;
+
 				this.cdr.markForCheck();
 			},
+
 			error: () => {
 				this.loading = false;
 				this.hasMore = false;
+
 				this.cdr.markForCheck();
 			}
 		});
 
-		this.subs.push(s);
+		this.subs.push(sub);
 	}
 
-	private mapToView(m: MobileBooking): ViewBooking {
+	private mapToView(
+		m: MobileBooking
+	): ViewBooking {
 		const start = new Date(m.startTime);
 		const end = new Date(m.endTime);
-		const dateStr = `${start.toLocaleDateString()} ${start.toLocaleTimeString()} to ${end.toLocaleTimeString()}`;
+
+		const dateStr =
+			`${start.toLocaleDateString()} ` +
+			`${start.toLocaleTimeString()} to ` +
+			`${end.toLocaleTimeString()}`;
+
 		return {
 			id: m.id,
-			name: m.coacheeFullName || 'Unknown',
+
+			name:
+				m.coacheeFullName ||
+				'Unknown',
+
 			title: '',
+
 			price: m.price,
+
 			discount: m.discount,
+
 			finalPrice: m.finalPrice,
+
 			date: dateStr,
-			status: (m.status || '').toLowerCase(),
-			avatar: m.coacheeProfileImageUrl || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23ccc%22%3E%3Cpath d=%22M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z%22/%3E%3C/svg%3E',
+
+			status:
+				(m.status || '').toLowerCase(),
+			avatar: m.coacheeProfileImageUrl,
 			raw: m
 		};
 	}
 
-	get filteredBookings() {
-		const t = this.activeTab();
-		if (t === 'Upcoming') return this.bookings.filter(b => b.status === 'upcoming');
-		if (t === 'Past') return this.bookings.filter(b => b.status === 'past' || b.status === 'completed' || b.status === 'canceled');
+	get filteredBookings(): ViewBooking[] {
+		const tab = this.activeTab();
+		return this.bookings;
+		if (tab === 'Upcoming') {
+			return this.bookings;
+		}
+
+		if (tab === 'History') {
+			return this.bookings.filter(
+				b =>
+					b.status === 'past' ||
+					b.status === 'completed' ||
+					b.status === 'canceled'
+			);
+		}
+
 		return this.bookings;
 	}
 
-	cancel(b: ViewBooking) {
-		if (!b) return;
+	// =========================================================
+	// CANCEL
+	// =========================================================
+
+	cancel(b: ViewBooking): void {
+		if (!b) {
+			return;
+		}
 
 		this.confirmationService.confirm({
-			message: `Are you sure you want to cancel the session for <strong>${b.name}</strong>?`,
+			message:
+				`Are you sure you want to cancel the session for ` +
+				`<strong>${b.name}</strong>?`,
+
 			header: 'Confirm Cancel',
+
 			acceptLabel: 'Cancel',
+
 			rejectLabel: 'Close',
-			acceptButtonStyleClass: 'no-radius p-button-danger p-button-sm',
-			rejectButtonStyleClass: 'no-radius p-button-secondary p-button-sm',
+
+			acceptButtonStyleClass:
+				'no-radius p-button-danger p-button-sm',
+
+			rejectButtonStyleClass:
+				'no-radius p-button-secondary p-button-sm',
+
 			accept: () => {
-				const sub = this.service.cancelBooking(b.id).subscribe({
-					next: () => {
-						this.toastService.success('The booking has been canceled successfully', 'Canceled Successfully');
-						this.resetAndLoad();
-					},
-					error: () => {
-						this.toastService.error('Failed to cancel the booking. Please try again.');
-					}
-				});
+				const sub =
+					this.service
+						.cancelBooking(b.id)
+						.subscribe({
+							next: () => {
+								this.toastService.success(
+									'The booking has been canceled successfully',
+									'Canceled Successfully'
+								);
+
+								this.resetAndLoad();
+							},
+
+							error: () => {
+								this.toastService.error(
+									'Failed to cancel the booking. Please try again.'
+								);
+							}
+						});
+
 				this.subs.push(sub);
 			}
 		});
 	}
 
-	hasCancelAction(b: ViewBooking): boolean {
-		return !!b.raw?.actions?.some(action => action.value === 'CANCEL');
-	}
 
+
+	// =========================================================
+	// START SESSION
+	// =========================================================
+
+	/**
+	 * The backend sends actions for every booking.
+	 *
+	 * Only an upcoming booking that contains
+	 * START can show the Start Now button.
+	 */
 	hasStartAction(b: ViewBooking): boolean {
-		return !!b.raw?.actions?.some(action => action.value === 'START' || action.value === 'JOIN');
+		if (b.status !== 'upcoming') {
+			return false;
+		}
+
+		return !!b.raw?.actions?.some(
+			action => action.value === 'START'
+		);
+	}
+	hasJoinAction(b: ViewBooking): boolean {
+	return b.status === 'running' &&
+		!!b.raw?.actions?.some(action => action.value === 'START');
+}
+	hasCancelAction(b: ViewBooking): boolean {
+	return !!b.raw?.actions?.some(
+		action => action.value === 'CANCEL'
+	);
+}
+	/**
+	 * Used to show loading only on the
+	 * booking being started.
+	 */
+	isStarting(b: ViewBooking): boolean {
+		return this.startingBookingId === b.id;
 	}
 
-	startNow(b: ViewBooking) {
-		console.log('start', b.id);
+	/**
+	 * Start the session and open the returned
+	 * third-party meeting URL.
+	 */
+startNow(b: ViewBooking): void {
+	if (!b) {
+		return;
 	}
+
+	if (
+		b.status !== 'upcoming' &&
+		b.status !== 'running'
+	) {
+		return;
+	}
+
+	// Upcoming → START
+	// Running → JOIN
+	if (
+		b.status === 'upcoming' &&
+		!this.hasStartAction(b)
+	) {
+		return;
+	}
+
+	if (
+		b.status === 'running' &&
+		!this.hasJoinAction(b)
+	) {
+		return;
+	}
+
+	if (this.startingBookingId !== null) {
+		return;
+	}
+
+	this.startingBookingId = b.id;
+
+	this.cdr.markForCheck();
+
+	const sub = this.service
+		.startSession(b.id)
+		.subscribe({
+			next: res => {
+				this.startingBookingId = null;
+
+				const sessionUrl =
+					res?.data?.sessionUrl;
+
+				if (!sessionUrl) {
+					this.toastService.error(
+						'Unable to start the session. No meeting URL was returned.'
+					);
+
+					this.cdr.markForCheck();
+					return;
+				}
+
+				this.router.navigate(
+					['/coach/session', b.id],
+					{
+						state: {
+							sessionUrl
+						}
+					}
+				);
+			},
+
+			error: err => {
+				this.startingBookingId = null;
+
+				const message =
+					err?.error?.messageEn ||
+					'Failed to start the session. Please try again.';
+
+				this.toastService.error(message);
+
+				this.cdr.markForCheck();
+			}
+		});
+
+	this.subs.push(sub);
+}
 }

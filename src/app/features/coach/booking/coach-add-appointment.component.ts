@@ -49,6 +49,8 @@ import { environment } from '../../../../environments/environment.development';
 
 import { ToastService } from '../../../core/services/toast.service';
 import { CoachDetail } from '../../admin/coaches-management/Coaches.model';
+import { BaseIcon } from "primeng/icons/baseicon";
+import { SkeletonModule } from 'primeng/skeleton';
 
 
 interface TimeSlot {
@@ -76,16 +78,18 @@ interface SelectOption<T = string> {
     standalone: true,
 
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        DatePickerModule,
-        ButtonModule,
-        DialogModule,
-        ToastModule,
-        ConfirmDialogModule,
-        SelectModule,
-    ],
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DatePickerModule,
+    ButtonModule,
+    DialogModule,
+    ToastModule,
+    ConfirmDialogModule,
+    SelectModule,
+    SkeletonModule,
+    BaseIcon
+],
 
     providers: [
         MessageService,
@@ -1911,4 +1915,7 @@ export class CoachAddAppointmentComponent
 
   return `${hour12}:${minutes.toString().padStart(2, '0')} ${period}`;
 }
+
+
+
 }

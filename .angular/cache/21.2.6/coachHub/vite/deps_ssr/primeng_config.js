@@ -4,16 +4,14 @@ import {
   PrimeNG,
   ThemeProvider,
   providePrimeNG
-} from "./chunk-QISEE3PZ.js";
-import "./chunk-ZV3QOPQX.js";
+} from "./chunk-4J2MTCKL.js";
+import "./chunk-SUGYR2LR.js";
 import "./chunk-ECH3QAAF.js";
-import "./chunk-VDPNK7VQ.js";
-import "./chunk-KFFXBNTL.js";
-import "./chunk-AA22JKKK.js";
-import "./chunk-S2TUEVEQ.js";
-import "./chunk-2UVUUPPC.js";
-import "./chunk-C27DBZK2.js";
-import "./chunk-K54IFBYX.js";
+import "./chunk-FO24UU4A.js";
+import "./chunk-CA7TPCNB.js";
+import "./chunk-32GIQMO2.js";
+import "./chunk-GPAMLMSK.js";
+import "./chunk-O5J3CNTX.js";
 import "./chunk-6DU2HRTW.js";
 export {
   PRIME_NG_CONFIG,
