@@ -1,0 +1,452 @@
+<div class="page-shell">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <!-- =================================================== -->
+    <!-- LOGO -->
+    <!-- =================================================== -->
+
+    <div class="header-brand">
+      <a
+        routerLink="/coach/bookings"
+        class="brand-link"
+      >
+        <img
+          src="/assets/images/alt-logo.png"
+          alt="Coaching Hub logo"
+          class="brand-icon"
+        />
+      </a>
+    </div>
+
+    <!-- =================================================== -->
+    <!-- NAVIGATION -->
+    <!-- =================================================== -->
+
+    <nav class="header-nav">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{
+          exact: item.exact
+        }"
+      >
+        {{ item.label }}
+      </a>
+    </nav>
+
+    <!-- =================================================== -->
+    <!-- HEADER ACTIONS -->
+    <!-- =================================================== -->
+
+    <div class="header-actions">
+
+      <!-- ================================================= -->
+      <!-- LANGUAGE -->
+      <!-- ================================================= -->
+
+      <button
+        type="button"
+        class="w-full mt-3 p-button p-button-secondary p-component lang-toggle"
+        (click)="toggleLanguage()"
+      >
+        {{
+          language() === "ar"
+            ? "EN"
+            : "العربية"
+        }}
+      </button>
+
+      <!-- ================================================= -->
+      <!-- AUTHENTICATED -->
+      <!-- ================================================= -->
+
+      @if (authService.isLoggedIn()) {
+
+        <!-- =============================================== -->
+        <!-- NOTIFICATIONS -->
+        <!-- =============================================== -->
+
+        <div
+          class="notification-wrapper"
+          [class.open]="notificationMenuOpen"
+        >
+
+          <!-- Notification button -->
+
+          <button
+            type="button"
+            class="notification-button"
+            (click)="toggleNotifications()"
+            [attr.aria-expanded]="notificationMenuOpen"
+            aria-label="Notifications"
+          >
+            <i class="pi pi-bell"></i>
+
+            @if (unreadCount() > 0) {
+              <span
+                class="notification-badge"
+              >
+                {{
+                  unreadCount() > 99
+                    ? "99+"
+                    : unreadCount()
+                }}
+              </span>
+            }
+
+          </button>
+
+          <!-- ============================================= -->
+          <!-- NOTIFICATION MENU -->
+          <!-- ============================================= -->
+
+          @if (notificationMenuOpen) {
+
+            <div
+              class="notification-menu"
+            >
+
+              <!-- =========================================== -->
+              <!-- HEADER -->
+              <!-- =========================================== -->
+
+              <div
+                class="notification-header"
+              >
+
+                <div
+                  class="notification-header-title"
+                >
+
+                  <h3>
+                    Notifications
+                  </h3>
+
+                  @if (unreadCount() > 0) {
+                    <span
+                      class="notification-unread-count"
+                    >
+                      {{ unreadCount() }}
+                      unread
+                    </span>
+                  }
+
+                </div>
+
+                @if (unreadCount() > 0) {
+                  <button
+                    type="button"
+                    class="mark-all-button"
+                    (click)="markAllAsRead()"
+                  >
+                    Mark all as read
+                  </button>
+                }
+
+              </div>
+
+              <!-- =========================================== -->
+              <!-- INITIAL LOADING -->
+              <!-- =========================================== -->
+
+              @if (
+                notificationsLoading &&
+                notifications.length === 0
+              ) {
+
+                <div
+                  class="notification-loading"
+                >
+
+                  @for (
+                    item of [1, 2, 3];
+                    track item
+                  ) {
+
+                    <div
+                      class="notification-skeleton"
+                    >
+
+                      <p-skeleton
+                        shape="circle"
+                        width="40px"
+                        height="40px"
+                        styleClass="notification-skeleton-icon"
+                      >
+                      </p-skeleton>
+
+                      <div
+                        class="content-wrapper"
+                      >
+
+                        <p-skeleton
+                          width="70%"
+                          height="14px"
+                          styleClass="notification-skeleton-title"
+                        >
+                        </p-skeleton>
+
+                        <p-skeleton
+                          width="90%"
+                          height="12px"
+                          styleClass="notification-skeleton-body"
+                        >
+                        </p-skeleton>
+
+                      </div>
+
+                    </div>
+
+                  }
+
+                </div>
+
+              }
+
+              <!-- =========================================== -->
+              <!-- NOTIFICATIONS LIST -->
+              <!-- =========================================== -->
+
+              @if (
+                notifications.length > 0
+              ) {
+
+                <div
+                  class="notifications-list"
+                  (scroll)="onNotificationsScroll($event)"
+                >
+
+                  <button
+                    type="button"
+                    class="notification-item"
+                    *ngFor="
+                      let notification of notifications;
+                      trackBy: trackByNotificationId
+                    "
+                    [class.unread]="
+                      !notification.read
+                    "
+                    (click)="
+                      onNotificationClick(
+                        notification
+                      )
+                    "
+                  >
+
+                    <div
+                      class="notification-icon"
+                    >
+                      <i
+                        class="pi pi-calendar"
+                      ></i>
+                    </div>
+
+                    <div
+                      class="notification-content"
+                    >
+
+                      <div
+                        class="notification-title"
+                      >
+                        {{
+                          getNotificationTitle(
+                            notification
+                          )
+                        }}
+                      </div>
+
+                      <div
+                        class="notification-body"
+                      >
+                        {{
+                          getNotificationBody(
+                            notification
+                          )
+                        }}
+                      </div>
+
+                    </div>
+
+                    <div
+                      class="notification-time"
+                    >
+                      {{
+                        getNotificationTime(
+                          notification.createdDate
+                        )
+                      }}
+                    </div>
+
+                    @if (!notification.read) {
+                      <span
+                        class="notification-unread-dot"
+                      >
+                      </span>
+                    }
+
+                  </button>
+
+                  <!-- ========================================= -->
+                  <!-- LOAD MORE -->
+                  <!-- ========================================= -->
+
+                  @if (
+                    notificationsLoading &&
+                    notifications.length > 0
+                  ) {
+
+                    <div
+                      class="notification-load-more"
+                    >
+
+                      <p-skeleton
+                        width="90%"
+                        height="12px"
+                      >
+                      </p-skeleton>
+
+                    </div>
+
+                  }
+
+                </div>
+
+              }
+
+              <!-- =========================================== -->
+              <!-- EMPTY -->
+              <!-- =========================================== -->
+
+              @if (
+                !notificationsLoading &&
+                notifications.length === 0
+              ) {
+
+                <div
+                  class="notification-empty"
+                >
+
+                  <i
+                    class="pi pi-bell-slash"
+                  >
+                  </i>
+
+                  <span>
+                    No notifications
+                  </span>
+
+                </div>
+
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+        <!-- =============================================== -->
+        <!-- PROFILE -->
+        <!-- =============================================== -->
+
+        <div
+          class="profile-dropdown"
+          [class.open]="menuOpen"
+        >
+
+          <button
+            type="button"
+            class="profile-button"
+            (click)="toggleMenu()"
+            [attr.aria-expanded]="menuOpen"
+          >
+
+            {{ username() }}
+
+            <span
+              class="profile-arrow"
+              aria-hidden="true"
+            >
+              ▾
+            </span>
+
+          </button>
+
+          <ul
+            class="dropdown-menu"
+          >
+
+            <li>
+              <a
+                routerLink="/coach/profile"
+                (click)="closeMenu()"
+              >
+                Profile
+              </a>
+            </li>
+
+            <li>
+              <button
+                type="button"
+                class="logout-button"
+                (click)="handleLogout()"
+              >
+                Logout
+              </button>
+            </li>
+
+          </ul>
+
+        </div>
+
+      }
+
+      <!-- ================================================= -->
+      <!-- GUEST -->
+      <!-- ================================================= -->
+
+      @else {
+
+        <div
+          class="header-actions"
+        >
+
+          <button
+            type="button"
+            class="w-full mt-3 p-button p-button-secondary p-component login-button"
+            (click)="navigateToSignIn()"
+          >
+            Sign in
+          </button>
+
+          <button
+            type="button"
+            class="w-full mt-3 p-button p-button-secondary p-component sigin-up-button"
+            (click)="navigateToSignup()"
+          >
+            Sign up
+          </button>
+
+        </div>
+
+      }
+
+    </div>
+
+  </header>
+
+  <!-- ===================================================== -->
+  <!-- PAGE CONTENT -->
+  <!-- ===================================================== -->
+
+  <main class="page-content">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

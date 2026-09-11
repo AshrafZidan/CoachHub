@@ -30,6 +30,7 @@
   .coach-main-info {
     margin-top: 12px;
     text-align: start;
+    min-width: 50%;
   }
 
   // Avatar
@@ -46,43 +47,45 @@
     font-weight: 600;
     color: var(--title-color);
     margin: 0 0 12px;
-  }
-
-  // Job with icon
-  .coach-job {
-    display: inline-flex;
+    .booking-row{
+    display: flex;
     align-items: center;
-    gap: 6px;
+     justify-content: start;
+    gap: 10%;
 
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--app-primary-color);
-    background: rgba(131,60,136,.1);
-    border-radius: 6px;
-    padding: 4px 12px;
-    margin-bottom: 12px;
+    .chip{
+             display: flex !important;
+    align-items: center;
+    gap: 5px;
+    }
+    }
+    .coach-job{
+        display: block;
+            font-size: 13px;
+    margin-top: 8px;
+        color: var(--title-secondary-color);
 
-    .pi {
-      font-size: 12px;
     }
   }
 
-  // Badges
-  .badges-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .badge {
-    display: inline-flex;
+ 
+  .badges-row{
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 10px;
+    .chip{
+            display: flex !important;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 16px;
-    font-size: 13px;
-    font-weight: 600;
-  }
+    gap: 5px;
+}
+    }
+
+
+ .star {
+    font-size: 14px;
+    .pi {
+      font-size: 12px;
+    }
+ }
 
   .badge-booking {
     background: rgba(131,60,136,.1);
@@ -349,4 +352,7 @@
 
   border-radius: 50%;
   background: var(--app-delete);
+}
+.book-now{
+ margin-top: 20px;
 }

@@ -75,6 +75,19 @@ export class CoachProfileService {
     );
   }
 
+    getSlots(
+    coachId: number | string,
+    date?: string
+  ): Observable<ApiResponse<SlotResponse>> {
+    let params = new HttpParams();
+    if (date) params = params.set('date', date);
+
+    return this.http.get<ApiResponse<SlotResponse>>(
+      `${this.baseUrl}/mobile/api/coach-slot/available/${coachId}`,
+      { params }
+    );
+  }
+
   deleteSlot(
     slotId: number | string,
   ): Observable<ApiResponse<SlotResponse>> {

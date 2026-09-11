@@ -26,7 +26,7 @@
   <!-- Loading: Initial -->
  <!-- Loading State -->
 <ng-container *ngIf="loading; else loadedState">
-  <div class="coachees-grid">
+  <div class="coachees-grid coachees-grid-skeleton">
     <div
       class="coachee-skeleton"
       *ngFor="let _ of [1, 2, 3]"
@@ -79,6 +79,7 @@
       <div class="card-body">
 
           <img
+            class="avatar"
           *ngIf="coachee.profileImageUrl; else avatarFallback"
           [src]="getImageUrl(coachee.profileImageUrl)"
           [alt]="coachee.fullName"

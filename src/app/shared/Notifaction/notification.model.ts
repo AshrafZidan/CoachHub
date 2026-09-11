@@ -1,7 +1,8 @@
 export interface CNotification {
-  id: string;
+  id: string | number;
 
-  coachId: number;
+  coachId?: number;
+  coacheeId?: number;
 
   titleEn: string;
   titleAr: string;
@@ -10,8 +11,11 @@ export interface CNotification {
   bodyAr: string;
 
   read: boolean;
-
   createdDate: Date;
+
+  type?: string;
+  route?: string;
+  relatedId?: number;
 }
 export interface NotificationsResponse {
   httpStatus?: string;

@@ -1,0 +1,22 @@
+.find-coach{
+.coachees-grid{
+    .meta-row{
+        flex-wrap: wrap;
+        .chip{
+            display: flex !important;
+            align-items: center;
+            gap: 5px;
+            .pi{font-size: 12px;}
+        }
+    }
+     .meta-info{
+            flex-wrap: wrap;
+     }
+    .card{
+        .card-body{
+            align-items: start;
+        }
+    }
+}
+
+}

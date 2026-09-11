@@ -4,66 +4,192 @@
 @import './styles/admin-table.scss';
 
 :root {
+
+  /* ========================================================
+     Application colors
+     ======================================================== */
+
   --title-color: #25324B;
+
   --title-secondary-color: #515B6F;
+
   --app-primary-color: #833C88;
+
   --app-primary-color-dark: #75347a;
-  --p-card-background : #f4f4f4;
-  --p-button-primary-background: #833C88 !important;
-  --p-button-primary-border-color: #833C88 !important;
-  --p-button-primary-hover-background: #833C88 !important;
-  --p-button-primary-hover-border-color: #833C88 !important;
-  --p-button-primary-focus-ring-color: #833C88 !important;
-  --p-button-primary-active-background: #833C88 !important;
-  --p-button-primary-border-color: #833C88 !important;
-  --p-button-primary-hover-border-color: #833C88 !important;
-  --p-button-primary-active-border-color: #833C88 !important;
-  --p-inputtext-focus-border-color: #833C88 !important;
-  --p-tabs-tab-active-border-color: #833C88 !important;
-  --p-tabs-tab-active-color: #833C88 !important;
-  --p-tabs-active-bar-background: #833C88 !important;
-  --p-select-option-selected-background: #833C88 !important;
-  --p-select-option-selected-color: #fff !important;
-  --p-select-option-selected-focus-background: #833C88 !important;
-  --p-select-option-selected-focus-color: #fff !important;
-  --p-select-focus-border-color: #833C88 !important;
-  --p-stepper-separator-active-background: #833C88 !important;
-  --p-datepicker-date-selected-background: #833C88 !important;
 
-  --p-multiselect-option-selected-background: #f1e9f2 !important;
-  --p-multiselect-option-selected-color: #833C88 !important;
-  --p-checkbox-checked-border-color: #833C88 !important;
-  --p-checkbox-checked-background: #833C88 !important;
-  --p-multiselect-option-selected-focus-background: #833C88 !important;
-  --p-multiselect-option-selected-focus-color: #fff !important;
-  --p-chip-background: #F8F8FD !important;
-  --p-chip-color: #833C88 !important;
-  --p-checkbox-checked-hover-background: #833C88 !important;
-  --p-checkbox-checked-hover-border-color: #833C88 !important;
-
-  --p-chip-gap: .3rem !important;
-  --p-chip-remove-icon-color: #833C88 !important;
-  --p-message-text-font-size: 12px !important;
-  --p-dialog-title-font-size: 1.1rem !important;
-  --p-button-success-background: #169E3F !important;
-  --p-button-success-border-color: #169E3F !important;
-  --p-button-danger-background: #F06565 !important;
-  --p-button-danger-border-color: #F06565 !important;
+  --p-card-background: #f4f4f4;
 
 
+  /* ========================================================
+     PrimeNG
+     ======================================================== */
 
-  --app-border-color: #F3F3F3;
-  --app-text-color: #858585;
-  --p-button-border-radius: 15px !important;
-  --app-error: #f87171;
-  --p-inputtext-border-radius: 15px !important;
-  --text-dark: #111827;
-  --text-muted: #7C8493;
-  --odd-row-bg: #F8F8FD;
-  --app-success: #169E3F;
-  --app-delete: #F06565;
+  --p-button-primary-background:
+    #833C88 !important;
+
+  --p-button-primary-border-color:
+    #833C88 !important;
+
+  --p-button-primary-hover-background:
+    #833C88 !important;
+
+  --p-button-primary-hover-border-color:
+    #833C88 !important;
+
+  --p-button-primary-focus-ring-color:
+    #833C88 !important;
+
+  --p-button-primary-active-background:
+    #833C88 !important;
+
+  --p-button-primary-active-border-color:
+    #833C88 !important;
+
+  --p-inputtext-focus-border-color:
+    #833C88 !important;
+
+  --p-tabs-tab-active-border-color:
+    #833C88 !important;
+
+  --p-tabs-tab-active-color:
+    #833C88 !important;
+
+  --p-tabs-active-bar-background:
+    #833C88 !important;
+
+  --p-select-option-selected-background:
+    #833C88 !important;
+
+  --p-select-option-selected-color:
+    #fff !important;
+
+  --p-select-option-selected-focus-background:
+    #833C88 !important;
+
+  --p-select-option-selected-focus-color:
+    #fff !important;
+
+  --p-select-focus-border-color:
+    #833C88 !important;
+
+  --p-stepper-separator-active-background:
+    #833C88 !important;
+
+  --p-datepicker-date-selected-background:
+    #833C88 !important;
+
+  --p-multiselect-option-selected-background:
+    #f1e9f2 !important;
+
+  --p-multiselect-option-selected-color:
+    #833C88 !important;
+
+  --p-checkbox-checked-border-color:
+    #833C88 !important;
+
+  --p-checkbox-checked-background:
+    #833C88 !important;
+
+  --p-multiselect-option-selected-focus-background:
+    #833C88 !important;
+
+  --p-multiselect-option-selected-focus-color:
+    #fff !important;
+
+  --p-chip-background:
+    #F8F8FD !important;
+
+  --p-chip-color:
+    #833C88 !important;
+
+  --p-checkbox-checked-hover-background:
+    #833C88 !important;
+
+  --p-checkbox-checked-hover-border-color:
+    #833C88 !important;
+
+  --p-chip-gap:
+    .3rem !important;
+
+  --p-chip-remove-icon-color:
+    #833C88 !important;
+
+  --p-message-text-font-size:
+    12px !important;
+
+  --p-dialog-title-font-size:
+    1.1rem !important;
+
+  --p-button-success-background:
+    #169E3F !important;
+
+  --p-button-success-border-color:
+    #169E3F !important;
+
+  --p-button-danger-background:
+    #F06565 !important;
+
+  --p-button-danger-border-color:
+    #F06565 !important;
+
+
+  /* ========================================================
+     Application
+     ======================================================== */
+
+  --app-border-color:
+    #F3F3F3;
+
+  --app-text-color:
+    #858585;
+
+  --text-dark:
+    #111827;
+
+  --text-muted:
+    #7C8493;
+
+  --odd-row-bg:
+    #F8F8FD;
+
+  --app-success:
+    #169E3F;
+
+  --app-delete:
+    #F06565;
+
+  --app-error:
+    #f87171;
+
+
+  /* ========================================================
+     Components
+     ======================================================== */
+
+  --p-button-border-radius:
+    15px !important;
+
+  --p-inputtext-border-radius:
+    15px !important;
+
+
+  /* ========================================================
+     Shared Filter
+     ======================================================== */
+
+  --filter-sidebar-width:
+    350px;
+
+  --filter-sidebar-mobile-height:
+    90vh;
+
+  --filter-sidebar-overlay:
+    rgba(0, 0, 0, 0.48);
+
+  --filter-sidebar-border:
+    #E8E8EC;
+
 }
-
 
 /* Regular */
 @font-face {
@@ -348,6 +474,10 @@ input.p-inputtext::placeholder,
     background-color: rgba(240, 101, 101, 0.14);
     color: var(--app-delete) !important;
   }
+  &.star{
+   background: rgba(255, 193, 7, 0.15);
+    color: #b48a00;
+  }
 
   // Booking Status
   &.running, &.active {
@@ -520,6 +650,28 @@ input.p-inputtext::placeholder,
 	}
 
 .booking-page {
+  	.tabs {
+		display: flex;
+		gap: 12px;
+		margin-bottom: 18px;
+
+		.tab {
+			padding: 10px 22px;
+			border-radius: 24px;
+			background: var(--p-card-background, #fff);
+			border: 1px solid var(--app-border-color);
+			cursor: pointer;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+		}
+
+		.tab.active {
+			background: var(--p-chip-background);
+			border-color: var(--app-primary-color);
+			color: var(--app-primary-color);
+			font-weight: bold;
+}
+		
+	}
 	.title {
 		font-size: 20px;
 		margin-bottom: 10px;
@@ -640,15 +792,19 @@ input.p-inputtext::placeholder,
 				margin-top: 10px;
 				display: flex;
 				flex-direction: column;
-				gap: 4px;
+				gap: 6px;
 			}
+
 
 			.price-item {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
 				font-size: 12px;
-				
+      &.discount-item{
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--app-border-color);
+      }
 				.label {
 					color: var(--text-muted);
 				}
@@ -678,6 +834,11 @@ input.p-inputtext::placeholder,
   position: relative;
   display: flex;
   align-items: center;
+  .filter-icon{
+    position: absolute;
+    right: 8px;
+    cursor: pointer;
+}
 }
 
 .search-icon {

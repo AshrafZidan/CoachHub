@@ -1,0 +1,14 @@
+@if(coach){
+<app-coach-add-appointment [coachInput]="coach"></app-coach-add-appointment>
+}@else {
+        <div
+                class="empty-state booking-empty"
+
+            >
+                <i class="pi pi-users"></i>
+                <h3 class="empty-title">
+                No Coaches Details Found
+                </h3>
+            </div>
+
+}

@@ -16,6 +16,33 @@
   flex-wrap: wrap;
 }
 
+.login-button , .sigin-up-button, .lang-toggle{
+border: 0 !important;
+border-radius: 4px !important;
+font-weight: 500 !important;
+  font-size: 0.95rem !important;
+  color: var(--title-secondary-color);
+      background: transparent !important;
+
+    padding: 7px 0px;
+    &:hover {
+      background: transparent !important;
+    }
+  min-width: 60px;
+
+
+
+}
+.sigin-up-button{
+  font-weight: bold !important;
+  background: #EEB945 !important;
+  border: 1px solid var(--app-border-color) !important;
+  padding: 7px 15px;
+    min-width: 100px;
+     &:hover {
+      background: #EEB945 !important;
+    }
+}
 .header-brand {
   display: flex;
   align-items: center;
@@ -79,7 +106,6 @@
   margin-left: auto;
 }
 
-.lang-toggle,
 .profile-button,
 .logout-button {
   border: 0;
@@ -418,3 +444,19 @@
   }
 }
 
+
+.notifications-list {
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.notification-load-more {
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px;
+}
+
+.notification-load-more p-skeleton {
+  display: block;
+}

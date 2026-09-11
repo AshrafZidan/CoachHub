@@ -28,7 +28,7 @@
         </p-message>
   
         <!-- Login Form -->
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+        <form [formGroup]="loginForm"  class="auth-form" novalidate>
   
         @if (websiteView) {
           <div class="role-toggle">
@@ -106,6 +106,7 @@
           <button
             pButton
             type="submit"
+            (click)="onSubmit()"
             label="{{ isLoading ? 'Signing in...' : 'Login' }}"
             class="w-full mt-3 p-button p-button-primary app-custom"
             [loading]="isLoading"
@@ -115,6 +116,7 @@
             @if (selectedRole === 'COACHEE') {
 
               <button
+              (click)="continueAsGust()"
               style="margin-top: 10px;"
               pButton
               label="Continue as Guest"

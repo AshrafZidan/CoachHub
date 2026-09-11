@@ -1,0 +1,606 @@
+/* ============================================================
+   FILTER SIDEBAR
+   ============================================================ */
+
+.filter-sidebar-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 10000;
+
+  display: flex;
+
+  align-items: stretch;
+
+  background: rgba(0, 0, 0, 0.48);
+}
+
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
+.filter-sidebar {
+  width: 350px;
+
+  height: 100vh;
+
+  max-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  background: #ffffff;
+
+  box-shadow:
+    6px 0 25px rgba(0, 0, 0, 0.15);
+
+  animation:
+    filter-sidebar-slide-in
+    220ms
+    ease-out;
+}
+
+
+@keyframes filter-sidebar-slide-in {
+
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.filter-sidebar-header {
+ min-height: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--app-border-color);
+}
+
+
+.filter-sidebar-title {
+  margin: 0;
+    color: var(--title-color);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+
+.filter-sidebar-close {
+  width: 36px;
+
+  height: 36px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color:
+    var(--text-muted);
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+
+.filter-sidebar-close:hover {
+  background:
+    #f5f5f5;
+
+  color:
+    var(--text-dark);
+}
+
+
+.filter-sidebar-close i {
+  font-size: 17px;
+}
+
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+
+.filter-sidebar-content {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  padding:
+    24px;
+
+  scrollbar-width: thin;
+}
+
+
+.filter-sidebar-section {
+  margin-bottom: 28px;
+}
+
+
+.filter-sidebar-section:last-child {
+  margin-bottom: 0;
+}
+
+
+.filter-sidebar-section-title {
+  margin:
+    0 0 10px;
+
+  color:
+    var(--title-color);
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+   OPTION
+   ============================================================ */
+
+.filter-sidebar-option {
+  position: relative;
+
+  min-height: 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+
+.filter-sidebar-option input {
+  position: absolute;
+
+  width: 1px;
+
+  height: 1px;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+.filter-option-label {
+  min-width: 0;
+
+  color:
+    var(--title-secondary-color);
+
+  font-size: 14px;
+
+  font-weight: 400;
+
+  line-height: 1.4;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   CHECKBOX
+   ============================================================ */
+
+.filter-checkbox {
+  width: 20px;
+
+  height: 20px;
+
+  flex: 0 0 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1.5px solid
+    #d4d9e2;
+
+  border-radius: 4px;
+
+  background: #ffffff;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+.filter-checkbox i {
+  color: #ffffff;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+
+.filter-sidebar-option
+input:checked
++ .filter-checkbox {
+  background:
+    var(--app-primary-color);
+
+  border-color:
+    var(--app-primary-color);
+}
+
+
+/* ============================================================
+   RADIO
+   ============================================================ */
+
+.filter-radio {
+  width: 20px;
+
+  height: 20px;
+
+  flex: 0 0 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1.5px solid
+    #d4d9e2;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+}
+
+
+.filter-radio span {
+  width: 9px;
+
+  height: 9px;
+
+  border-radius: 50%;
+
+  background:
+    var(--app-primary-color);
+}
+
+
+.filter-sidebar-option
+input:checked
++ .filter-radio {
+  border-color:
+    var(--app-primary-color);
+}
+
+
+/* ============================================================
+   SKELETON
+   ============================================================ */
+
+.filter-sidebar-skeleton {
+  min-height: 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.filter-sidebar-footer {
+  flex-shrink: 0;
+
+  display: flex;
+
+  gap: 12px;
+
+  padding:
+    16px 24px 20px;
+
+  background: #ffffff;
+
+  border-top:
+    1px solid
+    var(--app-border-color);
+}
+
+.filter-apply-button , .filter-clear-button  {
+  flex: 1;
+
+  width: auto;
+
+  height: 40px;
+}
+/* ============================================================
+   CLEAR
+   ============================================================ */
+
+
+
+
+
+.filter-apply-count {
+  min-width: 20px;
+
+  height: 20px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0 5px;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.2);
+
+  font-size: 11px;
+}
+
+
+/* ============================================================
+   BODY LOCK
+   ============================================================ */
+
+body.filter-sidebar-open {
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  .filter-sidebar-overlay {
+    align-items: flex-end;
+  }
+
+
+  .filter-sidebar {
+    width: 100%;
+
+    height: 90vh;
+
+    max-height: 90vh;
+
+    border-radius:
+      26px 26px 0 0;
+
+    box-shadow:
+      0 -8px 30px
+      rgba(0, 0, 0, 0.18);
+
+    animation:
+      filter-sidebar-slide-up
+      250ms
+      ease-out;
+  }
+
+
+  @keyframes filter-sidebar-slide-up {
+
+    from {
+      transform: translateY(100%);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
+
+
+  .filter-sidebar-header {
+    min-height: 76px;
+
+    justify-content: center;
+
+    padding:
+      0 24px;
+
+    border-bottom: 0;
+  }
+
+
+  .filter-sidebar-title {
+    font-size: 22px;
+
+    font-weight: 600;
+  }
+
+
+  .filter-sidebar-close {
+    position: absolute;
+
+    top: 20px;
+
+    right: 20px;
+  }
+
+
+  .filter-sidebar-content {
+    padding:
+      0 24px 120px;
+  }
+
+
+  .filter-sidebar-section {
+    margin-bottom: 26px;
+  }
+
+
+  .filter-sidebar-section-title {
+    margin-bottom: 8px;
+
+    font-size: 16px;
+  }
+
+
+  .filter-sidebar-option {
+    min-height: 48px;
+
+    gap: 13px;
+  }
+
+
+  .filter-option-label {
+    font-size: 15px;
+  }
+
+
+  .filter-checkbox,
+  .filter-radio {
+    width: 21px;
+
+    height: 21px;
+
+    flex-basis: 21px;
+  }
+
+
+  .filter-sidebar-footer {
+    position: absolute;
+
+    right: 0;
+
+    bottom: 0;
+
+    left: 0;
+
+    padding:
+      14px 24px
+      calc(
+        14px +
+        env(safe-area-inset-bottom)
+      );
+
+    box-shadow:
+      0 -5px 18px
+      rgba(0, 0, 0, 0.08);
+  }
+
+
+  .filter-clear-button {
+    display: flex;
+  }
+
+
+  .filter-apply-button {
+    flex: 1;
+
+    width: auto;
+
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+  .filter-sidebar {
+    height: 92vh;
+
+    max-height: 92vh;
+
+    border-radius:
+      22px 22px 0 0;
+  }
+
+
+  .filter-sidebar-header {
+    min-height: 70px;
+  }
+
+
+  .filter-sidebar-title {
+    font-size: 20px;
+  }
+
+
+  .filter-sidebar-content {
+    padding:
+      0 20px 120px;
+  }
+
+
+  .filter-sidebar-footer {
+    padding-left: 20px;
+
+    padding-right: 20px;
+  }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .filter-sidebar,
+  .filter-sidebar-close,
+  .filter-apply-button,
+  .filter-checkbox {
+    animation: none;
+
+    transition: none;
+  }
+}

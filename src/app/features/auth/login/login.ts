@@ -10,6 +10,9 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { TranslateModule } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+import { NotificationService } from '../../../shared/Notifaction/notification.service';
+import { FcmService } from '../../../shared/Notifaction/firebase-notification.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +27,9 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class LoginComponent implements OnInit {
     private route = inject(ActivatedRoute);
-
+    private router = inject(Router);
+    private notificationService = inject(NotificationService);
+    private fcmService = inject(FcmService);
   loginForm!: FormGroup;
   isLoading    = false;
   showPassword = false;
@@ -61,26 +66,80 @@ export class LoginComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  onSubmit(): void {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
-  
-    this.isLoading    = true;
-    this.errorMessage = '';
-  
-    this.auth.login(this.loginForm.value).subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        // console.log(response.messageEn);  // "Success"
-        this.auth.redirectAfterLogin();
-      },
-      error: (err: Error) => {
-        this.isLoading    = false;
-        this.errorMessage = err.message;  // messageEn from backend
+async onSubmit(): Promise<void> {
+  if (this.loginForm.invalid) {
+    this.loginForm.markAllAsTouched();
+    return;
+  }
+
+  this.isLoading = true;
+  this.errorMessage = "";
+
+  this.auth.login(this.loginForm.value).subscribe({
+    next: async () => {
+      this.isLoading = false;
+
+      try {
+        const user = this.auth.getUser();
+
+        if (user) {
+          const role =
+            user.roles?.some((r: string) =>
+              r.includes("COACH")
+            )
+              ? "COACH"
+              : "COACHEE";
+
+          this.notificationService.initialize(
+            Number(user.id),
+            role
+          );
+
+          const fcmToken =
+            await this.fcmService.getFcmToken();
+
+          if (fcmToken) {
+            this.notificationService
+              .registerFcmToken(fcmToken)
+              .subscribe({
+                next: () => {
+                  console.log(
+                    "FCM token registered successfully"
+                  );
+                },
+
+                error: (error) => {
+                  console.error(
+                    "Failed to register FCM token:",
+                    error
+                  );
+                },
+              });
+          }
+
+          this.fcmService.start();
+        }
+      } catch (error) {
+        console.error(
+          "FCM initialization failed:",
+          error
+        );
       }
-    });
+
+      this.auth.redirectAfterLogin();
+    },
+
+    error: (err: Error) => {
+      this.isLoading = false;
+      this.errorMessage = err.message;
+    },
+  });
+}
+
+  continueAsGust(): void {
+        this.router.navigateByUrl(
+          '/coachee/find-coach'
+        );  
   }
  
 }

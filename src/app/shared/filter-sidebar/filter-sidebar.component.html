@@ -1,0 +1,502 @@
+<div
+  class="filter-sidebar-overlay"
+  *ngIf="visible"
+  (click)="close()"
+>
+
+  <aside
+    class="filter-sidebar"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Filter Coaches"
+    (click)="$event.stopPropagation()"
+  >
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="filter-sidebar-header">
+
+      <h2 class="filter-sidebar-title">
+        Filter Coaches
+      </h2>
+
+      <button
+        type="button"
+        class="filter-sidebar-close"
+        aria-label="Close filters"
+        (click)="close()"
+      >
+
+        <i class="pi pi-times"></i>
+
+      </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONTENT
+         ===================================================== -->
+
+    <div class="filter-sidebar-content">
+
+
+      <!-- ===================================================
+           CATEGORIES
+           =================================================== -->
+
+      <section class="filter-sidebar-section">
+
+        <h3 class="filter-sidebar-section-title">
+          Categories
+        </h3>
+
+
+        <!-- Loading -->
+
+        <ng-container
+          *ngIf="
+            loadingCategories;
+            else categoriesContent
+          "
+        >
+
+          <div
+            class="filter-sidebar-skeleton"
+            *ngFor="
+              let item of [1, 2, 3, 4, 5, 6]
+            "
+          >
+
+            <p-skeleton
+              width="20px"
+              height="20px"
+            ></p-skeleton>
+
+            <p-skeleton
+              width="140px"
+              height="16px"
+            ></p-skeleton>
+
+          </div>
+
+        </ng-container>
+
+
+        <!-- Loaded -->
+
+        <ng-template #categoriesContent>
+
+          <label
+            class="filter-sidebar-option"
+            *ngFor="
+              let category of categories
+            "
+          >
+
+            <input
+              type="checkbox"
+              [checked]="
+                isCategorySelected(
+                  category.id
+                )
+              "
+              (change)="
+                toggleCategory(
+                  category.id
+                )
+              "
+            />
+
+            <span class="filter-checkbox">
+
+              <i
+                class="pi pi-check"
+                *ngIf="
+                  isCategorySelected(
+                    category.id
+                  )
+                "
+              ></i>
+
+            </span>
+
+            <span class="filter-option-label">
+              {{ category.nameEn }}
+            </span>
+
+          </label>
+
+        </ng-template>
+
+      </section>
+
+
+      <!-- ===================================================
+           LANGUAGES
+           =================================================== -->
+
+      <section class="filter-sidebar-section">
+
+        <h3 class="filter-sidebar-section-title">
+          Languages
+        </h3>
+
+
+        <!-- Loading -->
+
+        <ng-container
+          *ngIf="
+            loadingLanguages;
+            else languagesContent
+          "
+        >
+
+          <div
+            class="filter-sidebar-skeleton"
+            *ngFor="
+              let item of [1, 2, 3, 4]
+            "
+          >
+
+            <p-skeleton
+              width="20px"
+              height="20px"
+            ></p-skeleton>
+
+            <p-skeleton
+              width="110px"
+              height="16px"
+            ></p-skeleton>
+
+          </div>
+
+        </ng-container>
+
+
+        <!-- Loaded -->
+
+        <ng-template #languagesContent>
+
+          <label
+            class="filter-sidebar-option"
+            *ngFor="
+              let language of languages
+            "
+          >
+
+            <input
+              type="checkbox"
+              [checked]="
+                isLanguageSelected(
+                  language.id
+                )
+              "
+              (change)="
+                toggleLanguage(
+                  language.id
+                )
+              "
+            />
+
+            <span class="filter-checkbox">
+
+              <i
+                class="pi pi-check"
+                *ngIf="
+                  isLanguageSelected(
+                    language.id
+                  )
+                "
+              ></i>
+
+            </span>
+
+            <span class="filter-option-label">
+              {{ language.nameEn }}
+            </span>
+
+          </label>
+
+        </ng-template>
+
+      </section>
+
+
+      <!-- ===================================================
+           GENDER
+           =================================================== -->
+
+      <section class="filter-sidebar-section">
+
+        <h3 class="filter-sidebar-section-title">
+          Gender
+        </h3>
+
+
+        <!-- Male -->
+
+        <label class="filter-sidebar-option">
+
+          <input
+            type="radio"
+            name="filter-gender"
+            [checked]="
+              isGenderSelected('MALE')
+            "
+            (change)="
+              selectGender('MALE')
+            "
+          />
+
+          <span class="filter-radio">
+
+            <span
+              *ngIf="
+                isGenderSelected('MALE')
+              "
+            ></span>
+
+          </span>
+
+          <span class="filter-option-label">
+            Male
+          </span>
+
+        </label>
+
+
+        <!-- Female -->
+
+        <label class="filter-sidebar-option">
+
+          <input
+            type="radio"
+            name="filter-gender"
+            [checked]="
+              isGenderSelected('FEMALE')
+            "
+            (change)="
+              selectGender('FEMALE')
+            "
+          />
+
+          <span class="filter-radio">
+
+            <span
+              *ngIf="
+                isGenderSelected('FEMALE')
+              "
+            ></span>
+
+          </span>
+
+          <span class="filter-option-label">
+            Female
+          </span>
+
+        </label>
+
+
+        <!-- Any -->
+
+        <label class="filter-sidebar-option">
+
+          <input
+            type="radio"
+            name="filter-gender"
+            [checked]="
+              selectedGender === null
+            "
+            (change)="
+              selectGender(null)
+            "
+          />
+
+          <span class="filter-radio">
+
+            <span
+              *ngIf="
+                selectedGender === null
+              "
+            ></span>
+
+          </span>
+
+          <span class="filter-option-label">
+            Any
+          </span>
+
+        </label>
+
+      </section>
+
+
+      <!-- ===================================================
+           EXPERIENCE
+           =================================================== -->
+
+      <section class="filter-sidebar-section">
+
+        <h3 class="filter-sidebar-section-title">
+          Experience Level
+        </h3>
+
+
+        <!-- Beginner -->
+
+        <label class="filter-sidebar-option">
+
+          <input
+            type="radio"
+            name="filter-experience"
+            [checked]="
+              isExperienceSelected(
+                'BEGINNER'
+              )
+            "
+            (change)="
+              selectExperience(
+                'BEGINNER'
+              )
+            "
+          />
+
+          <span class="filter-radio">
+
+            <span
+              *ngIf="
+                isExperienceSelected(
+                  'BEGINNER'
+                )
+              "
+            ></span>
+
+          </span>
+
+          <span class="filter-option-label">
+            Beginner
+          </span>
+
+        </label>
+
+
+        <!-- Intermediate -->
+
+        <label class="filter-sidebar-option">
+
+          <input
+            type="radio"
+            name="filter-experience"
+            [checked]="
+              isExperienceSelected(
+                'INTERMEDIATE'
+              )
+            "
+            (change)="
+              selectExperience(
+                'INTERMEDIATE'
+              )
+            "
+          />
+
+          <span class="filter-radio">
+
+            <span
+              *ngIf="
+                isExperienceSelected(
+                  'INTERMEDIATE'
+                )
+              "
+            ></span>
+
+          </span>
+
+          <span class="filter-option-label">
+            Intermediate
+          </span>
+
+        </label>
+
+
+        <!-- Expert -->
+
+        <label class="filter-sidebar-option">
+
+          <input
+            type="radio"
+            name="filter-experience"
+            [checked]="
+              isExperienceSelected(
+                'EXPERT'
+              )
+            "
+            (change)="
+              selectExperience(
+                'EXPERT'
+              )
+            "
+          />
+
+          <span class="filter-radio">
+
+            <span
+              *ngIf="
+                isExperienceSelected(
+                  'EXPERT'
+                )
+              "
+            ></span>
+
+          </span>
+
+          <span class="filter-option-label">
+            Expert
+          </span>
+
+        </label>
+
+      </section>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <div class="filter-sidebar-footer">
+
+      <button
+        type="button"
+        class="w-full mt-3 p-button p-button-secondary app-custom p-component filter-clear-button"
+        (click)="onClear()"
+      >
+        Clear
+      </button>
+
+      <button
+        type="button"
+        class="p-button-primary w-full p-button p-component filter-apply-button"
+        (click)="onApply()"
+      >
+        Apply
+
+        <span
+          class="filter-apply-count"
+          *ngIf="
+            activeFilterCount > 0
+          "
+        >
+          {{ activeFilterCount }}
+        </span>
+
+      </button>
+
+    </div>
+
+  </aside>
+
+</div>

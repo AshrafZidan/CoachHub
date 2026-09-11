@@ -5,7 +5,7 @@ const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./layout/coach-layout/coach-layout').then(m => m.CoachLayoutComponent),
+      import('../../shared/layout/shared-layout/shared-layout.component').then(m => m.SharedLayoutComponent),
     children: [
       {
         path: '',

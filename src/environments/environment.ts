@@ -9,6 +9,7 @@ export const environment = {
   storageBucket: "coachinghub-9727f.firebasestorage.app",
   messagingSenderId: "311133154977",
   appId: "1:311133154977:web:fcea3d6047292e3ae84ae0",
-  measurementId: "G-2N0821RMDM"
+  measurementId: "G-2N0821RMDM",
+  vapidKey:"BEQ5KsXM8TqqamYG2EHj0m6CgcoNdZ_QTNNmF_dFPWsK1vOWg5DpZv4RO1asZejNkOp4V4ystxRFDqtGh5g46K0"
 }
 };

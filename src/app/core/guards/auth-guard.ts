@@ -82,6 +82,6 @@ export const guestGuard: CanActivateFn = () => {
       ? '/admin/coaches'
       : auth.isCoach()
         ? '/coach/bookings'
-        : '/user/dashboard'
+        : '/coachee/find-coach'
   ]);
 };

@@ -13,7 +13,6 @@ import {
   ApiError,
   User,
 } from '../models/auth.model';
-import { error } from 'console';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -36,7 +35,6 @@ export class AuthService {
     if (!token) return false;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      // ✅ Backend returns "ROLE_ADMIN" — check both formats
       return (
         payload.roles?.includes('ROLE_ADMIN') ||
         payload.roles?.includes('ADMIN') ||
@@ -140,6 +138,19 @@ registerCoach(payload: any): Observable<any> {
     })
   );
 }
+registerUserFcmToken(token: string): Observable<any> {
+  return this.http.put(
+    `${this.BASE_URL}/mobile/api/notifications/coach/fcm-token`,
+    token
+  ).pipe(
+    catchError((error) => {
+      const apiError: ApiError = error.error;
+      const message =
+        apiError?.messageEn ?? 'User registration failed to fcm token. Please try again.';
+      return throwError(() => new Error(message));
+    })
+  );
+}
 
     // ─── forgotPassword ────────────────────────────────────────────
   forgotPassword(email: string): Observable<any> {
@@ -220,7 +231,7 @@ registerCoach(payload: any): Observable<any> {
     const returnUrl =
       this.router.routerState.snapshot.root.queryParams['returnUrl'];
     this.router.navigateByUrl(
-      returnUrl || (this.isAdmin() ? '/admin/coaches' :  (this.isCoach()? '/coach/bookings':'user/dashboard'))
+      returnUrl || (this.isAdmin() ? '/admin/coaches' :  (this.isCoach()? '/coach/bookings':'coachee/find-coach'))
     );
   }
 

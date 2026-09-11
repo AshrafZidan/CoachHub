@@ -1,4 +1,4 @@
-import { User } from "../../../core/models/user";
+import { User } from "../../../core/models/auth.model";
 
 // ─── Coach Model ─────────────────────────────────────────
 export interface Coach {
@@ -133,6 +133,11 @@ nationality:Nationality;
 
   // ─── Relations ──────────────────────────
   coachingIndustries: any[];
+  industries: {
+    id:number; 
+    nameAr:string;
+    nameEn:string;
+      }[];
   languages: any[];
   certificates: any[];
 

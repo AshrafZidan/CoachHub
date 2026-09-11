@@ -1,0 +1,155 @@
+<div class="booking-page find-coach coach-coachees-page">
+ 
+
+<div class="title-wrapper">
+    <h2 class="title">Coaches
+        <p-skeleton *ngIf="loading" height="20px" class="page-subtitle"></p-skeleton>
+    </h2>
+    
+    
+    <!-- Search -->
+    <div class="search-section">
+        <div class="search-wrapper">
+            <i class="pi pi-search search-icon"></i>
+            <input
+        type="text"
+        pInputText
+        class="search-input"
+        placeholder="Search by name..."
+        (input)="onSearchChange($event.target.value)"
+      />
+      <span class="filter-icon" (click)="filterVisible = !filterVisible">
+          <svg width="29" height="20" viewBox="0 0 29 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.3977 13.8274H4.83594" stroke="#833C88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15.7705 5.75023H23.3323" stroke="#833C88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M10.473 5.70521C10.473 4.6255 9.20306 3.75 7.63689 3.75C6.07072 3.75 4.80078 4.6255 4.80078 5.70521C4.80078 6.78492 6.07072 7.66042 7.63689 7.66042C9.20306 7.66042 10.473 6.78492 10.473 5.70521Z" stroke="#833C88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M24.0033 13.7946C24.0033 12.7149 22.7343 11.8394 21.1681 11.8394C19.601 11.8394 18.3311 12.7149 18.3311 13.7946C18.3311 14.8743 19.601 15.7498 21.1681 15.7498C22.7343 15.7498 24.0033 14.8743 24.0033 13.7946Z" stroke="#833C88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </span>
+    </div>
+</div>
+  </div>
+
+<ng-container *ngIf="loading; else loadedState">
+  <div class=" coachees-grid coachees-grid-skeleton">
+    <div
+      class="coachee-skeleton"
+      *ngFor="let _ of [1, 2, 3]"
+    >
+      <p-skeleton
+        height="160px"
+        styleClass="skeleton-avatar"
+      ></p-skeleton>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Loaded State -->
+            <ng-template #loadedState>
+
+            <!-- Empty -->
+            <div
+                class="empty-state booking-empty"
+                *ngIf="coaches.length === 0"
+            >
+                <i class="pi pi-users"></i>
+
+                <h3 class="empty-title">
+                No Coaches Found
+                </h3>
+
+                <p>
+                {{ searchQuery ? 'Try a different search' : 'You have no coaches yet' }}
+                </p>
+            </div>
+
+            <!-- Data -->
+            <div
+                class="coachees-grid"
+                *ngIf="coaches.length > 0"
+            >
+              
+                <!-- Coachees Grid -->
+  <div class="grid" *ngIf="!loading && coaches.length > 0">
+    <div
+      class="card"
+      (click)="navigateToCoachDetails(coach)"
+      *ngFor="let coach of coaches"
+      
+      >
+      <!-- Avatar -->
+      <div class="card-header">
+        <h3 class="coach-name">{{ coach.fullNameEn }}</h3>
+        <span class="chip completed">+{{coach.bookingCount}} bookings</span>
+
+      </div>
+
+      <!-- Info -->
+      <div class="card-body">
+
+          <img
+          class="avatar"
+          *ngIf="coach.profileImageUrl; else avatarFallback"
+          [src]="getImageUrl(coach.profileImageUrl)"
+          [alt]="coach.fullNameEn"
+          (error)="onImageError($event)"
+        />
+        <ng-template #avatarFallback>
+          <div class="avatar">{{ getInitial(coach.fullNameEn) }}</div>
+        </ng-template>
+        <div class="meta-info">
+        <div class="meta-row">
+          <span class="chip pending"  *ngFor="let indus of coach?.industries">
+            <i class="pi pi-briefcase"></i>
+           {{ indus.nameEn }} 
+          </span>
+        </div>
+        <div class="meta-row" >
+
+            <span class="chip star"> 
+                <i class="pi pi-clock"></i>
+                {{coach.yearsOfExperience}} Yrs Exp
+            </span>
+        </div>
+
+        <!-- <div class="meta-row" *ngIf="coach.lastBookingDate">
+          <span class="meta-label">
+            <i class="pi pi-clock"></i>
+            Last Session : {{ coach.lastBookingDate | date: 'short' }}
+          </span>
+        </div> -->
+      </div>
+           <!-- CTA Arrow -->
+      <div   class="coachee-arrow show-details">
+        <i class="pi pi-chevron-right"></i>
+      </div>
+      </div>
+
+ 
+    </div>
+  </div>
+
+            </div>
+
+            </ng-template>
+
+
+
+  <!-- Loading More -->
+  <div class="booking-loading-inline" *ngIf="loadingMore">
+		<i class="pi pi-spin pi-spinner"></i>
+    <span>Loading more coaches...</span>
+  </div>
+</div>
+
+<app-filter-sidebar
+  [visible]="filterVisible"
+  [categories]="categories"
+  [languages]="languages"
+  [loadingCategories]="loadingCategories"
+  [loadingLanguages]="loadingLanguages"
+  [initialValue]="appliedFilters"
+  (visibleChange)="filterVisible = $event"
+  (apply)="onFiltersApplied($event)"
+  (clear)="onFiltersCleared()"
+></app-filter-sidebar>

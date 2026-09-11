@@ -5,7 +5,29 @@
     import { HttpClient } from '@angular/common/http';
     import { catchError, finalize, map, Observable, shareReplay, throwError } from 'rxjs';
     import { ApiError } from '../../../core/models/auth.model';
+    interface ILookupResponse<T> {
+    httpStatus: string;
+    code: string;
+    timeStamp: string;
+    messageEn: string;
+    messageAr: string;
+    data: T[];
+    count: number;
+    pageIndex: number;
+    pageCount: number;
+    pageSize: number;
+    errors: ApiError[];
+    }
 
+    interface ILookupItem {
+    id: number;
+    nameEn: string;
+    nameAr: string;
+    }
+
+    interface ILanguageLookupItem extends ILookupItem {
+    code: string;
+    }
     interface ICountry {
         id: number;
         code: string;
@@ -28,6 +50,7 @@
         pageSize: number;
         errors: ApiError[];
     }
+    
     @Injectable({ providedIn: 'root' })
     export class LookupsService {
         private http = inject(HttpClient);
@@ -55,30 +78,34 @@
             }
 
             return this.countriesRest$;
-        }
-       getCountriesfrombackend(): Observable<ICountry[]> {
-  if (!this.countriesBackend$) {
-    this.countriesBackend$ = this.http
-      .get<ICountry[]>(this.BASE_URL + '/countries')
-      .pipe(shareReplay(1));
-  }
+    }
+            getCountriesfrombackend(): Observable<ICountry[]> {
+            if (!this.countriesBackend$) {
+                this.countriesBackend$ = this.http
+                .get<ICountry[]>(this.BASE_URL + '/countries')
+                .pipe(shareReplay(1));
+            }
 
-  return this.countriesBackend$;
-}
+            return this.countriesBackend$;
+            }
+        
+        getCoachingIndustries(): Observable<ILookupItem[]> {
 
-        getCoachingIndustries(): Observable<ICoachingIndustry[]> {
             if (!this.coachingIndustries$) {
-                this.coachingIndustries$ = this.http
-                    .get<ICoachingIndustry[]>(
-                        this.BASE_URL + '/coaching-industries'
+
+                this.coachingIndustries$ =
+                this.http
+                    .get<ILookupResponse<ILookupItem>>(
+                    `${this.BASE_URL}/coaching-industries`
                     )
                     .pipe(
-                        shareReplay(1)
+                    map(response => response.data ?? []),
+                    shareReplay(1)
                     );
             }
 
             return this.coachingIndustries$;
-        }
+            }
         getCoaches(): Observable<any[]> {
             if (!this.coaches$) {
                 this.coaches$ = this.http
@@ -93,19 +120,23 @@
             return this.coaches$;
 
         }
-        getLanguages(): Observable<any[]> {
+       getLanguages(): Observable<ILanguageLookupItem[]> {
+
             if (!this.languages$) {
-                this.languages$ = this.http
-                    .get<any[]>(
-                        this.BASE_URL + '/languages'
+
+                this.languages$ =
+                this.http
+                    .get<ILookupResponse<ILanguageLookupItem>>(
+                    `${this.BASE_URL}/languages`
                     )
                     .pipe(
-                        shareReplay(1)
+                    map(response => response.data ?? []),
+                    shareReplay(1)
                     );
             }
 
             return this.languages$;
-        }
+            }
         loadPermissions(): Observable<any[]> {
             if (!this.permissions$) {
                 this.permissions$ =

@@ -13,6 +13,7 @@
     "/coach/profile": {},
     "/coach/todo": {},
     "/coach/todo/add": {},
+    "/forbidden": {},
     "/user": {},
     "/user/dashboard": {}
   }

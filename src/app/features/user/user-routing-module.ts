@@ -3,13 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'dashboard',
+    path: 'find-coach',
     loadComponent: () =>
-      import('./dashboard/dashboard.component').then(m => m.DashboardComponent)
+      import('./find-coach/find-coach.component').then(m => m.FindCoachComponent)
   },
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'find-coach',
     pathMatch: 'full'
   }
 ];

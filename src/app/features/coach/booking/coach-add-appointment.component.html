@@ -68,7 +68,6 @@
     <div class="coach-info">
 
       <div class="avatar-wrap">
-
         <ng-container
           *ngIf="coach?.profileImageUrl; else avatarFallback"
         >
@@ -94,36 +93,45 @@
       <div class="coach-main-info">
 
         <h2 class="coach-name">
-          {{ coach?.fullNameEn || '—' }}
+            <div class="booking-row">
+
+                {{ coach?.fullNameEn || '—' }}
+                
+                <span class="chip completed">
+                    
+                    <i class="pi pi-calendar"></i>
+                    
+                    <b>
+                        +{{ coach?.bookingCount || 0 }}
+                        Booking
+                    </b>
+                    
+                    
+                    
+                </span>
+            </div>
+
+          <span class="coach-job">
+
+            {{ coach?.jobTitle || 'Coach' }}
+
+
+          </span>
         </h2>
 
         <div class="badges-row">
 
-          <span class="coach-job">
-
+         <span class="chip pending"  *ngFor="let indus of coach?.industries ? coach?.industries : coach?.coachingIndustries">
             <i class="pi pi-briefcase"></i>
-
-            {{ coach?.jobTitle || 'Coach' }}
-
+           {{ indus.nameEn }} 
           </span>
 
-          <span class="coach-job">
-
-            <i class="pi pi-calendar"></i>
-
-            <b>
-              +{{ coach?.bookingCount || 0 }}
-            </b>
-
-            Booking
-
-          </span>
 
         </div>
 
-        <span class="badge badge-exp">
+        <span class="chip star">
 
-          <i class="pi pi-star-fill"></i>
+          <i class="pi pi-clock"></i>
 
           {{ coach?.yearsOfExperience || 0 }}
 
@@ -165,6 +173,19 @@
       </div>
 
     </div>
+    @if (! isCoach) {
+    <div class="book-now">
+        <button
+            pButton
+            type="button"
+            label="Book Now"
+            class="btn-book-now  p-button-primary w-full p-button p-component"
+            (click)="bookSelectedSlotToUser()"
+        >
+        </button>
+    </div>
+  }
+
 
   </ng-template>
 
@@ -318,8 +339,9 @@
       <!-- ================================================= -->
       <!-- ADD MORE -->
       <!-- ================================================= -->
+      @if (isLoggedIn && isCoach) {
 
-      <button
+          <button
         pButton
         type="button"
         label="Add More Appointment"
@@ -327,6 +349,7 @@
         (click)="openAddDialog()"
       >
       </button>
+      }
 
     </main>
 
