@@ -233,7 +233,7 @@ body {
 }
 
 .p-button {
-  border-radius: 12px !important;
+  border-radius: 16px !important;
   font-weight: 500;
   font-size: 14px !important;
   cursor: pointer;
@@ -739,6 +739,10 @@ input.p-inputtext::placeholder,
 			align-items: center;
 			border-bottom: 1px solid var(--app-border-color);
 		}
+    .card-footer{
+          padding: 10px 20px;
+    border-top: 1px solid var(--app-border-color);
+    }
 
 		.card-body {
 			display: flex;

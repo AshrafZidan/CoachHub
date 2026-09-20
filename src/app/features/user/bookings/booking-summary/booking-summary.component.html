@@ -1,0 +1,137 @@
+<!-- <p-dialog
+  header="Booking Summary"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible"
+  (visibleChange)="onVisibleChange($event)"
+  [closable]="!isCreatingBooking"
+  [style]="{ width: '500px' }"
+> -->
+  @if (bookingSummary) {
+    <div class="booking-summary">
+
+      <!-- Appointment Details -->
+      <section class="summary-section">
+        <h4>Appointment Details</h4>
+
+        <div class="summary-row">
+          <span>Coach</span>
+          <strong>{{ bookingSummary.coach?.fullNameEn }}</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Date</span>
+          <strong>
+            {{ bookingSummary.date | date: 'MMMM d, yyyy' }}
+          </strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Time</span>
+          <strong>
+            {{ bookingSummary.startTime }}
+            -
+            {{ bookingSummary.endTime }}
+          </strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Duration</span>
+          <strong>
+            {{ bookingSummary.durationMinutes }} minutes
+          </strong>
+        </div>
+      </section>
+
+      <!-- Coupon -->
+      <section class="summary-section">
+        <h4 style="margin-bottom: 0;">Coupon Code</h4>
+
+        <div class="coupon-container">
+          <input
+            pInputText
+            type="text"
+            [(ngModel)]="couponCode"
+            placeholder="Enter coupon code"
+            [disabled]="
+              isValidatingCoupon ||
+              isCreatingBooking
+            "
+            (keyup.enter)="onValidateCoupon()"
+          />
+
+          <button
+            pButton
+            type="button"
+            label="Validate"
+            [loading]="isValidatingCoupon"
+            class="apply-btn"
+            [disabled]="
+              !couponCode.trim() ||
+              isCreatingBooking
+            "
+            (click)="onValidateCoupon()"
+          ></button>
+        </div>
+      </section>
+
+      <!-- Price -->
+      <section class="price-section">
+
+        <div class="summary-row">
+          <span>Price</span>
+
+          <strong>
+            ${{ bookingSummary.originalPrice }}
+          </strong>
+        </div>
+
+        @if (bookingSummary.discountAmount > 0) {
+          <div class="summary-row discount">
+            <span>Discount</span>
+
+            <strong>
+              -${{ bookingSummary.discountAmount }}
+            </strong>
+          </div>
+        }
+
+        <div class="summary-row total">
+          <span>Total</span>
+
+          <strong>
+            ${{ bookingSummary.finalPrice }}
+          </strong>
+        </div>
+
+      </section>
+
+      <!-- Actions -->
+      <div class="modal-actions">
+
+        <button
+          pButton
+          type="button"
+          label="Cancel"
+          severity="secondary"
+          class="p-button-sm  p-button p-button-secondary app-custom p-component"
+          [disabled]="isCreatingBooking"
+          (click)="onVisibleChange(false)"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+        class="p-button  p-button-sm p-button-primary app-custom p-component"
+          label="Continue to Payment"
+          [loading]="isCreatingBooking"
+          [disabled]="isValidatingCoupon"
+          (click)="onContinueToPayment()"
+        ></button>
+
+      </div>
+
+    </div>
+  }
+<!-- </p-dialog> -->

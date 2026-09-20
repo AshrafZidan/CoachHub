@@ -73,7 +73,6 @@
   <div class="grid" *ngIf="!loading && coaches.length > 0">
     <div
       class="card"
-      (click)="navigateToCoachDetails(coach)"
       *ngFor="let coach of coaches"
       
       >
@@ -99,7 +98,7 @@
         </ng-template>
         <div class="meta-info">
         <div class="meta-row">
-          <span class="chip pending"  *ngFor="let indus of coach?.industries">
+          <span class="chip pending"  *ngFor="let indus of coach.coachingIndustries">
             <i class="pi pi-briefcase"></i>
            {{ indus.nameEn }} 
           </span>
@@ -112,17 +111,27 @@
             </span>
         </div>
 
-        <!-- <div class="meta-row" *ngIf="coach.lastBookingDate">
-          <span class="meta-label">
-            <i class="pi pi-clock"></i>
-            Last Session : {{ coach.lastBookingDate | date: 'short' }}
-          </span>
-        </div> -->
       </div>
            <!-- CTA Arrow -->
-      <div   class="coachee-arrow show-details">
+      <!-- <div   class="coachee-arrow show-details">
         <i class="pi pi-chevron-right"></i>
+      </div> -->
       </div>
+      <div class="card-footer" >
+        <div class="meta-row-price" *ngIf="coach.halfHourPrice">
+            <span class="label">Price Start From</span>
+            <span class="value">
+                {{coach.halfHourPrice}} $
+            </span>
+        </div>
+
+        <button    
+            type="button"
+            class="btn-book-now  p-button-primary  p-button p-component"
+
+        (click)="navigateToCoachDetails(coach)">
+        Book Now
+        </button>
       </div>
 
  

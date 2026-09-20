@@ -46,31 +46,18 @@ export class CoachProfileService {
   getSlotsByMonthAndYear(
     coachId: number | string,
     month: number,
-    year: number
+    year: number,
+    isAvailable:boolean = false
   ): Observable<ApiResponse<SlotResponse>> {
     const params = new HttpParams()
       .set('month', month)
       .set('year', year);
-
+    let url =   `${this.baseUrl}/mobile/api/coach-slot/by-month-and-year`;
+    if (isAvailable) {
+     url = `${this.baseUrl}/mobile/api/coach-slot/available-by-month-and-year/${coachId}`;
+    }
     return this.http.get<ApiResponse<SlotResponse>>(
-      `${this.baseUrl}/mobile/api/coach-slot/by-month-and-year`,
-      { params }
-    );
-  }
-
-  /**
-   * GET /mobile/api/coach-slot/available/{coachId}
-   * Legacy per-day endpoint — kept for the "Add More" dialog fallback.
-   */
-  getAvailableSlots(
-    coachId: number | string,
-    date?: string
-  ): Observable<ApiResponse<SlotResponse>> {
-    let params = new HttpParams();
-    if (date) params = params.set('date', date);
-
-    return this.http.get<ApiResponse<SlotResponse>>(
-      `${this.baseUrl}/mobile/api/coach-slot/available/${coachId}`,
+     url ,
       { params }
     );
   }
@@ -83,7 +70,7 @@ export class CoachProfileService {
     if (date) params = params.set('date', date);
 
     return this.http.get<ApiResponse<SlotResponse>>(
-      `${this.baseUrl}/mobile/api/coach-slot/available/${coachId}`,
+      `${this.baseUrl}/portal/api/coach-slots/${coachId}`,
       { params }
     );
   }

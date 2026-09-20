@@ -355,4 +355,12 @@
 }
 .book-now{
  margin-top: 20px;
+ .btn-book-now{min-width: 150px;}
+}
+.slot-chip{
+    cursor: pointer;
+    &.SelectedSlot{
+        background: var(--app-primary-color);
+        color: #fff;
+    }
 }

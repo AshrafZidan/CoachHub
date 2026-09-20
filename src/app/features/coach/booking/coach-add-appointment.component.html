@@ -51,6 +51,7 @@
         <p-skeleton height="20px" width="100%" class="coach-name-skeleton"></p-skeleton>
         <p-skeleton height="20px" width="100%" class="coach-name-skeleton"></p-skeleton>
 
+        <p-skeleton height="20px" width="100%" class="coach-name-skeleton"></p-skeleton>
 
     </div>
 
@@ -143,7 +144,23 @@
 
     </div>
 
-    <div class="about-section">
+        <div class="about-section">
+
+      <p class="about-title">
+        Languages
+      </p>
+
+    <p class="about-text">
+    <span *ngFor="let lang of coach?.languages; let isLast = last">
+        {{ lang?.nameEn || 'N/A' }} 
+        <span *ngIf="!isLast">-</span>
+    </span>
+    </p>
+
+
+    </div>
+
+    <div class="about-section" style="margin-top: 0;">
 
       <p class="about-title">
         About Coach
@@ -154,6 +171,21 @@
       </p>
 
     </div>
+
+        <div class="about">
+
+      <p class="about-title">
+        Education
+      </p>
+
+      <p class="about-text">
+        {{ coach?.education || 'N/A' }}
+      </p>
+
+    </div>
+
+
+    
 
     <div class="price-grid">
 
@@ -194,6 +226,15 @@
     <!-- =================================================== -->
     <!-- RIGHT CARD — CALENDAR -->
     <!-- =================================================== -->
+
+    @if(showBookingSummary){
+<app-booking-summary-dialog
+  [visible]="showBookingSummary"
+  [bookingSummary]="bookingSummary"
+  (visibleChange)="showBookingSummary = $event"
+
+/>
+} @else {
 
     <main class="calendar-card">
 
@@ -306,6 +347,8 @@
 
           <div
             class="slot-chip"
+            [class.SelectedSlot]="selectedTimeSlotToBook == slot"
+            (click)="onSelectTimeSlot(slot)"
             *ngFor="
               let slot of slotsForSelectedDate
             "
@@ -318,17 +361,19 @@
             <span class="slot-time">
               {{ formatTime(slot.endTime)    }}
             </span>
+            @if (isCoach) {
 
-            <button
+                <button
               class="slot-remove"
               type="button"
               (click)="removeSlot(slot)"
               aria-label="Remove slot"
             >
 
-              <i class="pi pi-times"></i>
+            <i class="pi pi-times"></i>
 
             </button>
+            }
 
           </div>
 
@@ -352,6 +397,7 @@
       }
 
     </main>
+  }
 
   </div>
 
@@ -569,3 +615,5 @@
   </p-dialog>
 
 </div>
+
+

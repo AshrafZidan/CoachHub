@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CoachingHub privacy policy">
+  <title>Privacy Policy | CoachingHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --page: #fbfafc;
+      --surface: #ffffff;
+      --ink: #1c1c28;
+      --body: #515b6f;
+      --muted: #858585;
+      --accent: #8d348b;
+      --border: #ebeaed;
+      --content-width: 1148px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 32px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--body);
+      font-family: "Epilogue", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; }
+
+    a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+      outline-offset: 4px;
+      border-radius: 3px;
+    }
+
+    .page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 64px;
+      padding: 96px 24px;
+    }
+
+    .hero,
+    .policy-layout,
+    .privacy-callout {
+      width: min(100%, var(--content-width));
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+      background: var(--surface);
+    }
+
+    .hero__accent {
+      width: 56px;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--accent);
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: .02em;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(34px, 4vw, 44px);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -.025em;
+    }
+
+    .hero__summary {
+      max-width: 900px;
+      margin: 0;
+      color: var(--body);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .last-updated {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .policy-layout {
+      display: grid;
+      grid-template-columns: 276px minmax(0, 800px);
+      gap: 72px;
+      align-items: start;
+      background: var(--surface);
+    }
+
+    .toc {
+      position: sticky;
+      top: 32px;
+      padding: 28px 24px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface);
+    }
+
+    .toc h2 {
+      margin: 0 0 18px;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .toc ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: section;
+    }
+
+    .toc li { counter-increment: section; }
+
+    .toc li a {
+      display: grid;
+      grid-template-columns: 2.25em 1fr;
+      padding: 2px 0;
+      color: var(--body);
+      line-height: 1.9;
+      text-decoration: none;
+      transition: color 160ms ease;
+    }
+
+    .toc li a::before {
+      content: counter(section, decimal-leading-zero);
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      transition: color 160ms ease;
+    }
+
+    .toc li a:hover,
+    .toc li a[aria-current="true"],
+    .toc li a[aria-current="true"]::before {
+      color: var(--accent);
+    }
+
+    .toc__divider {
+      height: 1px;
+      margin: 18px 0;
+      border: 0;
+      background: var(--border);
+    }
+
+    .toc__label {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .toc__contact {
+      margin: 0 0 10px;
+      color: #25324b;
+      font-weight: 500;
+      line-height: 1.65;
+    }
+
+    .toc__contact a {
+      display: block;
+      width: fit-content;
+      text-decoration: none;
+    }
+
+    .toc__contact a:hover { color: var(--accent); }
+
+    .toc__note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .article {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 38px;
+    }
+
+    .policy-section h2 {
+      margin: 0 0 14px;
+      color: var(--ink);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .section-number {
+      display: inline-block;
+      min-width: 2.3em;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .policy-section p { margin: 0; }
+    .policy-section p + p { margin-top: 14px; }
+
+    .policy-section ul {
+      display: grid;
+      gap: 4px;
+      margin: 0;
+      padding-left: 1.4em;
+    }
+
+    .policy-section li { padding-left: .2em; }
+    .policy-section li::marker { color: var(--accent); }
+
+    .privacy-callout {
+      padding: 30px 32px;
+      border-radius: 20px;
+      background: var(--accent);
+      color: rgba(255, 255, 255, .86);
+    }
+
+    .privacy-callout h2 {
+      margin: 0 0 10px;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .privacy-callout p { margin: 0; }
+
+    .privacy-callout a {
+      color: #fff;
+      font-weight: 500;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 920px) {
+      .page { padding: 64px 24px; }
+
+      .policy-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .toc {
+        position: static;
+        width: 100%;
+      }
+
+      .toc ol {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 24px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        gap: 44px;
+        padding: 48px 18px;
+      }
+
+      .hero { gap: 14px; }
+      .hero__summary { font-size: 16px; }
+
+      .toc {
+        padding: 24px 20px;
+        border-radius: 16px;
+      }
+
+      .toc ol { grid-template-columns: 1fr; }
+      .article { gap: 34px; }
+      .policy-section h2 { font-size: 18px; }
+
+      .privacy-callout {
+        padding: 26px 22px;
+        border-radius: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page { display: block; padding: 0; }
+      .hero, .policy-layout, .privacy-callout { width: 100%; }
+      .hero { margin-bottom: 36px; }
+      .policy-layout { display: block; }
+      .toc { display: none; }
+      .policy-section { break-inside: avoid; }
+      .privacy-callout { margin-top: 36px; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <!-- The product header is intentionally excluded so it can be supplied by the host application. -->
+  <main class="page">
+    <header class="hero" aria-labelledby="page-title">
+      <span class="hero__accent" aria-hidden="true"></span>
+      <p class="eyebrow">PRIVACY &amp; TRUST</p>
+      <h1 id="page-title">Privacy Policy</h1>
+      <p class="hero__summary">How CoachingHub collects, uses, shares, and protects information when you use our website, mobile application, coaching sessions, bookings, payments, and related services.</p>
+      <p class="last-updated">Last updated: September 19, 2026</p>
+    </header>
+
+    <div class="policy-layout">
+      <aside class="toc" aria-label="Privacy policy navigation">
+        <h2>On this page</h2>
+        <nav>
+          <ol>
+            <li><a href="#about">About this policy</a></li>
+            <li><a href="#information">Information we collect</a></li>
+            <li><a href="#uses">How we use information</a></li>
+            <li><a href="#sharing">How we share information</a></li>
+            <li><a href="#payments">Payments and sessions</a></li>
+            <li><a href="#retention">Data retention &amp; security</a></li>
+            <li><a href="#rights">Your rights &amp; choices</a></li>
+            <li><a href="#children">Children’s privacy</a></li>
+            <li><a href="#changes">Changes and contact</a></li>
+          </ol>
+        </nav>
+        <hr class="toc__divider">
+        <p class="toc__label">PRIVACY CONTACT</p>
+        <p class="toc__contact">
+          <a href="mailto:admin@coachinghub.ae">admin@coachinghub.ae</a>
+          <a href="https://www.coachinghub.ae">www.coachinghub.ae</a>
+        </p>
+        <p class="toc__note">Questions about your information or account deletion? Contact us using the details above.</p>
+      </aside>
+
+      <article class="article">
+        <section class="policy-section" id="about">
+          <h2><span class="section-number">01</span>About CoachingHub and this policy</h2>
+          <p>CoachingHub is a digital coaching platform operated by CoachingHub Technologies FZ-LLC, Dubai, United Arab Emirates. It connects users with professional coaches and supports coach discovery, profiles, scheduling, bookings, payments, tasks, notifications, and online coaching sessions.</p>
+          <p>This Privacy Policy explains how we collect, use, disclose, store, and protect personal information when you use the CoachingHub website, mobile application, and related services (together, the “Services”). By using the Services, you acknowledge the practices described here.</p>
+        </section>
+
+        <section class="policy-section" id="information">
+          <h2><span class="section-number">02</span>Information we collect</h2>
+          <ul>
+            <li><strong>Account and contact data:</strong> name, email address, phone or WhatsApp number, username, password or authentication credentials, preferred language, and account role.</li>
+            <li><strong>Profile data:</strong> date of birth, gender, country, nationality, profile photograph, biography, job title, years of experience, coaching specialties or industries, languages, availability, rates, qualifications, and certificates.</li>
+            <li><strong>Booking, coaching, and task data:</strong> coach searches, selected coach, booking date and time, session status, preferences, form responses, task questions and answers, due dates, completion status, communications, attendance, and attendance timestamps.</li>
+            <li><strong>Payment data:</strong> Stripe processes payment-method details. CoachingHub receives transaction identifiers, payment status, amount, currency, discounts, and booking-related payment information. We do not intentionally store complete card numbers or card security codes.</li>
+            <li><strong>Media and files:</strong> photographs or certificates you upload and camera, microphone, audio, and video data used during online sessions.</li>
+            <li><strong>Technical and usage data:</strong> IP address, device and operating-system details, app version, user or account ID, installation and device identifiers, timezone, language, push-notification tokens, product interactions, crash reports, and diagnostic data.</li>
+            <li><strong>Support and communications:</strong> information you provide when requesting support, exercising privacy rights, submitting feedback, or otherwise contacting us.</li>
+          </ul>
+        </section>
+
+        <section class="policy-section" id="uses">
+          <h2><span class="section-number">03</span>How we use your information</h2>
+          <p>We use personal information to create and authenticate accounts; provide coach discovery and profiles; manage bookings, availability, tasks, payments, and online sessions; connect users and coaches; send confirmations, reminders, push notifications, and important service messages; provide support; personalize language and timezone settings; operate, secure, troubleshoot, and improve the Services; measure usage and app performance; detect fraud or misuse; enforce our terms; comply with legal obligations; and send marketing communications where permitted by law and subject to applicable consent and opt-out rights.</p>
+          <p>Where applicable, our legal bases may include performing a contract with you, complying with law, protecting our legitimate interests or those of others, and your consent.</p>
+        </section>
+
+        <section class="policy-section" id="sharing">
+          <h2><span class="section-number">04</span>How we share information</h2>
+          <p>We do not sell personal information. We disclose information only as reasonably necessary to operate, protect, and improve the Services. Recipients may include:</p>
+          <ul>
+            <li><strong>Coaches,</strong> who receive information needed to manage bookings and provide coaching services, including relevant profile, booking, session, and task information.</li>
+            <li><strong>Stripe,</strong> which processes payments and supports payment security and fraud prevention.</li>
+            <li><strong>Google Firebase,</strong> including Google Analytics for Firebase, Firebase Crashlytics, and Firebase Cloud Messaging, which provides analytics, crash and diagnostic reporting, installation identifiers, and push-notification delivery.</li>
+            <li><strong>Whereby,</strong> which provides embedded video-conferencing functionality and may process audio, video, IP address, device information, display name, meeting identifiers, participation data, call duration, and technical diagnostics.</li>
+            <li><strong>Apple Push Notification service,</strong> which delivers notifications to Apple devices.</li>
+            <li>Hosting, infrastructure, communications, security, support, and professional-service providers acting for us under appropriate obligations.</li>
+          </ul>
+          <p>We may also disclose information when required by law, to protect rights or safety, to investigate fraud or security incidents, or as part of a merger, acquisition, financing, restructuring, or sale of assets.</p>
+        </section>
+
+        <section class="policy-section" id="payments">
+          <h2><span class="section-number">05</span>Payments, photographs, and online sessions</h2>
+          <p>Payment-method information entered through the app is submitted to Stripe. CoachingHub receives payment and booking records but does not intentionally receive or store complete card details or security codes. Stripe’s own privacy terms also apply to its processing.</p>
+          <p>Online sessions are delivered using Whereby inside the app. Camera and microphone access is used only when you enable those device permissions and participate in a session. Audio and video are transmitted to conduct the call. Unless we give separate notice and obtain any consent required by law, CoachingHub does not record session audio or video. Session metadata—such as participants, attendance, start time, duration, and technical events—may be retained to operate and support the service.</p>
+          <p>Camera and photo-library access may also be used to upload profile photographs and coach certificates. You can control these permissions through your device settings, although disabling them may limit related features.</p>
+        </section>
+
+        <section class="policy-section" id="retention">
+          <h2><span class="section-number">06</span>Retention, security, and international transfers</h2>
+          <p>We retain personal information only for as long as reasonably necessary to provide the Services and for the purpose for which it was collected. We may retain certain booking, payment, tax, accounting, fraud-prevention, security, and dispute records for longer periods where required or permitted by law. When information is no longer needed, we delete, anonymize, or securely isolate it.</p>
+          <p>We use administrative, organizational, and technical measures designed to protect information against unauthorized access, alteration, loss, misuse, or disclosure. No internet transmission, video service, mobile application, or electronic storage system is completely secure, and we cannot guarantee absolute security. Users are responsible for protecting their credentials and should notify us of suspected unauthorized access.</p>
+          <p>Our providers and technical infrastructure may process information in countries other than your country of residence. Where required, we use contractual, organizational, or other lawful safeguards intended to protect information transferred internationally.</p>
+        </section>
+
+        <section class="policy-section" id="rights">
+          <h2><span class="section-number">07</span>Your privacy rights and choices</h2>
+          <p>Depending on your location and applicable law, you may have the right to request access to, correction of, or deletion of your personal information; request a portable copy of certain information; object to or restrict certain processing; withdraw consent where processing relies on consent; and complain to an appropriate data-protection authority. We may need to verify your identity before completing a request.</p>
+          <p>To request account and data deletion, email <a href="mailto:admin@coachinghub.ae">admin@coachinghub.ae</a>. We will delete or anonymize associated information unless we must or are permitted to retain it for legal, tax, accounting, fraud-prevention, security, or dispute-resolution purposes. Retained information will remain protected and will not be used for unrelated purposes.</p>
+          <p>You can unsubscribe from promotional email using the link in the message or by contacting us. Necessary booking, transaction, security, and account communications may continue. You can manage push notifications, camera, microphone, and photo access in device settings. Our website may use essential cookies and, where permitted or consented to, analytics technologies to understand usage and improve the Services.</p>
+        </section>
+
+        <section class="policy-section" id="children">
+          <h2><span class="section-number">08</span>Children’s privacy</h2>
+          <p>The Services are not directed to children under 18, and we do not knowingly collect personal information directly from children under 18 without appropriate authorization. Where local law permits a lower age or requires parental or guardian consent, the applicable requirements will apply.</p>
+          <p>If you believe a child has provided personal information contrary to these requirements, contact us at <a href="mailto:admin@coachinghub.ae">admin@coachinghub.ae</a>. We will investigate and take appropriate steps, including deletion where required.</p>
+        </section>
+
+        <section class="policy-section" id="changes">
+          <h2><span class="section-number">09</span>Changes to this policy and contact</h2>
+          <p>We may update this Privacy Policy to reflect changes to our Services, providers, technology, or legal obligations. We will update the “Last updated” date and provide additional notice of material changes where required.</p>
+          <p>For privacy questions, rights requests, complaints, or account-deletion requests, contact:</p>
+          <p>CoachingHub Technologies FZ-LLC<br>Dubai, United Arab Emirates<br>Email: <a href="mailto:admin@coachinghub.ae">admin@coachinghub.ae</a><br>Website: <a href="https://www.coachinghub.ae">www.coachinghub.ae</a></p>
+        </section>
+      </article>
+    </div>
+
+    <aside class="privacy-callout" aria-label="Privacy contact">
+      <h2>Your privacy matters.</h2>
+      <p>For questions, requests, or concerns about your personal information, contact <a href="mailto:admin@coachinghub.ae">admin@coachinghub.ae</a>.</p>
+    </aside>
+  </main>
+
+  <script>
+    const sectionLinks = [...document.querySelectorAll('.toc a[href^="#"]')];
+    const sections = sectionLinks
+      .map((link) => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (!visible) return;
+        sectionLinks.forEach((link) => {
+          const isCurrent = link.getAttribute('href') === `#${visible.target.id}`;
+          if (isCurrent) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
+        });
+      }, { rootMargin: '-15% 0px -70% 0px', threshold: [0, .2, .5] });
+
+      sections.forEach((section) => observer.observe(section));
+    }
+  </script>
+</body>
+</html>

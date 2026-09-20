@@ -9,12 +9,28 @@
             .pi{font-size: 12px;}
         }
     }
+    .meta-row-price{
+            display: flex;
+    flex-direction: column;
+    gap: 8px;
+    .label{
+        font-size: 14px;
+        color: var(--title-secondary-color);
+    }
+    .value{
+        font-weight: bold;
+    }
+ }
      .meta-info{
             flex-wrap: wrap;
      }
     .card{
         .card-body{
             align-items: start;
+        }
+        .card-footer{display: flex;
+        align-items: center;
+    justify-content: space-between;
         }
     }
 }
