@@ -1,200 +1,144 @@
 /* You can add global styles to this file, and also import other style files */
 // @import "./app/shared-lib/_variables.scss";
-@import 'primeicons/primeicons.css';
-@import './styles/admin-table.scss';
+@import "primeicons/primeicons.css";
+@import "./styles/admin-table.scss";
 
 :root {
-
   /* ========================================================
      Application colors
      ======================================================== */
 
-  --title-color: #25324B;
+  --title-color: #25324b;
 
-  --title-secondary-color: #515B6F;
+  --title-secondary-color: #515b6f;
 
-  --app-primary-color: #833C88;
+  --app-primary-color: #833c88;
 
   --app-primary-color-dark: #75347a;
 
   --p-card-background: #f4f4f4;
 
-
   /* ========================================================
      PrimeNG
      ======================================================== */
 
-  --p-button-primary-background:
-    #833C88 !important;
+  --p-button-primary-background: #833c88 !important;
 
-  --p-button-primary-border-color:
-    #833C88 !important;
+  --p-button-primary-border-color: #833c88 !important;
 
-  --p-button-primary-hover-background:
-    #833C88 !important;
+  --p-button-primary-hover-background: #833c88 !important;
 
-  --p-button-primary-hover-border-color:
-    #833C88 !important;
+  --p-button-primary-hover-border-color: #833c88 !important;
 
-  --p-button-primary-focus-ring-color:
-    #833C88 !important;
+  --p-button-primary-focus-ring-color: #833c88 !important;
 
-  --p-button-primary-active-background:
-    #833C88 !important;
+  --p-button-primary-active-background: #833c88 !important;
 
-  --p-button-primary-active-border-color:
-    #833C88 !important;
+  --p-button-primary-active-border-color: #833c88 !important;
 
-  --p-inputtext-focus-border-color:
-    #833C88 !important;
+  --p-inputtext-focus-border-color: #833c88 !important;
 
-  --p-tabs-tab-active-border-color:
-    #833C88 !important;
+  --p-tabs-tab-active-border-color: #833c88 !important;
 
-  --p-tabs-tab-active-color:
-    #833C88 !important;
+  --p-tabs-tab-active-color: #833c88 !important;
 
-  --p-tabs-active-bar-background:
-    #833C88 !important;
+  --p-tabs-active-bar-background: #833c88 !important;
 
-  --p-select-option-selected-background:
-    #833C88 !important;
+  --p-select-option-selected-background: #833c88 !important;
 
-  --p-select-option-selected-color:
-    #fff !important;
+  --p-select-option-selected-color: #fff !important;
 
-  --p-select-option-selected-focus-background:
-    #833C88 !important;
+  --p-select-option-selected-focus-background: #833c88 !important;
 
-  --p-select-option-selected-focus-color:
-    #fff !important;
+  --p-select-option-selected-focus-color: #fff !important;
 
-  --p-select-focus-border-color:
-    #833C88 !important;
+  --p-select-focus-border-color: #833c88 !important;
 
-  --p-stepper-separator-active-background:
-    #833C88 !important;
+  --p-stepper-separator-active-background: #833c88 !important;
 
-  --p-datepicker-date-selected-background:
-    #833C88 !important;
+  --p-datepicker-date-selected-background: #833c88 !important;
 
-  --p-multiselect-option-selected-background:
-    #f1e9f2 !important;
+  --p-multiselect-option-selected-background: #f1e9f2 !important;
 
-  --p-multiselect-option-selected-color:
-    #833C88 !important;
+  --p-multiselect-option-selected-color: #833c88 !important;
 
-  --p-checkbox-checked-border-color:
-    #833C88 !important;
+  --p-checkbox-checked-border-color: #833c88 !important;
 
-  --p-checkbox-checked-background:
-    #833C88 !important;
+  --p-checkbox-checked-background: #833c88 !important;
 
-  --p-multiselect-option-selected-focus-background:
-    #833C88 !important;
+  --p-multiselect-option-selected-focus-background: #833c88 !important;
 
-  --p-multiselect-option-selected-focus-color:
-    #fff !important;
+  --p-multiselect-option-selected-focus-color: #fff !important;
 
-  --p-chip-background:
-    #F8F8FD !important;
+  --p-chip-background: #f8f8fd !important;
 
-  --p-chip-color:
-    #833C88 !important;
+  --p-chip-color: #833c88 !important;
 
-  --p-checkbox-checked-hover-background:
-    #833C88 !important;
+  --p-checkbox-checked-hover-background: #833c88 !important;
 
-  --p-checkbox-checked-hover-border-color:
-    #833C88 !important;
+  --p-checkbox-checked-hover-border-color: #833c88 !important;
 
-  --p-chip-gap:
-    .3rem !important;
+  --p-chip-gap: 0.3rem !important;
 
-  --p-chip-remove-icon-color:
-    #833C88 !important;
+  --p-chip-remove-icon-color: #833c88 !important;
 
-  --p-message-text-font-size:
-    12px !important;
+  --p-message-text-font-size: 12px !important;
 
-  --p-dialog-title-font-size:
-    1.1rem !important;
+  --p-dialog-title-font-size: 1.1rem !important;
 
-  --p-button-success-background:
-    #169E3F !important;
+  --p-button-success-background: #169e3f !important;
 
-  --p-button-success-border-color:
-    #169E3F !important;
+  --p-button-success-border-color: #169e3f !important;
 
-  --p-button-danger-background:
-    #F06565 !important;
+  --p-button-danger-background: #f06565 !important;
 
-  --p-button-danger-border-color:
-    #F06565 !important;
-
+  --p-button-danger-border-color: #f06565 !important;
 
   /* ========================================================
      Application
      ======================================================== */
 
-  --app-border-color:
-    #F3F3F3;
+  --app-border-color: #f3f3f3;
 
-  --app-text-color:
-    #858585;
+  --app-text-color: #858585;
 
-  --text-dark:
-    #111827;
+  --text-dark: #111827;
 
-  --text-muted:
-    #7C8493;
+  --text-muted: #7c8493;
 
-  --odd-row-bg:
-    #F8F8FD;
+  --odd-row-bg: #f8f8fd;
 
-  --app-success:
-    #169E3F;
+  --app-success: #169e3f;
 
-  --app-delete:
-    #F06565;
+  --app-delete: #f06565;
 
-  --app-error:
-    #f87171;
-
+  --app-error: #f87171;
 
   /* ========================================================
      Components
      ======================================================== */
 
-  --p-button-border-radius:
-    15px !important;
+  --p-button-border-radius: 15px !important;
 
-  --p-inputtext-border-radius:
-    15px !important;
-
+  --p-inputtext-border-radius: 15px !important;
 
   /* ========================================================
      Shared Filter
      ======================================================== */
 
-  --filter-sidebar-width:
-    350px;
+  --filter-sidebar-width: 350px;
 
-  --filter-sidebar-mobile-height:
-    90vh;
+  --filter-sidebar-mobile-height: 90vh;
 
-  --filter-sidebar-overlay:
-    rgba(0, 0, 0, 0.48);
+  --filter-sidebar-overlay: rgba(0, 0, 0, 0.48);
 
-  --filter-sidebar-border:
-    #E8E8EC;
-
+  --filter-sidebar-border: #e8e8ec;
 }
 
 /* Regular */
 @font-face {
-  font-family: 'Poppins';
-  src: url('/assets/fonts/poppins/Poppins-Regular.ttf') format('ttf');
+  font-family: "Poppins";
+  src: url("/assets/fonts/poppins/Poppins-Regular.ttf") format("ttf");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -202,8 +146,8 @@
 
 /* Medium */
 @font-face {
-  font-family: 'Poppins';
-  src: url('/assets/fonts/poppins/Poppins-Medium.ttf') format('ttf');
+  font-family: "Poppins";
+  src: url("/assets/fonts/poppins/Poppins-Medium.ttf") format("ttf");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -211,8 +155,8 @@
 
 /* Bold */
 @font-face {
-  font-family: 'Poppins';
-  src: url('/assets/fonts/poppins/Poppins-Bold.ttf') format('ttf');
+  font-family: "Poppins";
+  src: url("/assets/fonts/poppins/Poppins-Bold.ttf") format("ttf");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -220,7 +164,7 @@
 
 body,
 .p-component {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -242,15 +186,17 @@ body {
     opacity: 0.6;
   }
 }
-.p-button.app-custom.p-button-secondary.p-button{
-    border: 1px solid var(--app-primary-color);
-    background: transparent;
-    color: var(--app-primary-color);
-    &:hover {
-      background: #f1e9f2;
-    }
+.p-button.app-custom.p-button-secondary.p-button {
+  border: 1px solid var(--app-primary-color);
+  background: transparent;
+  color: var(--app-primary-color);
+  &:hover {
+    background: #f1e9f2;
+  }
 }
-.p-button-secondary.p-button{padding: 10px 30px;}
+.p-button-secondary.p-button {
+  padding: 10px 30px;
+}
 .p-button-primary.p-button {
   background: var(--app-primary-color);
   color: #fff;
@@ -260,15 +206,12 @@ body {
   &:hover {
     background: var(--app-primary-color-dark) !important;
     border: 0 !important;
-
   }
-
 }
 
 .p-button-sm {
   padding: 7px 13px !important;
   font-size: 12px !important;
-
 }
 
 .no-radius,
@@ -276,7 +219,8 @@ body {
 .app-input.no-radius,
 .p-datepicker.no-radius input,
 .no-radius .p-datepicker-input.p-inputtext,
-.no-raduis .p-inputtext, .no-raduis.p-inputtext{
+.no-raduis .p-inputtext,
+.no-raduis.p-inputtext {
   border-radius: 0 !important;
 }
 
@@ -284,9 +228,6 @@ body {
   color: var(--app-error);
   margin-left: 2px;
 }
-
-
-
 
 .p-card {
   border-radius: 12px;
@@ -308,11 +249,11 @@ body {
 }
 
 .lg-textarea {
-    min-height: 100px;
-    max-height: 300px;
-    resize: vertical;
-    padding: 12px;
-    line-height: 1.6;
+  min-height: 100px;
+  max-height: 300px;
+  resize: vertical;
+  padding: 12px;
+  line-height: 1.6;
 }
 // ─── PrimeNG overrides ────────────────────────────────────
 .p-motion {
@@ -345,7 +286,6 @@ body {
   .p-dialog-content {
     // padding: .5rem 1.25rem;
     font-size: 14px;
-
   }
 
   .p-dialog-footer {
@@ -355,14 +295,13 @@ body {
 
 input.p-inputtext::placeholder,
 .p-password input::placeholder {
-  color: #A8ADB7 !important;
+  color: #a8adb7 !important;
   opacity: 1 !important;
 }
 .app-input,
 .p-select,
 .p-dropdown,
 .p-inputtext,
-
 .p-datepicker {
   width: 100%;
   height: 42px;
@@ -372,10 +311,13 @@ input.p-inputtext::placeholder,
   border: 1px solid var(--app-border-color);
   font-size: 14.5px;
   color: var(--text-dark);
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
 
   &::placeholder {
-    color: #A8ADB7 !important;
+    color: #a8adb7 !important;
     font-size: 12px;
   }
 
@@ -412,12 +354,10 @@ input.p-inputtext::placeholder,
 .p-select,
 .p-datepicker {
   padding: 0;
-
 }
 
 .p-datepicker {
   border: 0;
-
 }
 
 // ─── Form actions ─────────────────────────────────────────
@@ -449,6 +389,9 @@ input.p-inputtext::placeholder,
   font-size: 12px;
   display: inline-block !important;
   font-weight: normal;
+  .pi {
+    font-size: 12px;
+  }
 
   &.pending {
     background-color: rgba(131, 60, 136, 0.12);
@@ -470,17 +413,20 @@ input.p-inputtext::placeholder,
     color: #6c757d !important; // gray
   }
 
-  &.cancelled , &.canceled {
+  &.cancelled,
+  &.canceled {
     background-color: rgba(240, 101, 101, 0.14);
     color: var(--app-delete) !important;
   }
-  &.star{
-   background: rgba(255, 193, 7, 0.15);
+  &.star,
+  &.assigned , &.upcoming{
+    background: rgba(255, 193, 7, 0.15);
     color: #b48a00;
   }
 
   // Booking Status
-  &.running, &.active {
+  &.running,
+  &.active {
     background-color: rgba(23, 162, 184, 0.14);
     color: #17a2b8 !important; // blue
   }
@@ -490,10 +436,7 @@ input.p-inputtext::placeholder,
     color: var(--app-success) !important;
   }
 
-  &.upcoming {
-    background-color: rgba(99, 165, 236, 0.14);
-    color: #63a5ec !important;
-  }
+
 
   &.past {
     background-color: rgba(108, 117, 125, 0.14);
@@ -525,13 +468,15 @@ input.p-inputtext::placeholder,
   }
 }
 
-.topbar-center .p-select-list{
+.topbar-center .p-select-list {
   direction: ltr !important;
-
 }
-.topbar-center .p-select-label{padding-inline-end: 0;}
-.filter-container .p-select{border-radius: 0 !important;}
-
+.topbar-center .p-select-label {
+  padding-inline-end: 0;
+}
+.filter-container .p-select {
+  border-radius: 0 !important;
+}
 
 .filter-container {
   background: #fff;
@@ -600,174 +545,179 @@ input.p-inputtext::placeholder,
   gap: 10px;
   margin-top: 16px;
 }
-.signup-stepper .p-steplist{
-    position: relative;
-    border: 1px solid var(--app-border-color);
-    border-radius: 8px;
-    padding: 10px 0;
-    padding-bottom: 25px;
+.signup-stepper .p-steplist {
+  position: relative;
+  border: 1px solid var(--app-border-color);
+  border-radius: 8px;
+  padding: 10px 0;
+  padding-bottom: 25px;
 }
-.bg-transparent{background: transparent;}
-.border-0{border: 0 !important;}
+.bg-transparent {
+  background: transparent;
+}
+.border-0 {
+  border: 0 !important;
+}
 
-.p-step button{
-  background: #E9EBFD;
-    width: 36px;
-    height: 36px;
+.p-step button {
+  background: #e9ebfd;
+  width: 36px;
+  height: 36px;
   border-radius: 100%;
 }
 .p-step button i {
-  color: #7C8493;
+  color: #7c8493;
 }
-.p-step-active button{
+.p-step-active button {
   background-color: var(--app-primary-color);
   color: #fff;
 }
 .p-step-active button i {
   color: #fff;
 }
-.d-flex{display: flex;}
-.gap-8{gap: 8px;}
-	.title-wrapper {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 30px;
-		
+.d-flex {
+  display: flex;
+}
+.gap-8 {
+  gap: 8px;
+}
+.title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 
-		h2.title {
-			font-size: 20px;
-			margin: 0;
-		}
+  h2.title {
+    font-size: 20px;
+    margin: 0;
+  }
 
-		h4 {
-			font-size: 14px;
-			color: #45594B;
-			cursor: pointer;
-			font-weight: 300;
-			margin: 0;
-		}
-	}
+  h4 {
+    font-size: 14px;
+    color: #45594b;
+    cursor: pointer;
+    font-weight: 300;
+    margin: 0;
+  }
+}
 
 .booking-page {
-  	.tabs {
-		display: flex;
-		gap: 12px;
-		margin-bottom: 18px;
+  .tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
 
-		.tab {
-			padding: 10px 22px;
-			border-radius: 24px;
-			background: var(--p-card-background, #fff);
-			border: 1px solid var(--app-border-color);
-			cursor: pointer;
-			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-		}
-
-		.tab.active {
-			background: var(--p-chip-background);
-			border-color: var(--app-primary-color);
-			color: var(--app-primary-color);
-			font-weight: bold;
-}
-		
-	}
-	.title {
-		font-size: 20px;
-		margin-bottom: 10px;
-	}
-  	.grid {
-	display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 30px;
-	}
-
-	.booking-empty,
-	.booking-loading {
-		text-align: center;
-		padding: 60px 20px;
-		border-radius: 16px;
-		background: var(--p-card-background, #fff);
-		border: 1px solid var(--app-border-color);
-		color: var(--title-color);
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-		margin-top: 24px;
-		min-height: 180px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 16px;
-
-		i {
-			font-size: 40px;
-			opacity: 0.35;
-		}
-
-		p {
-			margin: 0;
-			font-size: 15px;
-			color: var(--title-secondary-color);
-		}
-	}
-
-	.booking-loading-inline {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 12px;
-		padding: 18px 0;
-		color: var(--title-secondary-color);
-	}
-
-
-}
-
-	.card {
-		background: #fff;
-		border: 1px solid var(--app-border-color);
-		border-radius: 12px;
-		box-shadow: 0 4px 14px rgba(0,0,0,0.04);
-		overflow: hidden;
-
-		.card-header {
-			padding: 0 20px;
-			font-size: 13px;
-			color: var(--app-text-color);
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			border-bottom: 1px solid var(--app-border-color);
-		}
-    .card-footer{
-          padding: 10px 20px;
-    border-top: 1px solid var(--app-border-color);
+    .tab {
+      padding: 10px 22px;
+      border-radius: 24px;
+      background: var(--p-card-background, #fff);
+      border: 1px solid var(--app-border-color);
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-		.card-body {
-			display: flex;
-			// align-items: end;
-			align-items: center;
-			gap: 12px;
-			padding: 20px 14px;
-      position: relative;
-      
-  .show-details {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    color: var(--app-primary-color);
-    font-size: 14px;
-
-    cursor: pointer;
+    .tab.active {
+      background: var(--p-chip-background);
+      border-color: var(--app-primary-color);
+      color: var(--app-primary-color);
+      font-weight: bold;
+    }
   }
-		}
+  .title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 30px;
+  }
 
-		.avatar { 
-  width: 64px;
+  .booking-empty,
+  .booking-loading {
+    text-align: center;
+    padding: 60px 20px;
+    border-radius: 16px;
+    background: var(--p-card-background, #fff);
+    border: 1px solid var(--app-border-color);
+    color: var(--title-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    margin-top: 24px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    i {
+      font-size: 40px;
+      opacity: 0.35;
+    }
+
+    p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--title-secondary-color);
+    }
+  }
+
+  .booking-loading-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px 0;
+    color: var(--title-secondary-color);
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--app-border-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+
+  .card-header {
+    padding: 0 20px;
+    font-size: 13px;
+    color: var(--title-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--app-border-color);
+  }
+  .card-footer {
+    padding: 10px 20px;
+    border-top: 1px solid var(--app-border-color);
+  }
+
+  .card-body {
+    display: flex;
+    // align-items: end;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 14px;
+    position: relative;
+    color: var(--title-secondary-color);
+
+    .show-details {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      color: var(--app-primary-color);
+      font-size: 14px;
+
+      cursor: pointer;
+    }
+  }
+
+  .avatar {
+    width: 64px;
     height: 64px;
     border-radius: 8px;
     object-fit: cover;
@@ -779,70 +729,86 @@ input.p-inputtext::placeholder,
     justify-content: center;
     color: var(--app-primary-color);
     font-size: 30px;
- }
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 
-		.meta { flex: 1;
-			max-width: 40%;
-			.name {
-				font-weight: 700;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-			.role { color: var(--app-text-color); font-size: 13px }
-			.price { color: var(--title-secondary-color); font-size: 13px; margin-top: 6px }
-			
-			.pricing-section {
-				margin-top: 10px;
-				display: flex;
-				flex-direction: column;
-				gap: 6px;
-			}
+  .meta {
+    flex: 1;
+    max-width: 40%;
+    .name {
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .role {
+      color: var(--app-text-color);
+      font-size: 13px;
+    }
+    .price {
+      color: var(--title-secondary-color);
+      font-size: 13px;
+      margin-top: 6px;
+    }
 
+    .pricing-section {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
-			.price-item {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				font-size: 12px;
-      &.discount-item{
+    .price-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      &.discount-item {
         padding-bottom: 6px;
         border-bottom: 1px solid var(--app-border-color);
       }
-				.label {
-					color: var(--text-muted);
-				}
-				
-				.value {
-					font-weight: 600;
-					color: var(--title-color);
-				}
-			}
+      .label {
+        color: var(--text-muted);
+      }
 
-			.price-item.discount-item .value {
-				color: var(--app-error);
-			}
+      .value {
+        font-weight: 600;
+      }
+    }
 
-			.price-item.final {
-				.value {
-					font-weight: 700;
-				}
-			}
-		}
+    .price-item.discount-item .value {
+      color: var(--app-success);
+    }
 
-		.actions { display: flex; gap: 8px;width: 40%;
-    justify-content: end; }
-	}
+    .price-item.final {
+      .value {
+            font-weight: bold;
+        font-size: 13px;
+    
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    width: 40%;
+    justify-content: end;
+  }
+}
 
 .search-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  .filter-icon{
+  .filter-icon {
     position: absolute;
     right: 8px;
     cursor: pointer;
-}
+  }
 }
 
 .search-icon {
@@ -859,9 +825,11 @@ input.p-inputtext::placeholder,
   border: 1px solid var(--app-border-color) !important;
   border-radius: 10px !important;
   font-size: 14px;
-  background: #ffffff ;
+  background: #ffffff;
   color: var(--text-dark) !important;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 
   &::placeholder {
     color: #a8adb7 !important;
@@ -873,13 +841,13 @@ input.p-inputtext::placeholder,
     outline: none !important;
   }
 }
-    .role-toggle {
-        display: flex;
-        gap: 8px;
-        padding: 4px;
-        margin-bottom: 18px;
-        border-radius: 12px;
-        justify-content: center;
+.role-toggle {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  margin-bottom: 18px;
+  border-radius: 12px;
+  justify-content: center;
 
   .role-btn {
     border: none;
@@ -893,20 +861,22 @@ input.p-inputtext::placeholder,
   }
 
   .role-btn.active {
-       background: #EEB945 !important;
+    background: #eeb945 !important;
     box-shadow: 0 4px 10px rgb(114 103 31);
-
-    }
-
-    }
-.step-actions{flex-direction: column-reverse;}
-.p-multiselect-display-chip .p-multiselect-label{flex-wrap: wrap;}
-.page-subtitle{
-      margin: 0;
-    font-size: 12px;
-    margin-top: 10px;
-    color: var(--title-secondary-color);
+  }
+}
+.step-actions {
+  flex-direction: column-reverse;
+}
+.p-multiselect-display-chip .p-multiselect-label {
+  flex-wrap: wrap;
+}
+.page-subtitle {
+  margin: 0;
+  font-size: 12px;
+  margin-top: 10px;
+  color: var(--title-secondary-color);
 }
 
 /* Dark mode overrides are loaded last so they can override base styles. */
-@import './styles.dark';
+@import "./styles.dark";

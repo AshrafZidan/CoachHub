@@ -1,27 +1,23 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
-  NgZone,
   OnChanges,
   OnDestroy,
   Output,
   SimpleChanges,
   inject,
-} from '@angular/core';
+} from "@angular/core";
 
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
 
-import {
-  Subject,
-  finalize,
-  takeUntil,
-} from 'rxjs';
+import { Subject, finalize, takeUntil } from "rxjs";
 
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { SkeletonModule } from 'primeng/skeleton';
+import { ButtonModule } from "primeng/button";
+import { DialogModule } from "primeng/dialog";
+import { SkeletonModule } from "primeng/skeleton";
 
 import {
   BookingSession,
@@ -29,52 +25,28 @@ import {
   CoacheeService,
   TaskAssignment,
   TaskAssignmentDetails,
-} from '../coach-coachees.service';
+} from "../coach-coachees.service";
 
-
-type ViewState =
-  | 'bookings'
-  | 'session-detail'
-  | 'task-answers';
-
+type ViewState = "bookings" | "session-detail" | "task-answers";
 
 @Component({
-  selector: 'app-coachee-bookings-modal',
-
+  selector: "app-coachee-bookings-modal",
   standalone: true,
-
-  imports: [
-    CommonModule,
-    ButtonModule,
-    DialogModule,
-    SkeletonModule,
-  ],
-
-  templateUrl: './coachee-bookings.component.html',
-
-  styleUrls: [
-    './coachee-bookings.component.scss',
-  ],
+  imports: [CommonModule, ButtonModule, DialogModule, SkeletonModule],
+  templateUrl: "./coachee-bookings.component.html",
+  styleUrls: ["./coachee-bookings.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CoacheeBookingsComponent
-  implements OnChanges, OnDestroy {
-
+export class CoacheeBookingsComponent implements OnChanges, OnDestroy {
   // =========================================================
   // Dependencies
   // =========================================================
 
-  private readonly coacheeService =
-    inject(CoacheeService);
+  private readonly coacheeService = inject(CoacheeService);
 
-  private readonly cdr =
-    inject(ChangeDetectorRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  private readonly zone =
-    inject(NgZone);
-
-  private readonly destroy$ =
-    new Subject<void>();
-
+  private readonly destroy$ = new Subject<void>();
 
   // =========================================================
   // Inputs / Outputs
@@ -84,9 +56,7 @@ export class CoacheeBookingsComponent
 
   @Input() coachee: Coachee | null = null;
 
-  @Output() onClose =
-    new EventEmitter<void>();
-
+  @Output() onClose = new EventEmitter<void>();
 
   // =========================================================
   // Data
@@ -96,12 +66,10 @@ export class CoacheeBookingsComponent
 
   sessionTasks: TaskAssignment[] = [];
 
-  taskAssignmentDetails:
-    TaskAssignmentDetails | null = null;
-
+  taskAssignmentDetails: TaskAssignmentDetails | null = null;
 
   // =========================================================
-  // Loading States
+  // Loading
   // =========================================================
 
   bookingsLoading = false;
@@ -109,7 +77,6 @@ export class CoacheeBookingsComponent
   tasksLoading = false;
 
   answersLoading = false;
-
 
   // =========================================================
   // IDs
@@ -123,477 +90,318 @@ export class CoacheeBookingsComponent
 
   private currentTaskAssignmentId: number | null = null;
 
-
   // =========================================================
-  // View State
+  // View
   // =========================================================
 
-  currentView: ViewState =
-    'bookings';
-
+  currentView: ViewState = "bookings";
 
   // =========================================================
   // Lifecycle
   // =========================================================
 
-  ngOnChanges(
-    changes: SimpleChanges
-  ): void {
-
+  ngOnChanges(changes: SimpleChanges): void {
     /*
-     * Only load bookings when the coachee
-     * actually changes.
-     *
-     * We intentionally DO NOT load bookings
-     * when only `visible` changes.
+     * Coachee changed.
      */
-
-    if (
-      changes['coachee'] &&
-      this.coachee
-    ) {
-
-      const newCoacheeId =
-        this.coachee.id;
-
-      /*
-       * Same coachee:
-       * don't call the API again.
-       */
-      if (
-        this.loadedCoacheeId ===
-        newCoacheeId
-      ) {
+    if (changes["coachee"]) {
+      if (!this.coachee) {
+        this.resetState();
         return;
       }
 
-      this.coacheeId =
-        newCoacheeId;
+      const newCoacheeId = this.coachee.id;
 
-      this.loadBookings();
+      /*
+       * New coachee.
+       */
+      if (this.coacheeId !== newCoacheeId) {
+        this.coacheeId = newCoacheeId;
+
+        this.resetViewState();
+
+        this.loadBookings();
+
+        return;
+      }
+
+      /*
+       * Same coachee but modal opened again.
+       *
+       * We intentionally reload because
+       * bookings/tasks may have changed while
+       * the modal was closed.
+       */
+      if (changes["visible"] && changes["visible"].currentValue === true) {
+        this.resetViewState();
+
+        this.loadBookings();
+      }
+    }
+
+    /*
+     * Modal opened.
+     *
+     * Reload the current coachee's bookings.
+     */
+    if (
+      changes["visible"] &&
+      changes["visible"].currentValue === true &&
+      this.coachee
+    ) {
+      /*
+       * Avoid double loading when the coachee
+       * itself changed at the same time.
+       */
+      if (!changes["coachee"]) {
+        this.resetViewState();
+
+        this.loadBookings();
+      }
     }
   }
 
-
   ngOnDestroy(): void {
-
     this.destroy$.next();
-
     this.destroy$.complete();
   }
 
+  // =========================================================
+  // Change Detection
+  // =========================================================
+
+  private refreshView(): void {
+    /*
+     * Mark the component and its OnPush view dirty.
+     *
+     * Angular will render the updated state on
+     * the next change-detection pass.
+     */
+    this.cdr.markForCheck();
+  }
 
   // =========================================================
   // Load Bookings
   // =========================================================
 
   private loadBookings(): void {
-
-    if (
-      this.coacheeId === null ||
-      this.coacheeId === undefined
-    ) {
+    if (this.coacheeId === null || this.coacheeId === undefined) {
       return;
     }
 
-    /*
-     * Prevent duplicate request.
-     */
     if (this.bookingsLoading) {
       return;
     }
 
-    console.log(
-      '[CoacheeBookings] Loading bookings:',
-      this.coacheeId
-    );
+    const requestedCoacheeId = this.coacheeId;
 
+    console.log("[CoacheeBookings] Loading bookings:", requestedCoacheeId);
 
-    this.zone.run(() => {
+    this.currentView = "bookings";
 
-      this.currentView =
-        'bookings';
+    this.bookingsLoading = true;
 
-      this.bookingsLoading =
-        true;
+    this.bookings = [];
 
-      this.bookings = [];
+    this.sessionTasks = [];
 
-      this.sessionTasks = [];
+    this.taskAssignmentDetails = null;
 
-      this.taskAssignmentDetails =
-        null;
+    this.currentBookingId = null;
 
-      this.currentBookingId =
-        null;
+    this.currentTaskAssignmentId = null;
 
-      this.currentTaskAssignmentId =
-        null;
-
-      this.cdr.detectChanges();
-
-    });
-
+    this.refreshView();
 
     this.coacheeService
-      .getCoacheeBookings(
-        this.coacheeId
-      )
-
+      .getCoacheeBookings(requestedCoacheeId)
       .pipe(
-
-        takeUntil(
-          this.destroy$
-        ),
+        takeUntil(this.destroy$),
 
         finalize(() => {
+          /*
+           * Ignore a response belonging to an
+           * old coachee.
+           */
+          if (this.coacheeId !== requestedCoacheeId) {
+            return;
+          }
 
-          this.zone.run(() => {
+          this.bookingsLoading = false;
 
-            this.bookingsLoading =
-              false;
+          this.refreshView();
 
-            this.cdr.detectChanges();
-
-            console.log(
-              '[CoacheeBookings] Bookings loading:',
-              this.bookingsLoading
-            );
-
-          });
-
-        })
-
+          console.log(
+            "[CoacheeBookings] Bookings loading:",
+            this.bookingsLoading,
+          );
+        }),
       )
-
       .subscribe({
+        next: (res) => {
+          if (this.coacheeId !== requestedCoacheeId) {
+            return;
+          }
 
-        next: res => {
+          console.log("[CoacheeBookings] Bookings response:", res);
 
-          this.zone.run(() => {
+          this.bookings = res?.data ?? [];
 
-            console.log(
-              '[CoacheeBookings] Bookings response:',
-              res
-            );
+          this.loadedCoacheeId = requestedCoacheeId;
 
-            this.bookings =
-              res.data ?? [];
-
-            /*
-             * Remember that this coachee
-             * has already been loaded.
-             */
-            this.loadedCoacheeId =
-              this.coacheeId;
-
-            this.cdr.detectChanges();
-
-          });
-
+          /*
+           * This is the important part.
+           *
+           * API finished -> update state ->
+           * tell Angular that OnPush view changed.
+           */
+          this.refreshView();
         },
 
-        error: err => {
+        error: (err) => {
+          console.error("[CoacheeBookings] Bookings error:", err);
 
-          this.zone.run(() => {
+          this.bookings = [];
 
-            console.error(
-              '[CoacheeBookings] Bookings error:',
-              err
-            );
-
-            this.bookings = [];
-
-            this.cdr.detectChanges();
-
-          });
-
+          this.refreshView();
         },
-
       });
   }
-
 
   // =========================================================
   // Load Session Tasks
   // =========================================================
 
-  private loadSessionDetail(
-    bookingId: number
-  ): void {
-
-    if (
-      bookingId === null ||
-      bookingId === undefined
-    ) {
+  private loadSessionDetail(bookingId: number): void {
+    if (bookingId === null || bookingId === undefined) {
       return;
     }
 
-    /*
-     * Prevent duplicate request
-     * for the same booking.
-     */
-    if (
-      this.tasksLoading &&
-      this.currentBookingId ===
-      bookingId
-    ) {
+    if (this.tasksLoading && this.currentBookingId === bookingId) {
       return;
     }
 
-    console.log(
-      '[CoacheeBookings] Loading tasks:',
-      bookingId
-    );
+    console.log("[CoacheeBookings] Loading tasks:", bookingId);
 
+    this.currentBookingId = bookingId;
 
-    this.zone.run(() => {
+    this.currentView = "session-detail";
 
-      this.currentBookingId =
-        bookingId;
+    this.tasksLoading = true;
 
-      this.currentView =
-        'session-detail';
+    this.sessionTasks = [];
 
-      this.tasksLoading =
-        true;
+    this.taskAssignmentDetails = null;
 
-      this.sessionTasks = [];
+    this.currentTaskAssignmentId = null;
 
-      this.taskAssignmentDetails =
-        null;
-
-      this.currentTaskAssignmentId =
-        null;
-
-      this.cdr.detectChanges();
-
-    });
-
+    this.refreshView();
 
     this.coacheeService
-      .getBookingDetail(
-        bookingId
-      )
-
+      .getBookingDetail(bookingId)
       .pipe(
-
-        takeUntil(
-          this.destroy$
-        ),
+        takeUntil(this.destroy$),
 
         finalize(() => {
+          this.tasksLoading = false;
 
-          this.zone.run(() => {
+          this.refreshView();
 
-            this.tasksLoading =
-              false;
-
-            this.cdr.detectChanges();
-
-            console.log(
-              '[CoacheeBookings] Tasks loading:',
-              this.tasksLoading
-            );
-
-          });
-
-        })
-
+          console.log("[CoacheeBookings] Tasks loading:", this.tasksLoading);
+        }),
       )
-
       .subscribe({
+        next: (res) => {
+          console.log("[CoacheeBookings] Tasks response:", res);
 
-        next: res => {
+          this.sessionTasks = res?.data ?? [];
 
-          this.zone.run(() => {
-
-            console.log(
-              '[CoacheeBookings] Tasks response:',
-              res
-            );
-
-            this.sessionTasks =
-              res.data ?? [];
-
-            this.cdr.detectChanges();
-
-          });
-
+          this.refreshView();
         },
 
-        error: err => {
+        error: (err) => {
+          console.error("[CoacheeBookings] Tasks error:", err);
 
-          this.zone.run(() => {
+          this.sessionTasks = [];
 
-            console.error(
-              '[CoacheeBookings] Tasks error:',
-              err
-            );
-
-            this.sessionTasks = [];
-
-            this.cdr.detectChanges();
-
-          });
-
+          this.refreshView();
         },
-
       });
   }
-
 
   // =========================================================
   // Load Task Answers
   // =========================================================
 
-  private loadTaskAssignmentAnswers(
-    assignmentId: number
-  ): void {
-
-    if (
-      assignmentId === null ||
-      assignmentId === undefined
-    ) {
+  private loadTaskAssignmentAnswers(assignmentId: number): void {
+    if (assignmentId === null || assignmentId === undefined) {
       return;
     }
 
-    /*
-     * Prevent duplicate request
-     * for the same assignment.
-     */
-    if (
-      this.answersLoading &&
-      this.currentTaskAssignmentId ===
-      assignmentId
-    ) {
+    if (this.answersLoading && this.currentTaskAssignmentId === assignmentId) {
       return;
     }
 
-    console.log(
-      '[CoacheeBookings] Loading task answers:',
-      assignmentId
-    );
+    console.log("[CoacheeBookings] Loading task answers:", assignmentId);
 
+    this.currentTaskAssignmentId = assignmentId;
 
-    this.zone.run(() => {
+    this.currentView = "task-answers";
 
-      this.currentTaskAssignmentId =
-        assignmentId;
+    this.answersLoading = true;
 
-      this.currentView =
-        'task-answers';
+    this.taskAssignmentDetails = null;
 
-      this.answersLoading =
-        true;
-
-      this.taskAssignmentDetails =
-        null;
-
-      this.cdr.detectChanges();
-
-    });
-
+    this.refreshView();
 
     this.coacheeService
-      .getTaskAssignmentDetails(
-        assignmentId
-      )
-
+      .getTaskAssignmentDetails(assignmentId)
       .pipe(
-
-        takeUntil(
-          this.destroy$
-        ),
+        takeUntil(this.destroy$),
 
         finalize(() => {
+          this.answersLoading = false;
 
-          this.zone.run(() => {
+          this.refreshView();
 
-            this.answersLoading =
-              false;
-
-            this.cdr.detectChanges();
-
-            console.log(
-              '[CoacheeBookings] Answers loading:',
-              this.answersLoading
-            );
-
-          });
-
-        })
-
+          console.log(
+            "[CoacheeBookings] Answers loading:",
+            this.answersLoading,
+          );
+        }),
       )
-
       .subscribe({
+        next: (res) => {
+          console.log("[CoacheeBookings] Task answers response:", res);
 
-        next: res => {
+          this.taskAssignmentDetails = res?.data ?? null;
 
-          this.zone.run(() => {
-
-            console.log(
-              '[CoacheeBookings] Task answers response:',
-              res
-            );
-
-            this.taskAssignmentDetails =
-              res.data ?? null;
-
-            this.cdr.detectChanges();
-
-          });
-
+          this.refreshView();
         },
 
-        error: err => {
+        error: (err) => {
+          console.error("[CoacheeBookings] Task answers error:", err);
 
-          this.zone.run(() => {
+          this.taskAssignmentDetails = null;
 
-            console.error(
-              '[CoacheeBookings] Task answers error:',
-              err
-            );
-
-            this.taskAssignmentDetails =
-              null;
-
-            this.cdr.detectChanges();
-
-          });
-
+          this.refreshView();
         },
-
       });
   }
-
 
   // =========================================================
   // Actions
   // =========================================================
 
-  openSession(
-    booking: BookingSession
-  ): void {
-
-    if (
-      !booking ||
-      booking.id === null ||
-      booking.id === undefined
-    ) {
+  openSession(booking: BookingSession): void {
+    if (!booking || booking.id === null || booking.id === undefined) {
       return;
     }
 
-    this.loadSessionDetail(
-      booking.id
-    );
+    this.loadSessionDetail(booking.id);
   }
 
-
-  openTaskAnswers(
-    task: TaskAssignment
-  ): void {
-
+  openTaskAnswers(task: TaskAssignment): void {
     if (
       !task ||
       task.assignmentId === null ||
@@ -602,272 +410,212 @@ export class CoacheeBookingsComponent
       return;
     }
 
-    this.loadTaskAssignmentAnswers(
-      task.assignmentId
-    );
+    this.loadTaskAssignmentAnswers(task.assignmentId);
   }
-
 
   // =========================================================
   // Navigation
   // =========================================================
 
   goBackToBookings(): void {
+    console.log("[CoacheeBookings] Back to bookings");
 
-    console.log(
-      '[CoacheeBookings] Back to bookings'
-    );
+    this.currentView = "bookings";
 
-    this.zone.run(() => {
+    this.currentBookingId = null;
 
-      this.currentView =
-        'bookings';
+    this.currentTaskAssignmentId = null;
 
-      this.currentBookingId =
-        null;
+    this.taskAssignmentDetails = null;
 
-      this.currentTaskAssignmentId =
-        null;
+    this.tasksLoading = false;
 
-      this.taskAssignmentDetails =
-        null;
+    this.answersLoading = false;
 
-      /*
-       * Do NOT clear bookings.
-       *
-       * Do NOT call bookings API.
-       */
-
-      this.bookingsLoading =
-        false;
-
-      this.cdr.detectChanges();
-
-    });
+    this.refreshView();
   }
-
 
   goBackToTasks(): void {
+    console.log("[CoacheeBookings] Back to tasks");
 
-    console.log(
-      '[CoacheeBookings] Back to tasks'
-    );
+    this.currentView = "session-detail";
 
-    this.zone.run(() => {
+    this.currentTaskAssignmentId = null;
 
-      this.currentView =
-        'session-detail';
+    this.taskAssignmentDetails = null;
 
-      this.currentTaskAssignmentId =
-        null;
+    this.answersLoading = false;
 
-      this.taskAssignmentDetails =
-        null;
-
-      /*
-       * Do NOT clear sessionTasks.
-       *
-       * Do NOT call tasks API.
-       */
-
-      this.tasksLoading =
-        false;
-
-      this.cdr.detectChanges();
-
-    });
+    this.refreshView();
   }
-
 
   // =========================================================
   // Close
   // =========================================================
 
   close(): void {
-      this.resetToFirstView();
+    this.resetToFirstView();
 
-this.onClose.emit();
+    this.onClose.emit();
   }
 
   private resetToFirstView(): void {
+    this.currentView = "bookings";
 
-  this.currentView = 'bookings';
+    this.currentBookingId = null;
 
-  this.currentBookingId = null;
+    this.currentTaskAssignmentId = null;
 
-  this.currentTaskAssignmentId = null;
+    this.taskAssignmentDetails = null;
 
-  this.taskAssignmentDetails = null;
+    this.sessionTasks = [];
 
-  this.sessionTasks = [];
+    this.bookingsLoading = false;
 
-  this.bookingsLoading = false;
+    this.tasksLoading = false;
 
-  this.tasksLoading = false;
+    this.answersLoading = false;
 
-  this.answersLoading = false;
+    this.refreshView();
+  }
 
-  this.cdr.detectChanges();
-}
+  // =========================================================
+  // Full Reset
+  // =========================================================
 
+  private resetState(): void {
+    this.coacheeId = null;
+
+    this.loadedCoacheeId = null;
+
+    this.resetToFirstView();
+
+    this.bookings = [];
+  }
+
+  // =========================================================
+  // Reset View State
+  // =========================================================
+
+  private resetViewState(): void {
+    this.currentView = "bookings";
+
+    this.currentBookingId = null;
+
+    this.currentTaskAssignmentId = null;
+
+    this.sessionTasks = [];
+
+    this.taskAssignmentDetails = null;
+
+    this.bookingsLoading = false;
+
+    this.tasksLoading = false;
+
+    this.answersLoading = false;
+
+    this.refreshView();
+  }
 
   // =========================================================
   // Date
   // =========================================================
 
-  formatDate(
-    dateStr?: string
-  ): string {
-
+  formatDate(dateStr?: string): string {
     if (!dateStr) {
-      return '—';
+      return "—";
     }
 
-    const date =
-      new Date(dateStr);
+    const date = new Date(dateStr);
 
-    if (
-      Number.isNaN(
-        date.getTime()
-      )
-    ) {
+    if (Number.isNaN(date.getTime())) {
       return dateStr;
     }
 
-    return date.toLocaleDateString(
-      'en-US',
-      {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }
-    );
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   }
-
 
   // =========================================================
   // Time
   // =========================================================
 
-  formatTime(
-    dateStr?: string
-  ): string {
-
+  formatTime(dateStr?: string): string {
     if (!dateStr) {
-      return '—';
+      return "—";
     }
 
-    const date =
-      new Date(dateStr);
+    const date = new Date(dateStr);
 
-    if (
-      Number.isNaN(
-        date.getTime()
-      )
-    ) {
+    if (Number.isNaN(date.getTime())) {
       return dateStr;
     }
 
-    return date.toLocaleTimeString(
-      'en-US',
-      {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      }
-    );
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
   }
-
 
   // =========================================================
   // Duration
   // =========================================================
 
-  formatDuration(
-    minutes: number
-  ): string {
-
+  formatDuration(minutes: number): string {
     if (!minutes) {
-      return '0m';
+      return "0m";
     }
 
     if (minutes < 60) {
       return `${minutes}m`;
     }
 
-    const hours =
-      Math.floor(
-        minutes / 60
-      );
+    const hours = Math.floor(minutes / 60);
 
-    const mins =
-      minutes % 60;
+    const mins = minutes % 60;
 
-    return mins === 0
-      ? `${hours}h`
-      : `${hours}h ${mins}m`;
+    return mins === 0 ? `${hours}h` : `${hours}h ${mins}m`;
   }
-
 
   // =========================================================
   // Task Submit Date
   // =========================================================
 
-  formatTaskSubmitDate(
-    dateStr?: string
-  ): string {
-
+  formatTaskSubmitDate(dateStr?: string): string {
     if (!dateStr) {
-      return 'Not submitted';
+      return "Not submitted";
     }
 
-    const date =
-      new Date(dateStr);
+    const date = new Date(dateStr);
 
-    if (
-      Number.isNaN(
-        date.getTime()
-      )
-    ) {
+    if (Number.isNaN(date.getTime())) {
       return dateStr;
     }
 
-    return date.toLocaleDateString(
-      'en-US',
-      {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }
-    );
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   }
-
 
   // =========================================================
   // Status
   // =========================================================
 
-  getStatusClass(
-    status?: string
-  ): string {
-
-    return (status ?? '')
-      .toLowerCase()
-      .replace(
-        /\s+/g,
-        '-'
-      );
+  getStatusClass(status?: string): string {
+    return (status ?? "").toLowerCase().replace(/\s+/g, "-");
   }
-
 
   // =========================================================
   // Booking Helpers
   // =========================================================
 
-  hasDiscount(
-    booking: BookingSession
-  ): boolean {
-
+  hasDiscount(booking: BookingSession): boolean {
     return (
       booking.discount !== null &&
       booking.discount !== undefined &&
@@ -875,60 +623,29 @@ this.onClose.emit();
     );
   }
 
-
   // =========================================================
   // Question Helpers
   // =========================================================
 
-  isTextQuestion(
-    question: any
-  ): boolean {
-
-    return (
-      question?.type === 'TEXT'
-    );
+  isTextQuestion(question: any): boolean {
+    return question?.type === "TEXT";
   }
 
-
-  isMultipleChoice(
-    question: any
-  ): boolean {
-
-    return (
-      question?.type ===
-      'MULTIPLE_CHOICE'
-    );
+  isMultipleChoice(question: any): boolean {
+    return question?.type === "MULTIPLE_CHOICE";
   }
 
+  getQuestionAnswer(questionId: number): any {
+    const questions = this.taskAssignmentDetails?.questions;
 
-  getQuestionAnswer(
-    questionId: number
-  ): any {
-
-    const questions =
-      this.taskAssignmentDetails
-        ?.questions;
-
-    if (
-      !questions ||
-      questions.length === 0
-    ) {
+    if (!questions || questions.length === 0) {
       return null;
     }
 
-    return questions.find(
-      question =>
-        question.id === questionId
-    ) ?? null;
+    return questions.find((question) => question.id === questionId) ?? null;
   }
 
-
-  isAnswerArray(
-    answer: any
-  ): boolean {
-
-    return Array.isArray(
-      answer
-    );
+  isAnswerArray(answer: any): boolean {
+    return Array.isArray(answer);
   }
 }

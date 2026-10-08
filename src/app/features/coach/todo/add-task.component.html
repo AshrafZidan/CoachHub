@@ -1,265 +1,235 @@
-<div class="booking-page">
-
+<div class="booking-page coach-coachees-page">
   <div class="title-wrapper">
-    <h2 class="title">
-      Add New Task
-    </h2>
+    <h2 class="title">Add New Task</h2>
   </div>
 
-  <form
-    [formGroup]="taskForm"
-    (ngSubmit)="submit()">
-
+  <form [formGroup]="taskForm" (ngSubmit)="submit()">
     <!-- ========================= -->
     <!-- Task Information -->
     <!-- ========================= -->
 
     <section class="card form-card">
-
       <div class="form-group">
-
-        <label for="title">
-          Task Title
-        </label>
+        <label for="title"> Task Title </label>
 
         <input
           id="title"
           type="text"
           class="form-input"
           formControlName="title"
-          placeholder="Enter task title" />
+          placeholder="Enter task title"
+        />
 
         <small
           class="error required"
           *ngIf="
-            taskForm.get('title')?.touched &&
-            taskForm.get('title')?.invalid
-          ">
+            taskForm.get('title')?.touched && taskForm.get('title')?.invalid
+          "
+        >
           Task title is required
         </small>
-
       </div>
 
       <div class="form-group">
+        <label for="description"> Task Description </label>
 
-        <label for="description">
-          Task Description
-        </label>
-
-        <!-- IMPORTANT:
-             No whitespace/text node inside textarea.
-             This avoids Angular SSR hydration NG0500. -->
         <textarea
           id="description"
           class="form-input description-input"
           formControlName="description"
-          placeholder="Enter task description"></textarea>
+          placeholder="Enter task description"
+        ></textarea>
 
         <small
           class="error required"
           *ngIf="
             taskForm.get('description')?.touched &&
             taskForm.get('description')?.invalid
-          ">
+          "
+        >
           Task description is required
         </small>
-
       </div>
-
     </section>
 
     <!-- ========================= -->
     <!-- Questions -->
     <!-- ========================= -->
 
-    <div
-      formArrayName="questions"
-      class="questions-container">
-
+    <div formArrayName="questions" class="questions-container">
       <section
         class="card form-card question-card"
-        *ngFor="
-          let question of questions.controls;
-          let questionIndex = index
-        "
-        [formGroupName]="questionIndex">
-
+        *ngFor="let question of questions.controls; let questionIndex = index"
+        [formGroupName]="questionIndex"
+      >
         <!-- Question Header -->
 
         <div class="question-header">
-
-          <h2>
-            Question {{ questionIndex + 1 }}
-          </h2>
+          <h2>Question {{ questionIndex + 1 }}</h2>
 
           <button
             *ngIf="questions.length > 1"
             type="button"
             class="remove-button"
-            (click)="removeQuestion(questionIndex)">
-
+            (click)="removeQuestion(questionIndex)"
+          >
             <i class="pi pi-trash"></i>
-
           </button>
-
         </div>
 
         <!-- Question Text -->
 
         <div class="form-group">
-
-          <!-- IMPORTANT:
-               No whitespace/text node inside textarea. -->
           <textarea
             class="form-input question-input"
             formControlName="questionText"
-            placeholder="Enter question"></textarea>
+            placeholder="Enter question"
+          ></textarea>
 
           <small
             class="error required"
             *ngIf="
               question.get('questionText')?.touched &&
               question.get('questionText')?.invalid
-            ">
+            "
+          >
             Question is required
           </small>
-
-        </div>
-
-        <!-- Question Type -->
-
-        <div class="form-group">
-
-          <label>
-            Question Type
-          </label>
-
-          <div class="card question-type">
-
-            <button
-              type="button"
-              [class.active]="
-                question.get('type')?.value === 'TEXT'
-              "
-              (click)="
-                question.patchValue({ type: 'TEXT' });
-                onQuestionTypeChange(question)
-              ">
-
-              Free Text
-
-            </button>
-
-            <button
-              type="button"
-              [class.active]="
-                question.get('type')?.value === 'MULTIPLE_CHOICE'
-              "
-              (click)="
-                question.patchValue({
-                  type: 'MULTIPLE_CHOICE'
-                });
-                onQuestionTypeChange(question)
-              ">
-
-              Multiple Choices
-
-            </button>
-
-          </div>
-
-        </div>
-
-        <!-- Required -->
-
-        <div class="required-row">
-
-          <label class="switch">
-
-            <input
-              type="checkbox"
-              formControlName="required" />
-
-            <span class="slider"></span>
-
-          </label>
-
-          <span>
-            Required question
-          </span>
-
         </div>
 
         <!-- ========================= -->
-        <!-- Multiple Choice Options -->
+        <!-- Question Type -->
+        <!-- ========================= -->
+
+        <div class="form-group">
+          <label> Question Type </label>
+
+          <div class="card question-type">
+            <!-- Free Text -->
+
+            <button
+              type="button"
+              [class.active]="question.get('type')?.value === 'TEXT'"
+              (click)="
+                question.patchValue({
+                  type: 'TEXT',
+                });
+                onQuestionTypeChange(question)
+              "
+            >
+              Free Text
+            </button>
+
+            <!-- Single Selection -->
+
+            <!-- <button
+              type="button"
+              [class.active]="question.get('type')?.value === 'SINGLE_CHOICE'"
+              (click)="
+                question.patchValue({
+                  type: 'SINGLE_CHOICE',
+                });
+                onQuestionTypeChange(question)
+              "
+            >
+              Single Selection
+            </button> -->
+
+            <!-- Multiple Selection -->
+
+            <button
+              type="button"
+              [class.active]="question.get('type')?.value === 'MULTIPLE_CHOICE'"
+              (click)="
+                question.patchValue({
+                  type: 'MULTIPLE_CHOICE',
+                });
+                onQuestionTypeChange(question)
+              "
+            >
+              Multiple Selection
+            </button>
+          </div>
+        </div>
+
+        <!-- ========================= -->
+        <!-- Required -->
+        <!-- ========================= -->
+
+        <div class="required-row">
+          <label class="switch">
+            <input type="checkbox" formControlName="required" />
+
+            <span class="slider"></span>
+          </label>
+
+          <span> Required question </span>
+        </div>
+
+        <!-- ========================= -->
+        <!-- Selection Options -->
         <!-- ========================= -->
 
         <div
           class="options-section"
           *ngIf="
-            question.get('type')?.value ===
-            'MULTIPLE_CHOICE'
-          ">
-
+            question.get('type')?.value === 'SINGLE_CHOICE' ||
+            question.get('type')?.value === 'MULTIPLE_CHOICE'
+          "
+        >
           <div class="options-header">
-
-            <label>
-              Answer Options
-            </label>
+            <label> Answer Options </label>
 
             <button
               type="button"
               class="add-option-button p-button p-button-secondary app-custom"
-              (click)="addOption(question)">
-
+              (click)="addOption(question)"
+            >
               Add Option
-
             </button>
-
           </div>
 
-          <div
-            formArrayName="options"
-            class="options-list">
-
+          <div formArrayName="options" class="options-list">
             <div
               class="option-row"
               *ngFor="
                 let option of getOptions(question).controls;
                 let optionIndex = index
               "
-              [formGroupName]="optionIndex">
-
+              [formGroupName]="optionIndex"
+            >
               <input
                 type="text"
                 class="form-input"
                 formControlName="optionText"
-                [placeholder]="
-                  'Option ' + (optionIndex + 1)
-                " />
+                [placeholder]="'Option ' + (optionIndex + 1)"
+              />
 
               <button
                 type="button"
                 class="remove-option-button"
-                (click)="
-                  removeOption(
-                    question,
-                    optionIndex
-                  )
-                ">
-
+                (click)="removeOption(question, optionIndex)"
+              >
                 <i class="pi pi-times"></i>
-
               </button>
 
+              <small
+                class="error"
+                *ngIf="
+                  option.get('optionText')?.touched &&
+                  option.get('optionText')?.invalid
+                "
+              >
+                Option is required
+              </small>
             </div>
-
           </div>
 
+          <small class="options-hint" *ngIf="getOptions(question).length < 2">
+            Add at least two answer options.
+          </small>
         </div>
-
       </section>
-
     </div>
 
     <!-- ========================= -->
@@ -267,31 +237,23 @@
     <!-- ========================= -->
 
     <div class="actions">
-
       <button
         type="submit"
         class="w-full mt-3 p-button p-button-primary p-component"
-        [disabled]="isSubmitting">
+        [disabled]="isSubmitting"
+      >
+        <i *ngIf="isSubmitting" class="pi pi-spin pi-spinner"></i>
 
-        <i
-          *ngIf="isSubmitting"
-          class="pi pi-spin pi-spinner"></i>
-
-        {{ isSubmitting ? 'Adding...' : 'Add Task' }}
-
+        {{ isSubmitting ? "Adding..." : "Add Task" }}
       </button>
 
       <button
         type="button"
         class="w-full mt-3 p-button p-button-secondary app-custom"
-        (click)="addQuestion()">
-
+        (click)="addQuestion()"
+      >
         Add New Question
-
       </button>
-
     </div>
-
   </form>
-
 </div>

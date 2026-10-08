@@ -110,7 +110,7 @@
             if (!this.coaches$) {
                 this.coaches$ = this.http
                     .get<any[]>(
-                        environment.apiUrl + 'portal/api/coaches/coaches-lookup'
+                        environment.apiUrl + '/portal/api/coaches/coaches-lookup'
                     )
                     .pipe(
                         shareReplay(1)

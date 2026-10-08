@@ -7,6 +7,7 @@
     iframe{
             width: 75%;
     height: 100%;
+    &.coachee-session{width: 100%;}
     }
     .session-sidebar{
         width: 25%;
@@ -115,7 +116,14 @@
 		font-weight: 600;
 	}
 }
-
-
-
+}
+.assign-task-form{
+    
+.form-field{
+    margin-bottom: 20px;
+    label{
+    margin-bottom: 10px;
+    display: block;
+    }
+}
 }

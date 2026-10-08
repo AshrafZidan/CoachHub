@@ -1,225 +1,269 @@
 import {
-    ChangeDetectorRef,
-	Component,
-	OnInit,
-	inject
-} from '@angular/core';
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  inject,
+} from "@angular/core";
 
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { CoacheeService, TaskAssignment } from '../../features/coach/coachees/coach-coachees.service';
-import { DialogModule } from 'primeng/dialog';
-import { DatePickerModule } from 'primeng/datepicker';
-import { CoachToDoService, TaskTemplate, TaskTemplateResponse } from '../../features/coach/services/todo-bookings.service';
-import { SelectModule } from 'primeng/select';
-import { CoachBookingsService } from '../../features/coach/services/coach-bookings.service';
-import { ButtonModule } from 'primeng/button';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from "@angular/common";
+import { ActivatedRoute, Router } from "@angular/router";
+
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+
+import {
+  CoacheeService,
+  TaskAssignment,
+} from "../../features/coach/coachees/coach-coachees.service";
+
+import { DialogModule } from "primeng/dialog";
+import { DatePickerModule } from "primeng/datepicker";
+import { SelectModule } from "primeng/select";
+import { ButtonModule } from "primeng/button";
+import { FormsModule } from "@angular/forms";
+
+import {
+  CoachTaskTemplate,
+  ToDoService,
+} from "../../features/coach/services/todo-bookings.service";
+
+import { AuthService } from "../../core/services/auth.service";
 
 @Component({
-	selector: 'app-session',
-	standalone: true,
-	imports: [
-		CommonModule,
-        DialogModule,
-	    SelectModule,
-	    DatePickerModule,
-        ButtonModule,
-        FormsModule
-
-	],
-	templateUrl: './session.component.html',
-	styleUrls: ['./session.component.scss']
+  selector: "app-session",
+  standalone: true,
+  imports: [
+    CommonModule,
+    DialogModule,
+    SelectModule,
+    DatePickerModule,
+    ButtonModule,
+    FormsModule,
+  ],
+  templateUrl: "./session.component.html",
+  styleUrls: ["./session.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly coacheeService = inject(CoacheeService);
+  private readonly todoService = inject(ToDoService);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly authService = inject(AuthService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-	private route = inject(ActivatedRoute);
-	private router = inject(Router);
-    private coacheeService = inject(CoacheeService);
-    private coachToDoService = inject(CoachToDoService);
-    private cdr = inject(ChangeDetectorRef);
-	bookingId!: number;
-	sessionUrl = '';
-    loadingTasks:boolean = false;
-    loadingTaskTemplates:boolean = false;
-     	assigningTask = false;
+  bookingId!: number;
 
-	showAssignTaskDialog = false;
+  sessionUrl = "";
+  safeSessionUrl!: SafeResourceUrl;
 
-    assignedTasks:TaskAssignment[] = [];
-    taskTemplates: TaskTemplate[] = [];
-    selectedTask: TaskTemplate | null = null;
-    	dueDate: Date | null = null;
-today = new Date();
+  // --------------------------------------------------
+  // Tasks
+  // --------------------------------------------------
 
-	private sanitizer = inject(DomSanitizer);
+  loadingTasks = false;
+  loadingTaskTemplates = false;
+  assigningTask = false;
 
-	safeSessionUrl!: SafeResourceUrl;
+  showAssignTaskDialog = false;
 
+  assignedTasks: TaskAssignment[] = [];
 
-	ngOnInit(): void {
-	this.bookingId = Number(
-		this.route.snapshot.paramMap.get('bookingId')
-	);
+  taskTemplates: CoachTaskTemplate[] = [];
 
-	const navigation =
-		this.router.getCurrentNavigation();
+  selectedTask: CoachTaskTemplate | null = null;
 
-	this.sessionUrl =
-		navigation?.extras?.state?.['sessionUrl'] ||
-		history.state?.sessionUrl ||
-		'';
+  dueDate: Date | null = null;
 
-	if (!this.sessionUrl) {
-		this.router.navigate([
-			'/coach/bookings'
-		]);
+  today = new Date();
 
-		return;
-	}
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
 
-	this.safeSessionUrl =
-		this.sanitizer
-			.bypassSecurityTrustResourceUrl(
-				this.sessionUrl
-			);
+  ngOnInit(): void {
+    this.bookingId = Number(this.route.snapshot.paramMap.get("bookingId"));
+
+    const navigation = this.router.getCurrentNavigation();
+
+    this.sessionUrl =
+      navigation?.extras?.state?.["sessionUrl"] ||
+      history.state?.sessionUrl ||
+      "";
+
+    if (!this.sessionUrl) {
+      this.router.navigate(["/coach/bookings"]);
+      return;
+    }
+
+    this.safeSessionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.sessionUrl,
+    );
 
     this.loadAssignedTasks();
-}
 
+    this.cdr.markForCheck();
+  }
 
+  // --------------------------------------------------
+  // Assigned Tasks
+  // --------------------------------------------------
 
-private loadAssignedTasks(): void {
-	this.loadingTasks = true;
+  private loadAssignedTasks(): void {
+    this.loadingTasks = true;
 
-	this.cdr.markForCheck();
+    // Tell OnPush that loading state changed.
+    this.cdr.markForCheck();
 
-	this.coacheeService
-		.getBookingDetail(this.bookingId)
-		.subscribe({
-			next: res => {
-				this.assignedTasks =
-					res?.data || [];
+    this.coacheeService.getBookingDetail(this.bookingId).subscribe({
+      next: (res) => {
+        this.assignedTasks = res?.data ?? [];
+        this.loadingTasks = false;
 
-				this.loadingTasks = false;
+        /*
+         * The API has completed, but the callback may not
+         * automatically trigger Angular change detection.
+         *
+         * markForCheck() makes the new task state visible
+         * immediately without requiring a mouse click.
+         */
+        this.cdr.markForCheck();
+      },
 
-				this.cdr.markForCheck();
-			},
+      error: () => {
+        this.assignedTasks = [];
+        this.loadingTasks = false;
 
-			error: () => {
-				this.assignedTasks = [];
-				this.loadingTasks = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
 
-				this.cdr.markForCheck();
-			}
-		});
-}
+  // --------------------------------------------------
+  // Assign Task Dialog
+  // --------------------------------------------------
 
-	assignTask(): void {
-	this.selectedTask = null;
-	this.dueDate = null;
+  assignTask(): void {
+    this.selectedTask = null;
+    this.dueDate = null;
 
-	this.showAssignTaskDialog = true;
+    this.showAssignTaskDialog = true;
 
-	if (!this.taskTemplates.length) {
-		this.loadTaskTemplates();
-	}
-}
+    this.cdr.markForCheck();
 
-	endSession(): void {
-		// call your end-session API
-	}
+    if (!this.taskTemplates.length) {
+      this.loadTaskTemplates();
+    }
+  }
 
-	backToBookings(): void {
-		this.router.navigate([
-			'/coach/bookings'
-		]);
-	}
+  // --------------------------------------------------
+  // Task Templates
+  // --------------------------------------------------
 
-    private loadTaskTemplates(): void {
+  private loadTaskTemplates(): void {
+    this.loadingTaskTemplates = true;
 
-	this.loadingTaskTemplates = true;
+    this.cdr.markForCheck();
 
-	this.coachToDoService
-		.getTaskTemplatesForCoach(null,null)
-		.subscribe({
-			next: res => {
-	            this.taskTemplates =
-					res.data || [];
+    this.todoService.getTaskTemplates(null, null).subscribe({
+      next: (res) => {
+        this.taskTemplates = (res.data ?? []) as CoachTaskTemplate[];
 
-				this.loadingTaskTemplates = false;
-			},
+        this.loadingTaskTemplates = false;
 
-			error: () => {
+        this.cdr.markForCheck();
+      },
 
-				this.taskTemplates = [];
+      error: () => {
+        this.taskTemplates = [];
+        this.loadingTaskTemplates = false;
 
-				this.loadingTaskTemplates = false;
-			}
-		});
-}
+        this.cdr.markForCheck();
+      },
+    });
+  }
 
-assignSelectedTask(): void {
+  // --------------------------------------------------
+  // Assign Selected Task
+  // --------------------------------------------------
 
-	if (!this.selectedTask) {
-		return;
-	}
+  assignSelectedTask(): void {
+    if (!this.selectedTask || !this.dueDate) {
+      return;
+    }
 
-	if (!this.dueDate) {
-		return;
-	}
+    this.assigningTask = true;
 
-	this.assigningTask = true;
+    this.cdr.markForCheck();
 
-	const request = {
-		taskTemplateId:
-			this.selectedTask.id,
+    const request = {
+      taskTemplateId: this.selectedTask.id,
+      bookingId: this.bookingId,
+      dueDate: this.formatDate(this.dueDate),
+    };
 
-		bookingId:
-			this.bookingId,
+    this.coacheeService.assignTaskToBooking(request).subscribe({
+      next: () => {
+        /*
+         * Reset the dialog state first.
+         */
+        this.assigningTask = false;
+        this.showAssignTaskDialog = false;
 
-		dueDate:
-			this.formatDate(this.dueDate)
-	};
+        this.selectedTask = null;
+        this.dueDate = null;
 
-	this.coacheeService.assignTaskToBooking(request)
-		.subscribe({
-			next: () => {
+        /*
+         * Immediately update the UI.
+         */
+        this.cdr.markForCheck();
 
-				this.assigningTask = false;
+        /*
+         * Reload the assigned tasks.
+         */
+        this.loadAssignedTasks();
+      },
 
-				this.showAssignTaskDialog = false;
+      error: () => {
+        this.assigningTask = false;
 
-				this.selectedTask = null;
-				this.dueDate = null;
+        this.cdr.markForCheck();
+      },
+    });
+  }
 
-				// Refresh assigned tasks
-				this.loadAssignedTasks();
-			},
+  // --------------------------------------------------
+  // Session
+  // --------------------------------------------------
 
-			error: () => {
+  endSession(): void {
+    // Call your end-session API here.
+  }
 
-				this.assigningTask = false;
-			}
-		});
-}
+  backToBookings(): void {
+    this.router.navigate(["/coach/bookings"]);
+  }
 
-private formatDate(date: Date): string {
+  // --------------------------------------------------
+  // Date
+  // --------------------------------------------------
 
-	const year =
-		date.getFullYear();
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
 
-	const month =
-		String(
-			date.getMonth() + 1
-		).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
 
-	const day =
-		String(
-			date.getDate()
-		).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
 
-	return `${year}-${month}-${day}`;
-}
+    return `${year}-${month}-${day}`;
+  }
+
+  // --------------------------------------------------
+  // User
+  // --------------------------------------------------
+
+  get isCoach(): boolean {
+    return this.authService.isCoach();
+  }
 }

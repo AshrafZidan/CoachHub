@@ -1,0 +1,156 @@
+<div class="booking-page">
+
+  <div class="title-wrapper">
+    <h2 class="title">To Do</h2>
+
+    @if (authService.isCoach()) {
+      <button
+        class="button btn-add p-button-primary p-button p-component"
+        type="button"
+        (click)="addNewTask()"
+      >
+        Add New Task
+      </button>
+    }
+  </div>
+
+  @if (!authService.isCoach()) {
+    <!-- Tabs -->
+    <div class="tabs">
+      @for (tab of tabs; track tab) {
+        <button
+          type="button"
+          class="tab"
+          [class.active]="activeTab() === tab"
+          (click)="setTab(tab)"
+        >
+          {{ tab }}
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Tasks -->
+  @if (tasks().length > 0) {
+    <div class="grid">
+      @for (task of tasks(); track taskTrackId(task)) {
+        <div class="card" (click)="showTaskDetails(task)">
+          <div class="card-header">
+
+            <h3>{{ task.title }}</h3>
+
+            <!-- Coach -->
+            @if (authService.isCoach() && isCoachTask(task)) {
+              <span
+                class="task-status chip"
+                [class.completed]="task.active"
+                [class.canceled]="!task.active"
+              >
+                {{ task.active ? 'Active' : 'Inactive' }}
+              </span>
+            }
+
+            <!-- Coachee -->
+            @if (!authService.isCoach() && isCoacheeTask(task)) {
+              <span class="{{ task.status.toLocaleLowerCase() }} chip">
+                {{ task.status }}
+              </span>
+            }
+
+          </div>
+
+          <div class="card-body">
+
+            <div class="task-content">
+
+              <!-- Image -->
+              <div class="task-image">
+                <img src="assets/images/task-preview.jpg" alt="Task Image" />
+              </div>
+
+              <div
+                class="task-info"
+                [ngClass]="{ coachee: !authService.isCoach() }"
+              >
+
+                <!-- Description -->
+                <div class="task-description">
+                  <i class="pi pi-lightbulb"></i>
+
+                  <span>{{ task.description }}</span>
+
+                  <i class="pi pi-chevron-right show-details"></i>
+                </div>
+
+                <!-- Coach -->
+                @if (
+                  authService.isCoach() &&
+                  isCoachTask(task) &&
+                  task.questions?.length
+                ) {
+                  <div class="task-footer">
+                    <span>
+                      {{ task.questions.length }}
+                      {{ task.questions.length === 1 ? 'Question' : 'Questions' }}
+                    </span>
+                  </div>
+                }
+
+                <!-- Coachee -->
+                @if (!authService.isCoach() && isCoacheeTask(task)) {
+
+                  @if (task.coach) {
+                    <div class="task-owner">
+                      <i class="pi pi-user"></i>
+                      <span>Coach: {{ task.coach.fullNameEn }}</span>
+                    </div>
+                  }
+
+                  @if (task.dueDate) {
+                    <div class="task-due">
+                      <i class="pi pi-clock"></i>
+                      <span>Due: {{ task.dueDate | date: 'dd MMM yyyy' }}</span>
+                    </div>
+                  }
+
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Empty -->
+  @if (isEmpty() && !loading()) {
+    <div class="booking-empty">
+      <i class="pi pi-calendar-times"></i>
+      <p>No tasks found yet.</p>
+    </div>
+  }
+
+  <!-- Initial Loading -->
+  @if (loading() && tasks().length === 0) {
+    <div class="grid">
+      @for (i of skeletonPlaceholders; track i) {
+        <div>
+          <p-skeleton height="160px" styleClass="skeleton-avatar"></p-skeleton>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Loading More -->
+  @if (loading() && tasks().length > 0) {
+    <div class="booking-loading-inline">
+      <i class="pi pi-spin pi-spinner"></i>
+      <p>Loading more tasks...</p>
+    </div>
+  }
+
+</div>

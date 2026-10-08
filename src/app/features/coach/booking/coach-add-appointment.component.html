@@ -140,6 +140,15 @@
 
         </span>
 
+
+         <span class="chip refunded" style="margin-inline-start: 10px;">
+
+          <i class="pi pi-globe"></i>
+
+          {{ coach?.country?.nameEn }}
+
+        </span>
+
       </div>
 
     </div>
@@ -210,7 +219,7 @@
         <button
             pButton
             type="button"
-            label="Book Now"
+            label="{{ isBooking ? 'Reserving...' : 'Book Now' }}"
             class="btn-book-now  p-button-primary w-full p-button p-component"
             (click)="bookSelectedSlotToUser()"
         >

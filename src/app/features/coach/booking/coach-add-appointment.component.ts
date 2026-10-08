@@ -47,7 +47,14 @@ import {
 import { BaseIcon } from "primeng/icons/baseicon";
 import { SkeletonModule } from "primeng/skeleton";
 import { AuthService } from "../../../core/services/auth.service";
-import { BookingSummary, BookingSummaryDialogComponent } from "../../user/bookings/booking-summary/booking-summary.component";
+import {
+  BookingSummary,
+  BookingSummaryDialogComponent,
+} from "../../user/bookings/booking-summary/booking-summary.component";
+import {
+  ReserveBookingRequest,
+  UserBookingsService,
+} from "../../user/services/user-bookings.service";
 
 interface TimeSlot {
   id: number;
@@ -83,7 +90,7 @@ interface SelectOption<T = string> {
     SelectModule,
     SkeletonModule,
     BaseIcon,
-    BookingSummaryDialogComponent
+    BookingSummaryDialogComponent,
   ],
 
   providers: [MessageService, ConfirmationService],
@@ -120,6 +127,8 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
 
   private readonly fb = inject(FormBuilder);
 
+  private bookingsService = inject(UserBookingsService);
+
   private readonly destroy$ = new Subject<void>();
 
   private readonly authService = inject(AuthService);
@@ -128,7 +137,7 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
   public isCoach: boolean = false;
 
   public selectedTimeSlotToBook: TimeSlot | null = null;
-  public showBookingSummary:boolean = false;
+  public showBookingSummary: boolean = false;
 
   public bookingSummary: BookingSummary | null = null;
 
@@ -185,6 +194,7 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
   loadingSlots = false;
 
   loadingAddSlot = false;
+  isBooking = false;
 
   // =========================================================
   // Select Options
@@ -247,8 +257,7 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
           this.coach = this.coachInput();
           if (this.coach) {
             this.coachId = this.coach.id;
-            this.fetchMonthSlots(this.visibleMonth, this.visibleYear,true);
-          
+            this.fetchMonthSlots(this.visibleMonth, this.visibleYear, true);
           }
           this.cdr.markForCheck();
         }
@@ -348,7 +357,6 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
     }));
   }
 
-
   // =========================================================
   // Profile
   // =========================================================
@@ -421,12 +429,11 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
       return;
     }
 
-     if (this.coachInput()) {
-
-         this.fetchMonthSlots(month, year,true);
-     }else{
-         this.fetchMonthSlots(month, year);
-     }
+    if (this.coachInput()) {
+      this.fetchMonthSlots(month, year, true);
+    } else {
+      this.fetchMonthSlots(month, year);
+    }
   }
 
   // =========================================================
@@ -445,7 +452,7 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
     );
 
     this.selectedDateStr = this.toDateStr(this.selectedDate);
-        this.selectedTimeSlotToBook = null;
+    this.selectedTimeSlotToBook = null;
     this.showSlotsForDate(this.selectedDateStr);
 
     this.cdr.markForCheck();
@@ -469,7 +476,11 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
   // Fetch Month Slots
   // =========================================================
 
-  private fetchMonthSlots(month: number, year: number,isAvailable:boolean = false): void {
+  private fetchMonthSlots(
+    month: number,
+    year: number,
+    isAvailable: boolean = false
+  ): void {
     if (!this.coachId) {
       return;
     }
@@ -485,11 +496,10 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
 
     this.profileService
-      .getSlotsByMonthAndYear(this.coachId, month, year,isAvailable)
+      .getSlotsByMonthAndYear(this.coachId, month, year, isAvailable)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-
           const groups = res.data ?? [];
 
           this.monthCache.set(key, groups);
@@ -892,6 +902,13 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
   }
 
   bookSelectedSlotToUser(): void {
+    if (!this.coach) {
+      return;
+    }
+
+    if (this.showBookingSummary) {
+      return;
+    }
 
     if (!this.isLoggedIn) {
       this.toastService.warn("You must be logged in to book an appointment");
@@ -904,58 +921,98 @@ export class CoachAddAppointmentComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    const slot = this.selectedTimeSlotToBook;
 
-    const originalPrice = this.getSlotPrice(slot.periodMinutes);
-
-    this.bookingSummary = {
-        coach: this.coach ,
-        date: slot.startTimeUtc,
-        startTime: this.formatTime(slot.startTimeUtc),
-        endTime: this.formatTime(slot.endTimeUtc),
-        durationMinutes: slot.periodMinutes,
-        originalPrice,
-        discountAmount: 0,
-        finalPrice: originalPrice,
-    };
-        this.showBookingSummary = true;
-
-  }
-
-
-  onSelectTimeSlot(slot: TimeSlot): void {
-    if (! this.isCoach) {
-        
-        this.selectedTimeSlotToBook = slot;
+    if (this.isBooking) {
+      return;
     }
 
-}
+    const slot = this.selectedTimeSlotToBook;
+    const originalPrice = this.getSlotPrice(slot.periodMinutes);
+
+    this.isBooking = true;
+    this.cdr.markForCheck();
+
+    const request: ReserveBookingRequest = {
+      coachId: this.coach.id,
+      coachSlotId: slot.id,
+    };
+
+    this.bookingsService.reserveBooking(request).subscribe({
+      next: (response) => {
+        this.isBooking = false;
+
+        const bookingId = response?.data?.id;
+
+        if (!bookingId) {
+          this.toastService.error(
+            "Booking was created but no booking ID was returned."
+          );
+
+          this.cdr.markForCheck();
+          return;
+        }
+
+        this.bookingSummary = {
+          bookingId,
+          coach: this.coach,
+          date: slot.startTimeUtc,
+          startTime: this.formatTime(slot.startTimeUtc),
+          endTime: this.formatTime(slot.endTimeUtc),
+          durationMinutes: slot.periodMinutes,
+          originalPrice,
+          discount: 0,
+          finalPrice: originalPrice,
+        };
+
+        this.showBookingSummary = true;
+
+        this.cdr.markForCheck();
+      },
+
+      error: (err) => {
+        this.isBooking = false;
+
+        const message =
+          err?.error?.messageEn ||
+          "Failed to reserve the booking. Please try again.";
+
+        this.toastService.error(message);
+
+        this.cdr.markForCheck();
+      },
+    });
+  }
+  onSelectTimeSlot(slot: TimeSlot): void {
+    if (!this.isCoach) {
+      this.selectedTimeSlotToBook = slot;
+    }
+  }
 
   // =========================================================
   // Helpers
   // =========================================================
-    private getSlotPrice(periodMinutes: number): number {
-  if (!this.coach) {
-    return 0;
-  }
-
-  switch (periodMinutes) {
-    case 30:
-      return this.coach.halfHourPrice;
-
-    case 60:
-      return this.coach.hourlyPrice;
-
-    case 90:
-      return this.coach.OneAndHalfHourPrice;
-
-    case 120:
-      return this.coach.twoHoursPrice;
-
-    default:
+  private getSlotPrice(periodMinutes: number): number {
+    if (!this.coach) {
       return 0;
+    }
+
+    switch (periodMinutes) {
+      case 30:
+        return this.coach.halfHourPrice;
+
+      case 60:
+        return this.coach.hourlyPrice;
+
+      case 90:
+        return this.coach.OneAndHalfHourPrice;
+
+      case 120:
+        return this.coach.twoHoursPrice;
+
+      default:
+        return 0;
+    }
   }
-}
   getImageUrl(path?: string | null): string {
     if (!path) {
       return "";

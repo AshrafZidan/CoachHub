@@ -98,7 +98,6 @@
   .notification-skeleton,
   .p-dialog,
   .p-dialog-content,
-  .p-dialog-header,
   .p-dialog-footer,
   .profile-stepper,
   .signup-stepper,
@@ -458,7 +457,6 @@
   .p-dialog .p-dialog-footer {
     background: var(--app-card-bg) !important;
     color: var(--title-color) !important;
-    border-color: var(--app-border-color) !important;
   }
 
   .p-dialog .p-dialog-header .p-dialog-close-button {

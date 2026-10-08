@@ -1,0 +1,817 @@
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--app-text-color);
+}
+
+/* ========================= */
+/* Cards */
+/* ========================= */
+
+.form-card {
+  background: var(--p-card-background, #fff);
+  border: 1px solid var(--app-border-color);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+/* ========================= */
+/* Task Summary */
+/* ========================= */
+
+.task-summary-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.task-heading {
+  min-width: 0;
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--title-color);
+    word-break: break-word;
+  }
+
+  p {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: var(--title-color);
+  }
+}
+
+/* ========================= */
+/* Status */
+/* ========================= */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 30px;
+  padding: 5px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ========================= */
+/* Meta */
+/* ========================= */
+
+.task-meta {
+  display: flex;
+  gap: 40px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--app-border-color);
+}
+
+.meta-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  > i {
+    font-size: 18px;
+    color: var(--app-primary-color);
+  }
+}
+
+.meta-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.meta-label {
+  font-size: 12px;
+  color: var(--title-color);
+}
+
+.meta-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--app-text-color);
+}
+
+/* ========================= */
+/* Section Header */
+/* ========================= */
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.section-icon {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 8px;
+
+  background-color: rgba(131, 60, 136, 0.12);
+  color: var(--app-primary-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-title h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.section-title p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--app-text-color);
+}
+
+/* ========================= */
+/* Description */
+/* ========================= */
+
+.description-box {
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.7;
+
+  white-space: pre-wrap;
+}
+
+/* ========================= */
+/* Questions */
+/* ========================= */
+
+.questions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.questions-container .form-card {
+  margin-bottom: 0;
+}
+
+.question-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-bottom: 24px;
+
+  h2 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    font-weight: 600;
+  }
+}
+
+/* ========================= */
+/* Form Group */
+/* ========================= */
+
+.form-group {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+  }
+}
+
+.question-text-box {
+  padding: 14px 16px;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+  line-height: 1.6;
+
+  white-space: pre-wrap;
+}
+
+/* ========================= */
+/* Answer Box */
+/* ========================= */
+
+.answer-box {
+  min-height: 80px;
+
+  padding: 14px 16px;
+
+  border: 1px solid var(--app-border-color);
+  border-radius: 8px;
+
+  background: var(--p-card-background, #fff);
+
+  font-size: 14px;
+  line-height: 1.7;
+
+  color: var(--app-text-color);
+
+  white-space: pre-wrap;
+}
+
+.empty-answer {
+  color: var(--app-text-color);
+  font-size: 13px;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+/* ========================= */
+/* Options */
+/* ========================= */
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-row {
+  position: relative;
+
+  display: flex !important;
+  align-items: center;
+
+  gap: 14px;
+
+  width: 100%;
+
+  padding: 12px 16px;
+
+  margin: 0;
+
+  border: 1px solid var(--app-border-color);
+  border-radius: 10px;
+
+  background: var(--p-card-background, #fff);
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  color: var(--app-text-color);
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+/* ========================= */
+/* Option Indicator */
+/* ========================= */
+
+.option-indicator {
+  flex: 0 0 auto;
+
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================= */
+/* Native Radio */
+/* ========================= */
+
+.option-indicator input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 20px;
+  height: 20px;
+
+  margin: 0;
+
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  position: relative;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.option-indicator input[type="radio"]::after {
+  content: "";
+
+  position: absolute;
+
+  width: 8px;
+  height: 8px;
+
+  top: 50%;
+  left: 50%;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  transform: translate(-50%, -50%) scale(0);
+
+  transition: transform 0.15s ease;
+}
+
+.option-indicator input[type="radio"]:checked {
+  border-color: var(--app-primary-color);
+
+  background: var(--app-primary-color);
+
+  box-shadow: 0 0 0 3px rgba(131, 60, 136, 0.1);
+}
+
+.option-indicator input[type="radio"]:checked::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.option-indicator input[type="radio"]:focus-visible {
+  outline: none;
+
+  box-shadow: 0 0 0 3px rgba(131, 60, 136, 0.15);
+}
+
+.option-indicator input[type="radio"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ========================= */
+/* Native Checkbox */
+/* ========================= */
+
+.option-indicator input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 20px;
+  height: 20px;
+
+  margin: 0;
+
+  border: 2px solid #cbd5e1;
+  border-radius: 5px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  position: relative;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.option-indicator input[type="checkbox"]::after {
+  content: "";
+
+  position: absolute;
+
+  width: 5px;
+  height: 10px;
+
+  left: 6px;
+  top: 2px;
+
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+
+  transform: rotate(45deg) scale(0);
+
+  transition: transform 0.15s ease;
+}
+
+.option-indicator input[type="checkbox"]:checked {
+  border-color: var(--app-primary-color);
+
+  background: var(--app-primary-color);
+
+  box-shadow: 0 0 0 3px rgba(131, 60, 136, 0.1);
+}
+
+.option-indicator input[type="checkbox"]:checked::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.option-indicator input[type="checkbox"]:focus-visible {
+  outline: none;
+
+  box-shadow: 0 0 0 3px rgba(131, 60, 136, 0.15);
+}
+
+.option-indicator input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ========================= */
+/* Selectable Option */
+/* ========================= */
+
+.selectable-option {
+  cursor: pointer;
+}
+
+.selectable-option:hover {
+  border-color: var(--app-primary-color);
+
+  background: rgba(131, 60, 136, 0.035);
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  transform: translateY(-1px);
+}
+
+.selectable-option.selected {
+  border-color: var(--app-primary-color);
+
+  background: rgba(131, 60, 136, 0.07);
+
+  box-shadow:
+    0 0 0 1px rgba(131, 60, 136, 0.08),
+    0 3px 10px rgba(131, 60, 136, 0.08);
+}
+
+.selectable-option.selected > span {
+  color: var(--app-primary-color);
+
+  font-weight: 600;
+}
+
+/* ========================= */
+/* Option Text */
+/* ========================= */
+
+.option-row > span {
+  flex: 1;
+
+  min-width: 0;
+
+  color: var(--app-text-color);
+
+  word-break: break-word;
+}
+
+/* ========================= */
+/* Coach Read Only */
+/* ========================= */
+
+.readonly-option {
+  cursor: default;
+}
+
+.readonly-option:hover {
+  transform: none;
+
+  border-color: var(--app-border-color);
+
+  background: var(--p-card-background, #fff);
+
+  box-shadow: none;
+}
+
+/* Preview radio */
+
+.radio-preview {
+  display: block;
+
+  width: 18px;
+  height: 18px;
+
+  border: 2px solid #cbd5e1;
+
+  border-radius: 50%;
+
+  background: #fff;
+}
+
+/* Preview checkbox */
+
+.checkbox-preview {
+  width: 18px;
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #cbd5e1;
+
+  border-radius: 5px;
+
+  background: #fff;
+}
+
+.checkbox-preview .pi {
+  display: none;
+
+  font-size: 10px;
+}
+
+/* ========================= */
+/* Loading */
+/* ========================= */
+
+.loading-card {
+  overflow: hidden;
+}
+
+.skeleton {
+  border-radius: 6px;
+
+  background: #f1f2f4;
+
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.skeleton-title {
+  width: 35%;
+  height: 24px;
+  margin-bottom: 20px;
+}
+
+.skeleton-question {
+  width: 25%;
+  height: 20px;
+  margin-bottom: 20px;
+}
+
+.skeleton-text {
+  width: 90%;
+  height: 14px;
+  margin-bottom: 12px;
+}
+
+.skeleton-text.short {
+  width: 60%;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* ========================= */
+/* Error / Empty State */
+/* ========================= */
+
+.state-card {
+  min-height: 280px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.state-icon {
+  width: 52px;
+  height: 52px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 16px;
+
+  font-size: 20px;
+}
+
+.error-icon {
+  background: #fef2f2;
+
+  color: #dc2626;
+}
+
+.state-card h3 {
+  margin: 0 0 8px;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.state-card p {
+  margin: 0 0 20px;
+
+  color: #6b7280;
+
+  font-size: 13px;
+}
+
+/* ========================= */
+/* Status Message */
+/* ========================= */
+
+.status-message-card {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 18px 20px;
+
+  margin-bottom: 20px;
+}
+
+.status-message-card .state-icon {
+  flex: 0 0 auto;
+
+  width: 44px;
+  height: 44px;
+
+  margin-bottom: 0;
+
+  border-radius: 10px;
+
+  background: rgba(131, 60, 136, 0.1);
+
+  color: var(--app-primary-color);
+
+  font-size: 18px;
+}
+
+.status-message-card > div:last-child {
+  min-width: 0;
+}
+
+.status-message-card h3 {
+  margin: 0 0 4px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: var(--title-color);
+}
+
+.status-message-card p {
+  margin: 0;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  color: var(--app-text-color);
+}
+
+/* ========================= */
+/* Status Variants */
+/* ========================= */
+
+.status-message-card.completed {
+  background: rgba(22, 158, 63, 0.04);
+
+  border-color: rgba(22, 158, 63, 0.18);
+}
+
+.status-message-card.completed .state-icon {
+  background: rgba(22, 158, 63, 0.1);
+
+  color: var(--app-success);
+}
+
+.status-message-card.cancelled {
+  background: rgba(220, 38, 38, 0.04);
+
+  border-color: rgba(220, 38, 38, 0.16);
+}
+
+.status-message-card.cancelled .state-icon {
+  background: rgba(220, 38, 38, 0.1);
+
+  color: var(--app-error);
+}
+
+/* ========================= */
+/* Submit */
+/* ========================= */
+
+.submit-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.submit-card h3 {
+  margin: 0 0 5px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  color: var(--title-color);
+}
+
+.submit-card p {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: var(--app-text-color);
+}
+
+/* ========================= */
+/* Responsive */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .booking-page {
+    padding: 16px;
+  }
+
+  .form-card {
+    padding: 18px;
+  }
+
+  .task-summary-header {
+    flex-direction: column;
+  }
+
+  .task-meta {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .question-header {
+    flex-direction: column;
+  }
+
+  .status-badge,
+  .required-badge {
+    align-self: flex-start;
+  }
+
+  .submit-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .submit-card button {
+    width: 100%;
+  }
+
+  .option-row {
+    min-height: 50px;
+
+    padding: 11px 13px;
+  }
+
+  .option-indicator {
+    width: 21px;
+    height: 21px;
+  }
+
+  .option-indicator input[type="radio"],
+  .option-indicator input[type="checkbox"] {
+    width: 19px;
+    height: 19px;
+  }
+}

@@ -1,13 +1,3 @@
-<!-- <p-dialog
-  header="Booking Summary"
-  [modal]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [visible]="visible"
-  (visibleChange)="onVisibleChange($event)"
-  [closable]="!isCreatingBooking"
-  [style]="{ width: '500px' }"
-> -->
   @if (bookingSummary) {
     <div class="booking-summary">
 
@@ -44,68 +34,121 @@
         </div>
       </section>
 
-      <!-- Coupon -->
-      <section class="summary-section">
-        <h4 style="margin-bottom: 0;">Coupon Code</h4>
+      <!-- Payment Methods -->
+        <section class="summary-section payment-methods-section">
+        <h4>Payment Methods</h4>
 
-        <div class="coupon-container">
-          <input
-            pInputText
-            type="text"
-            [(ngModel)]="couponCode"
-            placeholder="Enter coupon code"
-            [disabled]="
-              isValidatingCoupon ||
-              isCreatingBooking
-            "
-            (keyup.enter)="onValidateCoupon()"
-          />
+        <div class="payment-methods">
+            <label
+            class="payment-method"
+            [class.selected]="selectedPaymentMethod === 'STRIPE'"
+            for="stripe"
+            >
+            <div class="payment-method-left">
+                <p-radioButton
+                inputId="stripe"
+                name="paymentMethod"
+                value="STRIPE"
+                [(ngModel)]="selectedPaymentMethod"
+                />
 
-          <button
-            pButton
-            type="button"
-            label="Validate"
-            [loading]="isValidatingCoupon"
-            class="apply-btn"
-            [disabled]="
-              !couponCode.trim() ||
-              isCreatingBooking
-            "
-            (click)="onValidateCoupon()"
-          ></button>
+                <div class="payment-method-info">
+                <strong>Stripe</strong>
+                <span>Pay securely with Stripe</span>
+                </div>
+            </div>
+
+            <i class="pi pi-credit-card"></i>
+            </label>
         </div>
-      </section>
+        </section>
+        <!-- Coupon -->
+        <section class="summary-section">
+        <h4 style="margin-bottom: 0;">Promo Code</h4>
 
-      <!-- Price -->
-      <section class="price-section">
+        @if (hasAppliedCoupon) {
+            <div class="applied-coupon">
+            <span class="coupon-tag">
+                <i class="pi pi-tag"></i>
+                {{ couponCode }}
+
+                <button
+                type="button"
+                class="remove-coupon-btn"
+                [disabled]="isRemovingCoupon || isCreatingBooking"
+                (click)="removeCoupon()"
+                aria-label="Remove coupon"
+                >
+                <i
+                    class="pi"
+                    [class.pi-times]="!isRemovingCoupon"
+                    [class.pi-spin]="isRemovingCoupon"
+                    [class.pi-spinner]="isRemovingCoupon"
+                ></i>
+                </button>
+            </span>
+            </div>
+        } @else {
+            <div class="coupon-container">
+            <input
+                pInputText
+                type="text"
+                [(ngModel)]="couponCode"
+                placeholder="Enter coupon code"
+                [disabled]="isValidatingCoupon || isCreatingBooking"
+                [class.p-invalid]="couponError"
+                (input)="onCouponInput()"
+                (keyup.enter)="onValidateCoupon()"
+            />
+
+            <button
+                pButton
+                type="button"
+                label="Apply"
+                [loading]="isValidatingCoupon"
+                class="apply-btn"
+                [disabled]="!couponCode.trim() || isCreatingBooking"
+                (click)="onValidateCoupon()"
+            ></button>
+            </div>
+        }
+             @if (couponError) {
+            <small class="p-error coupon-error">
+                {{ couponError }}
+            </small>
+            }
+        </section>
+         <!-- Price -->
+        <section class="price-section">
 
         <div class="summary-row">
-          <span>Price</span>
-
-          <strong>
-            ${{ bookingSummary.originalPrice }}
-          </strong>
-        </div>
-
-        @if (bookingSummary.discountAmount > 0) {
-          <div class="summary-row discount">
-            <span>Discount</span>
+            <span>Subtotal</span>
 
             <strong>
-              -${{ bookingSummary.discountAmount }}
+            ${{ bookingSummary.originalPrice }}
             </strong>
-          </div>
+        </div>
+
+        @if (bookingSummary.discount > 0) {
+            <div class="summary-row discount">
+            <span>Cupon Discount</span>
+
+            <strong>
+                - ${{ bookingSummary.discount }}
+            </strong>
+            </div>
         }
 
         <div class="summary-row total">
-          <span>Total</span>
+            <span>Total</span>
 
-          <strong>
+            <strong>
             ${{ bookingSummary.finalPrice }}
-          </strong>
+            </strong>
         </div>
 
-      </section>
+        </section>
+     
 
       <!-- Actions -->
       <div class="modal-actions">
@@ -121,17 +164,27 @@
         ></button>
 
         <button
-          pButton
-          type="button"
-        class="p-button  p-button-sm p-button-primary app-custom p-component"
-          label="Continue to Payment"
-          [loading]="isCreatingBooking"
-          [disabled]="isValidatingCoupon"
-          (click)="onContinueToPayment()"
+        pButton
+        type="button"
+        class="p-button p-button-sm p-button-primary app-custom p-component"
+        label="Continue to Payment"
+        [loading]="isCreatingPaymentIntent"
+        [disabled]="
+            isValidatingCoupon ||
+            isCreatingBooking ||
+            isRemovingCoupon ||
+            isCreatingPaymentIntent
+        "
+        (click)="onContinueToPayment()"
         ></button>
 
       </div>
 
     </div>
   }
-<!-- </p-dialog> -->
+<app-payment-dialog
+  [(visible)]="showPaymentDialog"
+  [paymentIntent]="paymentIntent"
+  (paymentSuccess)="onPaymentSuccess($event)"
+  (paymentError)="onPaymentError($event)"
+/>

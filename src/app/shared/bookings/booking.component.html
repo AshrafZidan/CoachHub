@@ -1,0 +1,174 @@
+<div class="booking-page">
+  <p-confirmDialog></p-confirmDialog>
+
+  <div class="title-wrapper">
+    <h2 class="title">My Bookings</h2>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button
+      *ngFor="let tab of tabs"
+      type="button"
+      class="tab"
+      [class.active]="activeTab() === tab"
+      (click)="setTab(tab)"
+    >
+      {{ tab }}
+    </button>
+  </div>
+
+  <!-- Bookings -->
+  <div class="grid" *ngIf="filteredBookings.length > 0">
+    <ng-container *ngFor="let booking of filteredBookings">
+      <div class="card">
+        <!-- Card Header -->
+        <div class="card-header">
+          <h3 class="booking-date">
+            {{ booking.date }}
+          </h3>
+
+          <span class="chip" [ngClass]="booking.status">
+            {{ booking.status | titlecase }}
+          </span>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+          <!-- Avatar -->
+          <div class="avatar">
+            <img *ngIf="booking.avatar" [src]="booking.avatar" alt="avatar" />
+
+            <i *ngIf="!booking.avatar" class="pi pi-user"></i>
+          </div>
+
+          <!-- Booking Information -->
+          <div class="meta">
+            <div class="name">
+              {{ booking.name }}
+            </div>
+
+            <!-- <div
+							class="role"
+							*ngIf="booking.title"
+						>
+							{{ booking.title }}
+						</div> -->
+
+            <!-- Pricing -->
+            <div class="pricing-section">
+              <!-- Original Price -->
+              <div
+                class="price-item"
+                *ngIf="
+                  booking.price != null &&
+                  booking.discount != null &&
+                  booking.discount > 0
+                "
+              >
+                <span class="label"> Price: </span>
+
+                <span class="value"> {{ booking.price }} $ </span>
+              </div>
+
+              <!-- Discount -->
+              <div
+                class="price-item discount-item"
+                *ngIf="booking.discount != null && booking.discount > 0"
+              >
+                <span class="label"> Discount: </span>
+
+                <span class="value"> -${{ booking.discount }} </span>
+              </div>
+
+              <!-- Final Price -->
+              <div class="price-item final" *ngIf="booking.finalPrice != null">
+                <span
+                  class="label"
+                  *ngIf="
+                    booking.price != null &&
+                    booking.discount != null &&
+                    booking.discount > 0
+                  "
+                >
+                  Final:
+                </span>
+
+                <span class="value"> {{ booking.finalPrice }} $ </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="actions" *ngIf="booking.raw?.actions?.length">
+            <button
+              class="btn-secondary p-button-sm btn p-button p-button-secondary app-custom"
+              *ngIf="hasRescheduleAction(booking)"
+              (click)="reschedule(booking)"
+              [disabled]="isStarting(booking)"
+              type="button"
+            >
+              Reschedule
+            </button>
+
+            <!-- Cancel -->
+            <button
+              class="btn-secondary p-button-sm btn p-button p-button-secondary app-custom"
+              *ngIf="hasCancelAction(booking)"
+              (click)="cancel(booking)"
+              [disabled]="isStarting(booking)"
+              type="button"
+            >
+              Cancel
+            </button>
+
+            <!-- Start / Join -->
+            <button
+              class="p-button-sm btn p-button p-button-primary app-custom"
+              *ngIf="hasStartAction(booking) || hasJoinAction(booking)"
+              (click)="startNow(booking)"
+              [disabled]="isStarting(booking)"
+              type="button"
+            >
+              <i *ngIf="isStarting(booking)" class="pi pi-spin pi-spinner"></i>
+
+              {{ isStarting(booking) ? "Starting..." : "Start Now" }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Empty State -->
+  <div class="booking-empty" *ngIf="!loading && filteredBookings.length === 0">
+    <i class="pi pi-calendar-times"></i>
+
+    <p>
+      {{
+        activeTab() === "Upcoming"
+          ? "No upcoming bookings found yet."
+          : "No History found yet."
+      }}
+    </p>
+  </div>
+
+  <!-- Initial Loading -->
+  <ng-container *ngIf="loading && bookings.length === 0">
+    <div class="grid">
+      <div class="coachee-skeleton" *ngFor="let item of [1, 2, 3]">
+        <p-skeleton height="160px" styleClass="skeleton-avatar"></p-skeleton>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Loading More -->
+  <div
+    class="booking-loading-inline"
+    *ngIf="loading && filteredBookings.length > 0"
+  >
+    <i class="pi pi-spin pi-spinner"></i>
+
+    <p>Loading more bookings...</p>
+  </div>
+</div>

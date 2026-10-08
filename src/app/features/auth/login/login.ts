@@ -82,7 +82,7 @@ async onSubmit(): Promise<void> {
       try {
         const user = this.auth.getUser();
 
-        if (user) {
+        if (user && ! this.auth.isAdmin() ) {
           const role =
             user.roles?.some((r: string) =>
               r.includes("COACH")

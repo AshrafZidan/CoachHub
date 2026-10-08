@@ -1,12 +1,14 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { CommonModule } from "@angular/common";
+
+import { Component, inject } from "@angular/core";
+
 import {
   FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+  Validators,
+} from "@angular/forms";
 
 import {
   CreateTaskTemplateRequest,
@@ -15,33 +17,33 @@ import {
   TaskFormValue,
   TaskTemplateOption,
   TaskTemplateQuestion,
-  TaskTemplateService
-} from '../services/task-template.service';
+  TaskTemplateService,
+} from "../services/task-template.service";
 
-import { ToastService } from '../../../core/services/toast.service';
+import { ToastService } from "../../../core/services/toast.service";
 
 @Component({
-  selector: 'app-add-task',
+  selector: "app-add-task",
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
-  templateUrl: './add-task.component.html',
-  styleUrl: './add-task.component.scss'
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: "./add-task.component.html",
+  styleUrl: "./add-task.component.scss",
 })
 export class AddTaskComponent {
-
   private readonly fb = inject(FormBuilder);
+
   private readonly ser = inject(TaskTemplateService);
+
   private readonly toastService = inject(ToastService);
 
   isSubmitting = false;
 
   taskForm = this.fb.group({
-    title: ['', Validators.required],
-    description: ['', Validators.required],
-    questions: this.fb.array<FormGroup>([])
+    title: ["", Validators.required],
+
+    description: ["", Validators.required],
+
+    questions: this.fb.array<FormGroup>([]),
   });
 
   ngOnInit(): void {
@@ -49,18 +51,20 @@ export class AddTaskComponent {
   }
 
   get questions(): FormArray<FormGroup> {
-    return this.taskForm.get(
-      'questions'
-    ) as FormArray<FormGroup>;
+    return this.taskForm.get("questions") as FormArray<FormGroup>;
   }
 
   private createQuestion(): FormGroup {
     return this.fb.group({
-      questionText: ['', Validators.required],
-      type: ['TEXT', Validators.required],
+      questionText: ["", Validators.required],
+
+      type: ["TEXT", Validators.required],
+
       required: [true],
+
       orderIndex: [this.questions.length + 1],
-      options: this.fb.array<FormGroup>([])
+
+      options: this.fb.array<FormGroup>([]),
     });
   }
 
@@ -82,12 +86,8 @@ export class AddTaskComponent {
     this.updateQuestionOrder();
   }
 
-  getOptions(
-    question: FormGroup
-  ): FormArray<FormGroup> {
-    return question.get(
-      'options'
-    ) as FormArray<FormGroup>;
+  getOptions(question: FormGroup): FormArray<FormGroup> {
+    return question.get("options") as FormArray<FormGroup>;
   }
 
   addOption(question: FormGroup): void {
@@ -95,37 +95,47 @@ export class AddTaskComponent {
 
     options.push(
       this.fb.group({
-        optionText: ['', Validators.required]
-      })
+        optionText: ["", Validators.required],
+      }),
     );
   }
 
-  removeOption(
-    question: FormGroup,
-    optionIndex: number
-  ): void {
-
+  removeOption(question: FormGroup, optionIndex: number): void {
     const options = this.getOptions(question);
+
+    /*
+     * Keep at least two options
+     * for selection questions.
+     */
+    if (options.length <= 2) {
+      return;
+    }
 
     options.removeAt(optionIndex);
   }
 
-  onQuestionTypeChange(
-    question: FormGroup
-  ): void {
-
-    const type = question.get('type')?.value;
+  onQuestionTypeChange(question: FormGroup): void {
+    const type = question.get("type")?.value;
 
     const options = this.getOptions(question);
 
-    if (type === 'TEXT') {
+    /*
+     * Free Text
+     * does not need answer options.
+     */
+    if (type === "TEXT") {
       options.clear();
+
       return;
     }
 
-    // Multiple choice should have at least two options
+    /*
+     * Both Single Selection and
+     * Multiple Selection require
+     * at least two options.
+     */
     if (
-      type === 'MULTIPLE_CHOICE' &&
+      (type === "SINGLE_CHOICE" || type === "MULTIPLE_CHOICE") &&
       options.length === 0
     ) {
       this.addOption(question);
@@ -134,109 +144,92 @@ export class AddTaskComponent {
   }
 
   private updateQuestionOrder(): void {
-
-    this.questions.controls.forEach(
-      (question, index) => {
-
-        question.patchValue(
-          {
-            orderIndex: index + 1
-          },
-          {
-            emitEvent: false
-          }
-        );
-
-      }
-    );
+    this.questions.controls.forEach((question, index) => {
+      question.patchValue(
+        {
+          orderIndex: index + 1,
+        },
+        {
+          emitEvent: false,
+        },
+      );
+    });
   }
 
   submit(): void {
-
     if (this.taskForm.invalid) {
       this.taskForm.markAllAsTouched();
       return;
     }
 
-    const formValue =
-      this.taskForm.getRawValue() as TaskFormValue;
+    /*
+     * Validate selection questions.
+     */
+    for (const question of this.questions.controls) {
+      const type = question.get("type")?.value;
+
+      if (
+        (type === "SINGLE_CHOICE" || type === "MULTIPLE_CHOICE") &&
+        this.getOptions(question).length < 2
+      ) {
+        this.toastService.error(
+          "Selection questions must have at least two answer options.",
+        );
+
+        return;
+      }
+    }
+
+    const formValue = this.taskForm.getRawValue();
 
     const payload: CreateTaskTemplateRequest = {
+      title: formValue.title?.trim() ?? "",
 
-      title:
-        formValue.title?.trim() ?? '',
+      description: formValue.description?.trim() ?? "",
 
-      description:
-        formValue.description?.trim() ?? '',
+      questions: formValue.questions.map(
+        (question, index): TaskTemplateQuestion => ({
+          questionText: question["questionText"]?.trim() ?? "",
 
-      questions:
-        formValue.questions.map(
-          (
-            question: TaskFormQuestion,
-            index: number
-          ): TaskTemplateQuestion => ({
+          type: question["type"],
 
-            questionText:
-              question.questionText?.trim() ?? '',
+          required: question["required"] ?? true,
 
-            type:
-              question.type,
+          orderIndex: index + 1,
 
-            required:
-              question.required ?? true,
-
-            orderIndex:
-              index + 1,
-
-            options:
-              question.type === 'MULTIPLE_CHOICE'
-                ? question.options.map(
-                    (
-                      option: TaskFormOption
-                    ): TaskTemplateOption => ({
-
-                      optionText:
-                        option.optionText?.trim() ?? ''
-
-                    })
-                  )
-                : []
-
-          })
-        )
+          options:
+            question["type"] === "SINGLE_CHOICE" ||
+            question["type"] === "MULTIPLE_CHOICE"
+              ? (question["options"] ?? []).map((option: any) => ({
+                  optionText: option["optionText"]?.trim() ?? "",
+                }))
+              : [],
+        }),
+      ),
     };
+
+    console.log("[AddTask] Payload:", payload);
 
     this.isSubmitting = true;
 
-    this.ser
-      .createTaskTemplate(payload)
-      .subscribe({
+    this.ser.createTaskTemplate(payload).subscribe({
+      next: () => {
+        this.isSubmitting = false;
 
-        next: response => {
+        this.toastService.success("Task created successfully.");
 
+        this.taskForm.reset();
 
-          this.isSubmitting = false;
+        this.questions.clear();
 
-          this.toastService.success(
-            'Task created successfully.'
-          );
-          this.taskForm.reset();
-        },
+        this.addQuestion();
+      },
 
-        error: error => {
+      error: (error) => {
+        console.error("[AddTask] Failed to create task", error);
 
-          console.error(
-            '[AddTask] Failed to create task',
-            error
-          );
-
-          this.isSubmitting = false;
-
-          this.toastService.error(
-            'Failed to create task. Please try again later.'
-          );
-        }
-
-      });
+        this.isSubmitting = false;
+      },
+    });
   }
 }

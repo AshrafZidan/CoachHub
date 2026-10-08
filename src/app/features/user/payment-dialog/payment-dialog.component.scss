@@ -1,0 +1,57 @@
+.payment-container {
+  width: 100%;
+}
+
+.payment-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background: #f8f8f8;
+
+  span {
+    font-size: 14px;
+  }
+
+  strong {
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.payment-method {
+  width: 100%;
+
+  h4 {
+    margin: 0 0 12px;
+    font-size: 15px;
+  }
+}
+
+.payment-element {
+  width: 100%;
+  min-height: 100px;
+}
+
+.payment-loading {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #777;
+}
+
+.payment-error {
+  display: block;
+  margin-top: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+.payment-element-hidden{
+  visibility: hidden;
+}

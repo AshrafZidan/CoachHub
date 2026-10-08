@@ -20,10 +20,6 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log(
-    '[firebase-messaging-sw.js] Background message:',
-    payload
-  );
 
   const notification = payload.notification || {};
   const data = payload.data || {};

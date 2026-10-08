@@ -1,0 +1,108 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="!isProcessingPayment && !isVerifyingPayment"
+  [closeOnEscape]="!isProcessingPayment && !isVerifyingPayment"
+  [dismissableMask]="!isProcessingPayment && !isVerifyingPayment"
+  [style]="{ width: '500px' }"
+  header="Payment"
+  (onShow)="initializeStripe()"
+  (onHide)="onDialogHide()"
+>
+  @if (paymentIntent) {
+    <div class="payment-container">
+
+      <!-- Amount -->
+      <div class="payment-summary">
+        <span>Total Amount</span>
+
+        <strong>
+          {{
+            paymentIntent.amount
+              | currency: paymentIntent.currency.toUpperCase()
+          }}
+        </strong>
+      </div>
+
+      <!-- Stripe Payment Element -->
+      <div class="payment-method">
+        <h4>Payment Details</h4>
+
+      @if (isInitializing) {
+  <div class="payment-loading">
+    <p-skeleton
+      width="100%"
+      height="40px"
+      styleClass="mb-2"
+    />
+
+    <p-skeleton
+      width="100%"
+      height="40px"
+      styleClass="mb-2"
+    />
+
+    <div class="payment-skeleton-row">
+      <p-skeleton width="48%" height="40px" />
+      <p-skeleton width="48%" height="40px" />
+    </div>
+
+    <p-skeleton
+      width="100%"
+      height="40px"
+      styleClass="mt-2"
+    />
+  </div>
+}
+
+        <div
+          id="payment-element"
+          [class.payment-element-hidden]="isInitializing"
+        ></div>
+      </div>
+
+      @if (isVerifyingPayment) {
+        <div class="payment-verifying">
+          Verifying payment...
+        </div>
+      }
+
+      @if (paymentErrorMessage) {
+        <small class="p-error payment-error">
+          {{ paymentErrorMessage }}
+        </small>
+      }
+
+      <!-- Actions -->
+      <div class="modal-actions">
+
+        <button
+          pButton
+          type="button"
+          label="Cancel"
+          severity="secondary"
+          class="p-button-sm p-button p-button-secondary app-custom p-component p-button-sm"
+          [disabled]="isProcessingPayment || isVerifyingPayment"
+          (click)="close()"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Pay Now"
+          class="p-button-sm p-button-primary"
+          [loading]="isProcessingPayment || isVerifyingPayment"
+          [disabled]="
+            isInitializing ||
+            isProcessingPayment ||
+            isVerifyingPayment ||
+            !paymentElement
+          "
+          (click)="pay()"
+        ></button>
+
+      </div>
+
+    </div>
+  }
+</p-dialog>

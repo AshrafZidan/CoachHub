@@ -15,7 +15,7 @@ const routes: Routes = [
       {
         path: 'bookings',
         loadComponent: () =>
-          import('./booking/booking.component').then(m => m.BookingComponent)
+          import('../../shared/bookings/booking.component').then(m => m.BookingComponent)
       },
       {
         path: 'calendar',
@@ -25,7 +25,7 @@ const routes: Routes = [
       {
         path: 'todo',
         loadComponent: () =>
-          import('./todo/todo.component').then(m => m.TodoComponent)
+          import('../../shared/todo/todo.component').then(m => m.TodoComponent)
       },
         {
         path: 'todo/add',
@@ -36,7 +36,7 @@ const routes: Routes = [
       {
           path: 'task-details/:assignmentId',
         loadComponent: () =>
-    import('./todo/task-details.component')
+    import('../../shared/todo/task-details/task-details.component')
       .then(m => m.TaskDetailsComponent)
 },
       

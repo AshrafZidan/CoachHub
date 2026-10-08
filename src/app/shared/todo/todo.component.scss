@@ -37,13 +37,15 @@
 .task-info {
   flex: 1;
   min-width: 0;
-
+  gap: 8px;
+  font-size: 15px;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 100px;
+  &.coachee{
+    display: flex;
+  }
 }
 
-.task-description {
+.task-description , .task-due , .task-owner{
   position: relative;
 
   display: flex;
@@ -55,7 +57,7 @@
 
   padding-right: 25px;
 
-  i.pi-lightbulb {
+  i.pi-lightbulb , .pi{
     flex-shrink: 0;
     color: var(--app-primary-color);
   }

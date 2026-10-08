@@ -21,13 +21,31 @@ export const USER_ROUTES: Routes = [
         path: 'coache-details',
         loadComponent: () =>
           import('./coache-details/coache-details.component').then(m => m.CoacheDetailsComponent)
-      }
-    //   {
-    //   path: 'bookings',
-    //   // canActivate: [coachGuard],
-    //   loadComponent: () =>
-    //     import('./bookings/user-bookings.component').then(m => m.UserBookingsComponent)
-    // },
+      },
+      {
+      path: 'bookings',
+      // canActivate: [coachGuard],
+      loadComponent: () =>
+        import('./../../shared/bookings/booking.component').then(m => m.BookingComponent)
+      },
+      {
+      path: 'todo',
+        loadComponent: () =>
+        import('./../../shared/todo/todo.component').then(m => m.TodoComponent)
+      },
+      
+      {
+      path: 'task-details/:assignmentId',
+        loadComponent: () =>
+        import('./../../shared/todo/task-details/task-details.component')
+      .then(m => m.TaskDetailsComponent)
+      },
+       {
+      path: 'session/:bookingId',
+      loadComponent: () =>
+        import('./../../shared/session/session.component')
+          .then(m => m.SessionComponent)
+    }
     
     ]
   }

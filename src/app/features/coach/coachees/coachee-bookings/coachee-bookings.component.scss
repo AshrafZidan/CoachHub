@@ -1,14 +1,17 @@
 // ═══════════════════════════════════════════════════════════
-// Coachee Bookings Modal — 3 Views
+// COACHEE BOOKINGS MODAL
+// 3 Views: Bookings / Session Tasks / Task Answers
 // ═══════════════════════════════════════════════════════════
 
 .coachee-detail {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 16px 0;
+  padding: 4px 0 8px;
   min-height: 100px;
+  color: var(--text-dark);
 
+  // PrimeNG dialog content
   :host ::ng-deep .p-dialog {
     .p-dialog-content {
       padding: 20px;
@@ -17,15 +20,19 @@
 }
 
 // ═══════════════════════════════════════════════════════════
-// SHARED STYLES
+// SHARED
 // ═══════════════════════════════════════════════════════════
 
 .card {
   background: #ffffff;
-  border-radius: 12px;
   border: 1px solid #f0f0f0;
+  border-radius: 12px;
   padding: 16px;
-  transition: all 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+  box-sizing: border-box;
 
   &:hover {
     border-color: var(--app-primary-color) !important;
@@ -33,108 +40,178 @@
   }
 }
 
-// Back Button Header
+// ═══════════════════════════════════════════════════════════
+// VIEW HEADER
+// ═══════════════════════════════════════════════════════════
+
 .view-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--app-border-color);
-      position: sticky;
-    top: 0;
-    background: var(--app-card-bg);
-    z-index: 5;
+  position: sticky;
+  top: -20px;
+  z-index: 5;
+
+  margin: -20px -20px 0;
+  padding: 12px 20px;
+
+  background: var(--app-card-bg, #ffffff);
+  border-bottom: 1px solid var(--app-border-color, #eeeeee);
 
   .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 6px 10px !important;
+
     background: transparent !important;
     border: none !important;
-    padding: 6px 10px !important;
+    border-radius: 6px;
+
     color: var(--app-primary-color) !important;
+
     font-size: 14px !important;
     font-weight: 600 !important;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+
     cursor: pointer;
-    transition: background 0.2s;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
 
     .pi {
-      font-size: 16px;
+      font-size: 15px;
     }
 
     &:hover {
       background: rgba(131, 60, 136, 0.08) !important;
-      border-radius: 6px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(131, 60, 136, 0.25);
+      outline-offset: 2px;
     }
   }
 }
 
-// Loading State
+// ═══════════════════════════════════════════════════════════
+// LOADING
+// ═══════════════════════════════════════════════════════════
+
 .loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
+
   padding: 60px 20px;
+
   color: var(--text-muted);
 
   .spinner {
     width: 24px;
     height: 24px;
+
     border: 2px solid rgba(131, 60, 136, 0.2);
     border-top-color: var(--app-primary-color);
     border-radius: 50%;
+
     animation: spin 0.8s linear infinite;
   }
 
   p {
-    font-size: 14px;
     margin: 0;
+    font-size: 14px;
   }
 }
 
-// Empty State
+.skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.booking-skeleton,
+.task-skeleton {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+}
+
+.task-skeleton {
+  padding: 0;
+}
+
+// ═══════════════════════════════════════════════════════════
+// EMPTY STATE
+// ═══════════════════════════════════════════════════════════
+
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
+
   padding: 60px 20px;
+
   text-align: center;
 
   .empty-icon {
-    font-size: 48px;
-    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 56px;
+    height: 56px;
+
+    border-radius: 50%;
+
+    background: rgba(131, 60, 136, 0.08);
+
+    color: var(--app-primary-color);
+    font-size: 28px;
+
+    opacity: 0.85;
   }
 
   .empty-text {
-    font-size: 14px;
-    color: var(--text-muted);
     margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 14px;
+    line-height: 1.5;
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-// VIEW 1: BOOKINGS LIST
+// VIEW 1 — BOOKINGS
 // ═══════════════════════════════════════════════════════════
 
 .detail-header {
-  margin-bottom: 16px;
+  margin-bottom: 4px;
 
   .coachee-name {
+    margin: 0 0 4px;
+
+    color: var(--title-color);
+
     font-size: 18px;
     font-weight: 700;
-    color: var(--title-color);
-    margin: 0 0 4px;
+    line-height: 1.3;
   }
 
   .booking-count {
-    font-size: 12px;
-    color: var(--text-muted);
     margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+    font-weight: 500;
   }
 }
 
@@ -147,11 +224,15 @@
 .booking-card {
   cursor: pointer;
 
+  &:hover {
+    transform: translateY(-1px);
+  }
+
   .booking-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    gap: 10px;
+
     margin-bottom: 12px;
   }
 
@@ -164,17 +245,19 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 6px;
+
       font-size: 14px;
-      font-weight: 500;
+      line-height: 1.4;
 
       .date,
       .time {
-        font-weight: 600;
         color: var(--title-color);
+        font-weight: 600;
       }
 
       .time-separator {
         color: var(--text-muted);
+        font-weight: 400;
       }
     }
   }
@@ -183,31 +266,61 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 0;
+    gap: 8px;
+
+    padding: 7px 0;
+
     font-size: 14px;
 
     .booking-label {
       display: flex;
       align-items: center;
       gap: 6px;
+
       color: var(--text-muted);
 
       .pi {
+        color: var(--text-muted);
         font-size: 14px;
       }
     }
 
     .booking-value {
-      font-weight: 600;
       color: var(--title-color);
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
     }
   }
 
+  // Status / payment chips inside header
+  .chip {
+    flex-shrink: 0;
+  }
+
+  > .pi-chevron-right {
+    flex-shrink: 0;
+
+    color: var(--text-muted);
+    font-size: 14px;
+
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  &:hover > .booking-header > .pi-chevron-right {
+    color: var(--app-primary-color);
+    transform: translateX(2px);
+  }
+
   .discount-row {
-    margin: 12px 0;
+    margin: 10px 0;
     padding: 10px 12px;
+
     border: 1px solid #bbf7d0;
     border-radius: 8px;
+
     background: #f0fdf4;
 
     .discount-content {
@@ -221,8 +334,10 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 13px;
+
       color: #169e3f;
+
+      font-size: 13px;
       font-weight: 600;
 
       .pi {
@@ -231,8 +346,10 @@
     }
 
     .discount-value {
-      font-weight: 600;
       color: #169e3f;
+
+      font-size: 13px;
+      font-weight: 700;
       white-space: nowrap;
     }
   }
@@ -241,53 +358,50 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
+
     padding-top: 12px;
+
     border-top: 1px solid #e5e5e5;
 
     .total-label {
-      font-size: 14px;
-      font-weight: 600;
       color: var(--text-muted);
+
+      font-size: 13px;
+      font-weight: 600;
     }
 
     .total-price {
+      color: var(--title-color);
+
       font-size: 16px;
       font-weight: 700;
-      color: var(--title-color);
+      white-space: nowrap;
     }
-  }
-}
-
-.skeleton-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  .booking-skeleton {
-    background: #f9f9f9;
-    border-radius: 12px;
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-// VIEW 2: SESSION DETAIL & TASKS
+// VIEW 2 — SESSION DETAIL
 // ═══════════════════════════════════════════════════════════
 
 .session-summary {
   margin-bottom: 16px;
 
   .summary-title {
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
     margin: 0 0 12px;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
 
   .summary-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -297,17 +411,19 @@
     gap: 4px;
 
     .label {
+      color: var(--text-muted);
+
       font-size: 11px;
       font-weight: 600;
-      text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--text-muted);
+      text-transform: uppercase;
     }
 
     .value {
+      color: var(--title-color);
+
       font-size: 13px;
       font-weight: 600;
-      color: var(--title-color);
 
       &.status-badge {
         width: fit-content;
@@ -322,31 +438,42 @@
   gap: 12px;
 
   .tasks-title {
+    margin: 0 0 2px;
+
+    color: var(--text-muted);
+
     font-size: 13px;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--text-muted);
-    margin: 0 0 12px;
+    text-transform: uppercase;
   }
 
   .task-item {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
+
     cursor: pointer;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
 
     .task-number {
       display: flex;
       align-items: center;
       justify-content: center;
+
       width: 32px;
       height: 32px;
       min-width: 32px;
+
       border-radius: 8px;
+
       background: var(--app-primary-color);
       color: #ffffff;
-      font-size: 13px;
+
+      font-size: 12px;
       font-weight: 700;
     }
 
@@ -356,12 +483,33 @@
     }
 
     .task-title {
+      margin: 0 0 5px;
+
+      color: var(--title-color);
+
       font-size: 14px;
       font-weight: 600;
-      color: var(--title-color);
-      margin: 0 0 6px;
+      line-height: 1.4;
+
       overflow: hidden;
       text-overflow: ellipsis;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .task-description {
+      margin: 0 0 7px;
+
+      color: var(--text-muted);
+
+      font-size: 12px;
+      line-height: 1.45;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -370,19 +518,16 @@
     .task-meta {
       display: flex;
       align-items: center;
-      gap: 8px;
       flex-wrap: wrap;
-
-      .status-badge {
-        font-size: 11px;
-      }
+      gap: 8px;
 
       .submitted-date,
       .not-submitted {
-        font-size: 12px;
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 4px;
+
+        font-size: 12px;
 
         .pi {
           font-size: 12px;
@@ -398,15 +543,32 @@
       }
     }
 
+    .status-badge {
+      flex-shrink: 0;
+    }
+
     .task-arrow {
-      font-size: 16px;
+      flex-shrink: 0;
+
       color: var(--text-muted);
+      font-size: 14px;
+
+      transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    &:hover {
+      .task-arrow {
+        color: var(--app-primary-color);
+        transform: translateX(2px);
+      }
     }
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-// VIEW 3: TASK ANSWERS
+// VIEW 3 — TASK ANSWERS
 // ═══════════════════════════════════════════════════════════
 
 .task-info-summary {
@@ -417,38 +579,50 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 12px;
   }
 
   .task-info-title {
+    flex: 1;
+    min-width: 0;
+
+    margin: 0;
+
+    color: var(--title-color);
+
     font-size: 16px;
     font-weight: 700;
-    color: var(--title-color);
-    margin: 0;
-    flex: 1;
+    line-height: 1.4;
   }
 
   .task-description {
-    font-size: 14px;
-    color: var(--text-dark);
-    line-height: 1.5;
     margin: 12px 0 0;
     padding-top: 12px;
+
     border-top: 1px solid #e5e5e5;
+
+    color: var(--text-dark);
+
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
   }
 
   .task-meta-info {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 12px;
+
     margin-top: 12px;
-    font-size: 12px;
+
     color: var(--text-muted);
 
+    font-size: 12px;
+
     .meta-item {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
 
       .pi {
         font-size: 12px;
@@ -463,116 +637,258 @@
   gap: 12px;
 
   .questions-title {
+    margin: 0 0 2px;
+
+    color: var(--text-muted);
+
     font-size: 13px;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--text-muted);
-    margin: 0 0 12px;
+    text-transform: uppercase;
   }
 
   .question-item {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
 
     .question-header {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 10px;
 
       .question-number {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
-        min-width: 28px;
-        border-radius: 6px;
+
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+
+        border-radius: 7px;
+
         background: var(--app-primary-color);
         color: #ffffff;
-        font-size: 12px;
+
+        font-size: 11px;
         font-weight: 700;
       }
 
       .question-text {
+        flex: 1;
+        min-width: 0;
+
+        margin: 4px 0 0;
+
+        color: var(--title-color);
+
         font-size: 14px;
         font-weight: 600;
-        color: var(--title-color);
-        margin: 0;
-        line-height: 1.4;
+        line-height: 1.45;
+      }
+
+      .question-type-row {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
       }
     }
-
 
     .answer-section {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding-top: 10px;
 
-      .answer-label {
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.3px;
-        color: var(--text-muted);
+      padding-top: 2px;
+    }
+
+    .answer-content {
+      padding: 12px;
+
+      background: var(--app-card-bg, #fafafa);
+
+      border: 1px solid var(--app-border-color, #eeeeee);
+      border-radius: 8px;
+
+      color: var(--text-dark);
+
+      font-size: 14px;
+
+      &.text-answer {
+        .answer-text {
+          margin: 0;
+
+          color: var(--text-dark);
+
+          line-height: 1.6;
+          white-space: pre-wrap;
+
+          &:empty {
+            color: var(--text-muted);
+            font-style: italic;
+          }
+        }
       }
 
-      .answer-content {
-        padding: 10px 12px;
-        background: var(--app-card-bg);
-        border: 1px solid var(--app-border-color);
-        border-radius: 8px;
-        font-size: 14px;
-        color: var(--text-dark);
+      &.multiple-answer {
+        .options-list {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
 
-        &.text-answer {
-          .answer-text {
-            margin: 0;
-            line-height: 1.6;
-            white-space: pre-wrap;
+        .option-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          padding: 9px 10px;
+
+          background: #ffffff;
+
+          border: 1px solid var(--app-border-color, #eeeeee);
+          border-radius: 7px;
+
+          color: var(--text-dark);
+
+          font-size: 13px;
+          line-height: 1.4;
+
+          transition:
+            background 0.2s ease,
+            border-color 0.2s ease;
+
+          .pi {
+            flex-shrink: 0;
+
+            color: var(--text-muted);
+            font-size: 14px;
+          }
+
+          &.selected {
+            background: rgba(22, 158, 63, 0.05);
+            border-color: var(--app-success);
+
+            .pi {
+              color: var(--app-success);
+            }
           }
         }
 
-        &.multiple-answer {
-          .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-          }
+        .no-answer {
+          color: var(--text-muted);
 
-          .option-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            background: var(--app-card-bg);
-            border: 1px solid var(--app-border-color);
-            border-radius: 6px;
-            font-size: 13px;
-
-            .pi {
-              font-size: 14px;
-              color: var(--text-muted);
-            }
-
-            &.selected {
-              background: rgba(22, 158, 63, 0.05);
-              border-color: var(--app-success);
-
-              .pi {
-                color: var(--app-success);
-              }
-            }
-          }
-
-          .no-answer {
-            font-style: italic;
-            color: var(--text-muted);
-          }
+          font-size: 13px;
+          font-style: italic;
         }
       }
     }
+  }
+}
+// ═══════════════════════════════════════════════════════════
+// RESPONSIVE
+// ═══════════════════════════════════════════════════════════
+
+@media (max-width: 640px) {
+  .coachee-detail {
+    gap: 12px;
+    padding: 0 0 4px;
+  }
+
+  .view-header {
+    top: -20px;
+
+    margin-left: -12px;
+    margin-right: -12px;
+
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .detail-header {
+    .coachee-name {
+      font-size: 17px;
+    }
+  }
+
+  .booking-card {
+    .booking-header {
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .booking-datetime {
+      flex-basis: 100%;
+    }
+
+    .booking-row {
+      padding: 5px 0;
+    }
+  }
+
+  .tasks-list {
+    .task-item {
+      align-items: flex-start;
+
+      .task-number {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+      }
+
+      .status-badge {
+        align-self: flex-start;
+      }
+
+      .task-arrow {
+        margin-top: 7px;
+      }
+    }
+  }
+
+  .task-info-summary {
+    .task-info-header {
+      align-items: flex-start;
+    }
+
+    .task-info-title {
+      font-size: 15px;
+    }
+  }
+
+  .questions-list {
+    .question-item {
+      .question-header {
+        flex-wrap: wrap;
+
+        .question-text {
+          flex-basis: calc(100% - 40px);
+        }
+
+        .question-type-row {
+          width: 100%;
+          margin-left: 40px;
+        }
+      }
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// ANIMATION
+// ═══════════════════════════════════════════════════════════
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

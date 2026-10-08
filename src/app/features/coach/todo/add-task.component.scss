@@ -6,23 +6,13 @@
 }
 
 /* ========================= */
-/* Header */
-/* ========================= */
-
-
-
-
-/* ========================= */
 /* Cards */
 /* ========================= */
 
 .form-card {
   padding: 28px 32px;
-
   margin-bottom: 24px;
-
 }
-
 
 /* ========================= */
 /* Form */
@@ -65,8 +55,9 @@
 
   outline: none;
 
-  transition: border-color 0.2s ease,
-              box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &::placeholder {
     color: var(--app-placeholder-color);
@@ -75,13 +66,8 @@
   &:focus {
     border-color: var(--app-primary-color);
 
-    box-shadow:
-      0 0 0 3px
-      color-mix(
-        in srgb,
-        var(--app-primary-color) 12%,
-        transparent
-      );
+    box-shadow: 0 0 0 3px
+      color-mix(in srgb, var(--app-primary-color) 12%, transparent);
   }
 }
 
@@ -94,7 +80,6 @@
   min-height: 120px;
   resize: vertical;
 }
-
 
 /* ========================= */
 /* Question */
@@ -119,7 +104,6 @@
   }
 }
 
-
 /* ========================= */
 /* Question Type */
 /* ========================= */
@@ -135,10 +119,14 @@
 
   background: #f0f0f0;
 
+  gap: 2px;
+
   button {
     flex: 1;
 
-    min-height: 40px;
+    min-height: 44px;
+
+    padding: 8px 14px;
 
     border: 0;
     border-radius: 26px;
@@ -147,25 +135,31 @@
 
     color: var(--app-text-color);
 
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
 
     cursor: pointer;
 
-    transition: 0.2s ease;
+    white-space: nowrap;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      box-shadow 0.2s ease;
 
     &.active {
-      background:var(--app-card-bg);
+      background: var(--app-card-bg);
+
       color: var(--app-primary-color);
 
-      box-shadow: var(
-        --app-control-shadow,
-        0 1px 4px rgba(0, 0, 0, 0.08)
-      );
+      box-shadow: var(--app-control-shadow, 0 1px 4px rgba(0, 0, 0, 0.08));
+    }
+
+    &:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.5);
     }
   }
 }
-
 
 /* ========================= */
 /* Required */
@@ -174,6 +168,7 @@
 .required-row {
   display: flex;
   align-items: center;
+
   gap: 10px;
 
   margin-top: 20px;
@@ -182,7 +177,6 @@
 
   font-size: 14px;
 }
-
 
 /* ========================= */
 /* Options */
@@ -213,19 +207,34 @@
 .options-list {
   display: flex;
   flex-direction: column;
+
   gap: 12px;
 }
 
 .option-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+
   gap: 10px;
 
   .form-input {
     flex: 1;
   }
+
+  .error {
+    flex: 0 0 auto;
+  }
 }
 
+.options-hint {
+  display: block;
+
+  margin-top: 10px;
+
+  color: var(--app-placeholder-color);
+
+  font-size: 13px;
+}
 
 /* ========================= */
 /* Buttons */
@@ -233,12 +242,11 @@
 
 .actions {
   display: flex;
+
   gap: 8px;
+
   margin-top: 32px;
 }
-
-
-
 
 .remove-button,
 .remove-option-button {
@@ -246,11 +254,16 @@
 
   background: transparent;
 
-    color: var(--app-delete);
+  color: var(--app-delete);
 
   cursor: pointer;
-}
 
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
 
 /* ========================= */
 /* Validation */
@@ -258,5 +271,39 @@
 
 .error {
   display: block;
+
   margin-top: 6px;
+}
+
+/* ========================= */
+/* Responsive */
+/* ========================= */
+
+@media (max-width: 600px) {
+  .add-task-page {
+    padding: 16px;
+  }
+
+  .form-card {
+    padding: 22px 18px;
+  }
+
+  .question-type {
+    flex-direction: column;
+
+    border-radius: 16px;
+
+    button {
+      width: 100%;
+
+      border-radius: 12px;
+    }
+  }
+
+  .options-header {
+    align-items: flex-start;
+
+    gap: 12px;
+    flex-direction: column;
+  }
 }

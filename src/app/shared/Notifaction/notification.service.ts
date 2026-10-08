@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subject, takeUntil } from "rxjs";
 
 import { CNotification } from "./notification.model";
 import { environment } from "../../../environments/environment";
+import { AuthService } from "../../core/services/auth.service";
 
 export type NotificationRole = "COACH" | "COACHEE";
 
@@ -24,6 +25,8 @@ export class NotificationService implements OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   private readonly apiUrl = environment.apiUrl;
+  private readonly authService = inject(AuthService);
+
 
   /**
    * Number of notifications requested per API call.
@@ -207,7 +210,7 @@ export class NotificationService implements OnDestroy {
    * Get role-specific notification endpoint.
    */
   private getNotificationsEndpoint(): string {
-    if (this.currentRole === "COACHEE") {
+    if (! this.authService.isCoach()) {
       return `${this.apiUrl}/mobile/api/notifications/coachee`;
     }
 
@@ -476,7 +479,7 @@ export class NotificationService implements OnDestroy {
     }
 
     const endpoint =
-      this.currentRole === "COACH"
+      this.authService.isCoach()
         ? `${this.apiUrl}/mobile/api/notifications/coach/fcm-token`
         : `${this.apiUrl}/mobile/api/notifications/coachee/fcm-token`;
 

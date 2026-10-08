@@ -1,0 +1,408 @@
+<div class="booking-page">
+  <!-- ===================================================== -->
+  <!-- Header -->
+  <!-- ===================================================== -->
+
+  <div class="title-wrapper">
+    <div class="title-content">
+      <div>
+        <h2 class="title">Task Details</h2>
+
+        @if (task; as currentTask) {
+          <p class="subtitle">
+            {{ isCoach() ? "Task Template" : "Assigned Task" }}
+            #{{ currentTask.id }}
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- Loading -->
+  <!-- ===================================================== -->
+
+  @if (isLoading) {
+    <section class="card form-card loading-card">
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton skeleton-text"></div>
+      <div class="skeleton skeleton-text short"></div>
+    </section>
+
+    <section class="card form-card loading-card">
+      <div class="skeleton skeleton-question"></div>
+      <div class="skeleton skeleton-text"></div>
+      <div class="skeleton skeleton-text"></div>
+    </section>
+  }
+
+  <!-- ===================================================== -->
+  <!-- Error -->
+  <!-- ===================================================== -->
+
+  @if (!isLoading && hasError) {
+    <section class="form-card state-card">
+      <div class="state-icon error-icon">
+        <i class="pi pi-exclamation-triangle"></i>
+      </div>
+
+      <h3>Unable to load task</h3>
+
+      <p>
+        We couldn't find the task details. Please return to the task list and
+        select a task again.
+      </p>
+
+      <button
+        type="button"
+        class="btn-secondary p-button-sm btn p-button p-button-secondary app-custom"
+        (click)="goBack()"
+      >
+        <i class="pi pi-arrow-left"></i>
+        Back
+      </button>
+    </section>
+  }
+
+  <!-- ===================================================== -->
+  <!-- Loaded Task -->
+  <!-- ===================================================== -->
+
+  @if (!isLoading && !hasError && task; as currentTask) {
+    <!-- ================================================= -->
+    <!-- Task Summary -->
+    <!-- ================================================= -->
+
+    <section class="card form-card task-summary-card">
+      <div class="task-summary-header">
+        <div class="task-heading">
+          <h2>{{ currentTask.title }}</h2>
+        </div>
+
+        <!-- Coach Status -->
+        @if (isCoach()) {
+          <span
+            class="chip"
+            [ngClass]="currentTask.active ? 'active' : 'inactive'"
+          >
+            {{ currentTask.active ? "Active" : "Inactive" }}
+          </span>
+        }
+
+        <!-- Coachee Status -->
+        @if (!isCoach() && currentTask.status) {
+          <span class="chip" [ngClass]="currentTask.status.toLowerCase()">
+            {{ currentTask.status }}
+          </span>
+        }
+      </div>
+
+      <!-- ================================================= -->
+      <!-- Coach Meta -->
+      <!-- ================================================= -->
+
+      @if (isCoach()) {
+        <div class="task-meta">
+          <div class="meta-item">
+            <i class="pi pi-list"></i>
+
+            <div>
+              <span class="meta-label">Questions</span>
+              <span class="meta-value">
+                {{ currentTask.questions.length }}
+              </span>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <i class="pi pi-check-circle"></i>
+
+            <div>
+              <span class="meta-label">Status</span>
+              <span class="meta-value">
+                {{ currentTask.active ? "Active" : "Inactive" }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ================================================= -->
+      <!-- Coachee Meta -->
+      <!-- ================================================= -->
+
+      @if (!isCoach()) {
+        <div class="task-meta">
+          <div class="meta-item">
+            <i class="pi pi-calendar"></i>
+
+            <div>
+              <span class="meta-label">Due Date</span>
+              <span class="meta-value">
+                {{ currentTask.dueDate || "-" }}
+              </span>
+            </div>
+          </div>
+
+          @if (currentTask.coach) {
+            <div class="meta-item">
+              <i class="pi pi-user"></i>
+
+              <div>
+                <span class="meta-label">Coach</span>
+                <span class="meta-value">
+                  {{ currentTask.coach?.fullNameEn || "-" }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- ================================================= -->
+    <!-- Description -->
+    <!-- ================================================= -->
+
+    <section class="card form-card">
+      <div class="section-title">
+        <div class="section-icon">
+          <i class="pi pi-file-edit"></i>
+        </div>
+
+        <div>
+          <h3>Task Description</h3>
+          <p>Details about this task</p>
+        </div>
+      </div>
+
+      <div class="card description-box">
+        {{ currentTask.description || "No description provided." }}
+      </div>
+    </section>
+
+    <!-- ================================================= -->
+    <!-- Coachee Status -->
+    <!-- ================================================= -->
+
+    @if (
+      !isCoach() && currentTask.status && currentTask.status !== "ASSIGNED"
+    ) {
+      <section class="card form-card status-message-card">
+        <div class="state-icon">
+          <i class="pi pi-info-circle"></i>
+        </div>
+
+        <div>
+          <h3>Task is {{ currentTask.status }}</h3>
+          <p>This task is not available for answering.</p>
+        </div>
+      </section>
+    }
+
+    <!-- ================================================= -->
+    <!-- Questions -->
+    <!-- ================================================= -->
+
+    <div class="questions-container">
+      @for (
+        question of currentTask.questions;
+        track question.id;
+        let questionIndex = $index
+      ) {
+        <section class="card form-card question-card">
+          <!-- ================================================= -->
+          <!-- Question Header -->
+          <!-- ================================================= -->
+
+          <div class="question-header">
+            <div>
+              <h2>Question {{ questionIndex + 1 }}</h2>
+
+              <span class="chip pending">
+                {{ getQuestionTypeLabel(question.type) }}
+              </span>
+            </div>
+
+            @if (question.required) {
+              <span class="chip failed">Required</span>
+            }
+          </div>
+
+          <!-- ================================================= -->
+          <!-- Question Text -->
+          <!-- ================================================= -->
+
+          <div class="form-group">
+            <label>Question</label>
+
+            <div class="card question-text-box">
+              {{ question.questionText }}
+            </div>
+          </div>
+
+          <!-- ================================================= -->
+          <!-- Coach - Text -->
+          <!-- ================================================= -->
+
+          @if (isCoach() && isTextQuestion(question.type)) {
+            <div class="form-group">
+              <label>Answer Type</label>
+
+              <div class="card answer-box">
+                <span>Free Text</span>
+              </div>
+            </div>
+          }
+
+          <!-- ================================================= -->
+          <!-- Coachee - Text -->
+          <!-- ================================================= -->
+
+          @if (!isCoach() && isTextQuestion(question.type)) {
+            <div class="form-group">
+              <label>Your Answer</label>
+
+              <textarea
+                rows="5"
+                pInputText
+                class="w-full lg-textarea"
+                [disabled]="!canAnswer || submitting"
+                [ngModel]="getTextAnswer(question.id)"
+                (ngModelChange)="setTextAnswer(question.id, $event)"
+                placeholder="Enter your answer..."
+              ></textarea>
+
+              @if (
+                question.required && canAnswer && isAnswerInvalid(question)
+              ) {
+                <small class="p-error"> This question is required. </small>
+              }
+            </div>
+          }
+
+          <!-- ================================================= -->
+          <!-- CHOICE QUESTIONS -->
+          <!-- SINGLE + MULTIPLE = SINGLE SELECTION -->
+          <!-- ================================================= -->
+
+          @if (isChoiceQuestion(question.type)) {
+            <div class="form-group">
+              <label>
+                {{ isCoach() ? "Answer Options" : "Your Answer" }}
+              </label>
+
+              <!-- Coach -->
+              @if (isCoach()) {
+                <div class="options-list">
+                  @for (option of question.options; track option.id) {
+                    <div class="card option-row readonly-option">
+                      <div class="option-indicator">
+                        <span class="radio-preview"></span>
+                      </div>
+
+                      <span>{{ option.optionText }}</span>
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Coachee -->
+              @if (!isCoach()) {
+                <div class="options-list">
+                  @for (option of question.options; track option.id) {
+                    <label
+                      class="card option-row selectable-option"
+                      [class.selected]="
+                        getSelectedOption(question.id) === option.id
+                      "
+                    >
+                      <div class="option-indicator">
+                        <input
+                          type="radio"
+                          [name]="'question-' + question.id"
+                          [value]="option.id"
+                          [checked]="
+                            getSelectedOption(question.id) === option.id
+                          "
+                          [disabled]="!canAnswer || submitting"
+                          (change)="setSelectedOption(question.id, option.id)"
+                        />
+                      </div>
+
+                      <span>{{ option.optionText }}</span>
+                    </label>
+                  }
+                </div>
+              }
+
+              <!-- No Options -->
+              @if (!question.options || question.options.length === 0) {
+                <div class="empty-answer">No options available</div>
+              }
+
+              <!-- Validation -->
+              @if (
+                !isCoach() &&
+                question.required &&
+                canAnswer &&
+                isAnswerInvalid(question)
+              ) {
+                <small class="p-error"> Please select an answer. </small>
+              }
+            </div>
+          }
+        </section>
+      }
+    </div>
+
+    <!-- ================================================= -->
+    <!-- No Questions -->
+    <!-- ================================================= -->
+
+    @if (currentTask.questions.length === 0) {
+      <section class="card form-card state-card">
+        <div class="state-icon">
+          <i class="pi pi-list"></i>
+        </div>
+
+        <h3>No questions available</h3>
+
+        <p>There are no questions associated with this task.</p>
+      </section>
+    }
+
+    <!-- ================================================= -->
+    <!-- Submit -->
+    <!-- ================================================= -->
+
+    @if (!isCoach() && canAnswer && currentTask.questions.length > 0) {
+      <section class="card form-card submit-card">
+        <div>
+          <h3>Ready to submit?</h3>
+
+          <p>
+            Make sure all required questions are answered before submitting.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-primary p-button p-button-primary app-custom"
+          [disabled]="submitting || !isFormValid()"
+          (click)="submitTask()"
+        >
+          @if (!submitting) {
+            <i class="pi pi-check"></i>
+          }
+
+          @if (submitting) {
+            <i class="pi pi-spin pi-spinner"></i>
+          }
+
+          {{ submitting ? "Submitting..." : "Submit Task" }}
+        </button>
+      </section>
+    }
+  }
+</div>

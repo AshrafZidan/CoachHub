@@ -9,6 +9,7 @@ export interface PendingRequest {
   key: string;
   observable: Observable<BookingListResponse>;
 }
+
 @Injectable({ providedIn: 'root' })
 export class BookingsService {
  private errorHandler = inject(ErrorHandlerService);
@@ -91,6 +92,5 @@ if (query.endDate) {
       .put<ApiResponse<void>>(`${this.BASE_URL}/${id}/cancel`, {})
       .pipe(catchError(err => throwError(() => err)));
   }
-   
 
 }

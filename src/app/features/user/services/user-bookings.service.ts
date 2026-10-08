@@ -55,6 +55,60 @@ export interface BookingAction {
 	value: string;
 	label?: string;
 }
+export interface ReserveBookingRequest {
+  coachId: number;
+  coachSlotId: number;
+  formAnswers?: {
+    challenge?: string;
+    whyImportant?: string;
+    commitment?: number;
+    openToHelp?: boolean;
+    triedBefore?: string;
+  };
+}
+
+export interface ApplyCouponRequest {
+  code: string;
+  bookingId: number;
+}
+
+export interface ApplyCouponResponse {
+  discount: number;
+  finalPrice: number;
+}
+
+export interface ReserveBookingResponse {
+  id: number;
+}
+
+export interface StripePaymentIntentResponse {
+  bookingId: number;
+  paymentId: number;
+  paymentIntentId: string;
+  clientSecret: string;
+  amount: number;
+  amountMinor: number;
+  currency: string;
+  status: string;
+}
+
+export interface StripePaymentIntentApiResponse {
+  httpStatus: string;
+  code: string;
+  timeStamp: string;
+  messageEn: string;
+  messageAr: string;
+  data: StripePaymentIntentResponse;
+  count: number;
+  pageIndex: number;
+  pageCount: number;
+  pageSize: number;
+  errors: {
+    messageEn: string;
+    messageAr: string;
+  }[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class UserBookingsService {
   private http = inject(HttpClient);
@@ -77,5 +131,38 @@ export class UserBookingsService {
    startSession(bookingId: number): Observable<ApiResponse<StartSessionResponse>> {
     return this.http.post<ApiResponse<StartSessionResponse>>(`${this.BASE}/${bookingId}/start-session`, {});
   }
+
+    reserveBooking(
+	request: ReserveBookingRequest
+): Observable<ApiResponse<ReserveBookingResponse>> {
+	return this.http.post<
+		ApiResponse<ReserveBookingResponse>
+	>(
+		`${this.BASE}/reserve`,
+		request
+	);
+}
+applyCoupon(
+  request: ApplyCouponRequest
+): Observable<ApiResponse<ApplyCouponResponse>> {
+  return this.http.post<ApiResponse<ApplyCouponResponse>>(
+    `${this.BASE}/apply-coupon`,
+    request
+  );
+}
+ deleteCoupon(bookingId: number) {
+  return this.http.post(
+    `${this.BASE}/delete-coupon/${bookingId}`,{}
+  );
+}  
+
+createStripePaymentIntent(
+  bookingId: number
+) {
+  return this.http.post<StripePaymentIntentApiResponse>(
+    `${environment.apiUrl}/mobile/api/payments/bookings/${bookingId}/stripe-payment-intent`,
+    {}
+  );
+}
 
 }

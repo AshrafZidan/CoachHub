@@ -35,11 +35,10 @@
     color: var(--app-primary-color);
   }
 
-  // ✅ Active state — selected option
   &.active {
     border-color: var(--app-primary-color);;
     background: var(--p-datepicker-date-selected-background);
-    color: var(--app-primary-color);;
+    color: #fff;
   }
 }
 
