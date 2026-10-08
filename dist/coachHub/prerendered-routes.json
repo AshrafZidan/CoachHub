@@ -14,8 +14,10 @@
     "/coach/todo": {},
     "/coach/todo/add": {},
     "/coachee": {},
+    "/coachee/bookings": {},
     "/coachee/coache-details": {},
     "/coachee/find-coach": {},
+    "/coachee/todo": {},
     "/forbidden": {}
   }
 }
